@@ -9,8 +9,8 @@
 //	func RequireAdmin(next http.Handler) http.Handler
 //
 // LoadSession is mounted globally by the router and is the only place that
-// puts a *User into the request context. In M0 it never does, so RequireUser
-// and RequireAdmin always answer 401 (fail closed).
+// puts a *User into the request context. It joins sessions → users on every
+// request, so a manual `is_admin` change applies on the next request.
 package auth
 
 import (
@@ -26,10 +26,11 @@ import (
 
 // User is the authenticated user attached to a request.
 type User struct {
-	ID      uuid.UUID
-	Email   string
-	Name    string
-	IsAdmin bool
+	ID        uuid.UUID
+	Email     string
+	Name      string
+	AvatarURL string
+	IsAdmin   bool
 }
 
 type ctxKey struct{}
@@ -47,15 +48,16 @@ func UserFrom(ctx context.Context) (*User, bool) {
 }
 
 // LoadSession resolves the `sid` cookie into a *User on the request context.
-// It never rejects a request; use RequireUser / RequireAdmin for that.
 //
-// M0 stub: attaches no user. M1 implements the session lookup (sessions JOIN
-// users on every request, so a manual is_admin change applies immediately).
+// It does not reject anonymous requests (use RequireUser / RequireAdmin for
+// that), with one exception: state-changing requests (POST, PUT, PATCH,
+// DELETE) whose Origin does not match APP_ORIGIN get 403, as CSRF protection
+// for every /api route.
+//
+// Expired or unknown sessions are treated as anonymous, and the stale cookie
+// is cleared.
 func LoadSession(d *app.Deps) func(http.Handler) http.Handler {
-	_ = d
-	return func(next http.Handler) http.Handler {
-		return next
-	}
+	return newService(d).loadSession
 }
 
 // RequireUser rejects requests without an authenticated user with 401.
@@ -70,6 +72,7 @@ func RequireUser(next http.Handler) http.Handler {
 }
 
 // RequireAdmin rejects anonymous requests with 401 and non-admins with 403.
+// IsAdmin comes from LoadSession's per-request DB read and is never cached.
 func RequireAdmin(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		u, ok := UserFrom(r.Context())
@@ -86,11 +89,10 @@ func RequireAdmin(next http.Handler) http.Handler {
 }
 
 // Register mounts the auth routes on r, which is the /api sub-router:
-// /auth/google/login, /auth/google/callback, /auth/logout, /me.
-//
-// M0 stub: registers nothing. Implemented in M1.
+// GET /auth/google/login, GET /auth/google/callback, POST /auth/logout,
+// GET /me.
 func Register(r chi.Router, d *app.Deps) {
-	_, _ = r, d
+	newService(d).routes(r)
 }
 
 func writeError(w http.ResponseWriter, status int, msg string) {
