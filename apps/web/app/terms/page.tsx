@@ -1,13 +1,9 @@
 import type { Metadata } from "next";
-import { placeholders } from "@/content/placeholders";
+import { LegalPage } from "@/components/shell/LegalPage";
+import { legal } from "@/content/legal";
 
-export const metadata: Metadata = { title: placeholders.terms };
+export const metadata: Metadata = { title: legal.terms.title, description: legal.terms.description };
 
-// Placeholder (M0). Static legal page, filled in M7.
 export default function TermsPage() {
-  return (
-    <main className="p-4">
-      <h1 className="text-2xl font-bold">{placeholders.terms}</h1>
-    </main>
-  );
+  return <LegalPage content={legal.terms} />;
 }
