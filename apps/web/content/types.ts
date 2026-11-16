@@ -36,14 +36,34 @@ export interface SetupStep {
   title: string;
   /** Step-switcher label, e.g. "Đáy giả" (rendered as "1 · Đáy giả"). */
   shortLabel: string;
-  /** Pill on the checklist card, e.g. "10–20% chiều cao". */
+  /** Pill on the checklist card, e.g. "10–20% chiều cao". Empty string: no pill. */
   badge: string;
-  /** One-line description under the title. */
+  /** One-line description under the title. Empty string: none. */
   description: string;
   /** aria-label for the illustration SVG. */
   illustrationLabel: string;
   substeps: Substep[];
   featureTarget: SetupFeatureTarget;
+  /** Stage chip text after "Bước N/3 · ", e.g. "Nạp cơ chất". Defaults to `title`. */
+  stageLabel?: string;
+  /** Extra chip at the stage's top right, e.g. "Lớp 3". */
+  stageTag?: string;
+  /** Second line in the desktop step list, e.g. "~70% chiều cao · lớp 3–5 cm". Defaults to `badge`. */
+  summary?: string;
+  /** Tiles under the checklist (step 3: "Các ngày tiếp theo", "3 ngày cuối"). */
+  infoTiles?: SetupInfoTile[];
+}
+
+/** An info tile under a setup step's checklist. */
+export interface SetupInfoTile {
+  /** Bold first line. */
+  title: string;
+  /** Body line. */
+  text: string;
+  /** light: pale tile with dark text. dark: primary-dark tile with white text. */
+  tone: "light" | "dark";
+  /** Optional leading icon on the title line. */
+  icon?: "lock";
 }
 
 /** A troubleshooting FAQ (Tab 2). */

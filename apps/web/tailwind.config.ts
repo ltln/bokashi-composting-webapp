@@ -177,6 +177,27 @@ const config: Config = {
           "0%, 100%": { transform: "translateX(0)" },
           "50%": { transform: "translateX(8px)" },
         },
+        // Setup step boards (Step2 "fall" and Step3 "lidDown" differ from the FAQ ones above).
+        sprinkle: {
+          "0%": { transform: "translateY(-50px)", opacity: "0" },
+          "20%": { opacity: "1" },
+          "75%": { transform: "translateY(0)", opacity: "1" },
+          "100%": { transform: "translateY(0)", opacity: "0" },
+        },
+        settle: {
+          "0%": { transform: "translateY(-70px)", opacity: "0" },
+          "15%": { opacity: "1" },
+          "70%, 90%": { transform: "translateY(0)", opacity: "1" },
+          "100%": { transform: "translateY(0)", opacity: "0" },
+        },
+        spread: {
+          "0%": { transform: "scaleY(.3)", opacity: ".6" },
+          "55%, 100%": { transform: "scaleY(1)", opacity: "1" },
+        },
+        lidSeal: {
+          "0%, 30%": { transform: "translateY(-24px)" },
+          "70%, 100%": { transform: "translateY(0)" },
+        },
       },
       animation: {
         drop: "drop 2.4s cubic-bezier(.5,0,.9,.6) infinite",
@@ -196,6 +217,10 @@ const config: Config = {
         grow: "grow 2.4s ease-in-out infinite",
         sprout: "sprout 2.4s ease-in-out infinite",
         hop: "hop 1.6s ease-in-out infinite",
+        sprinkle: "sprinkle 1.8s ease-in infinite",
+        settle: "settle 2.6s cubic-bezier(.5,0,.9,.6) infinite",
+        spread: "spread 2.4s ease-out infinite",
+        lidSeal: "lidSeal 2.6s ease-in-out infinite alternate",
       },
     },
   },
