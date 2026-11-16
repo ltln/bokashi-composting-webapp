@@ -194,6 +194,12 @@ const config: Config = {
           "0%": { transform: "scaleY(.3)", opacity: ".6" },
           "55%, 100%": { transform: "scaleY(1)", opacity: "1" },
         },
+        // FAQ 3 board: paper balls drop in and stay (unlike `drop`, which fades out).
+        faqDrop: {
+          "0%": { transform: "translateY(-40px)", opacity: "0" },
+          "20%": { opacity: "1" },
+          "75%, 100%": { transform: "translateY(0)", opacity: "1" },
+        },
         lidSeal: {
           "0%, 30%": { transform: "translateY(-24px)" },
           "70%, 100%": { transform: "translateY(0)" },
@@ -220,6 +226,7 @@ const config: Config = {
         sprinkle: "sprinkle 1.8s ease-in infinite",
         settle: "settle 2.6s cubic-bezier(.5,0,.9,.6) infinite",
         spread: "spread 2.4s ease-out infinite",
+        faqDrop: "faqDrop 2.2s ease-in infinite",
         lidSeal: "lidSeal 2.6s ease-in-out infinite alternate",
       },
     },

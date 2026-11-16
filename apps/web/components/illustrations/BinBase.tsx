@@ -47,6 +47,10 @@ export interface BinBaseProps {
   canTabs?: boolean;
   /** Draw the newspaper layer as one flat band (y 230–260) behind the cans. Default false. */
   newspaper?: boolean;
+  /** Fill class of the newspaper band. Default "fill-bk-illo-paper" (FAQ 3 uses a wet tint). */
+  newspaperClassName?: string;
+  /** Drawn between the newspaper band and the cans (FAQ 3's pooled liquid). Clipped to the interior. */
+  underlay?: ReactNode;
   /** Draw the cardboard strip on top of the newspaper (y 226–230.5). Default false. */
   cardboard?: boolean;
   /** Freeze CSS animations inside the SVG. The AnimationStage does this for the whole canvas already. */
@@ -80,6 +84,8 @@ export function BinBase({
   cans = "static",
   canTabs = true,
   newspaper = false,
+  newspaperClassName = "fill-bk-illo-paper",
+  underlay,
   cardboard = false,
   paused = false,
   className,
@@ -100,7 +106,8 @@ export function BinBase({
       <ellipse cx="160" cy="266" rx="104" ry="7" className="fill-bk-border" />
       <path d="M77 52 L91 257 L229 257 L243 52 Z" className="fill-bk-illo-bin-inner" />
       <g clipPath={`url(#${clipId})`}>
-        {newspaper && <rect x="70" y="230" width="180" height="30" className="fill-bk-illo-paper" />}
+        {newspaper && <rect x="70" y="230" width="180" height="30" className={newspaperClassName} />}
+        {underlay}
         {cans !== "none" &&
           CANS.map((c, i) => {
             const falling = cans === "drop" && c.row === 1;
