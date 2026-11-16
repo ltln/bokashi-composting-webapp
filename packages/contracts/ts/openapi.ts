@@ -201,7 +201,10 @@ export interface paths {
         };
         get?: never;
         put?: never;
-        /** Batch ingest tracking events (max 50 per call) */
+        /**
+         * Batch ingest tracking events (max 50 per call)
+         * @description The whole batch is validated first; if any item is invalid nothing is stored. ts, device_type, device_info and user_hash are derived on the server. Rate limited to ~120 requests a minute per session.
+         */
         post: {
             parameters: {
                 query?: never;
@@ -211,31 +214,46 @@ export interface paths {
             };
             requestBody: {
                 content: {
-                    "application/json": components["schemas"]["EventIn"][];
+                    "application/json": components["schemas"]["EventBatch"];
                 };
             };
             responses: {
-                /** @description Accepted */
+                /** @description Accepted; every event in the batch was stored. */
                 202: {
                     headers: {
                         [name: string]: unknown;
                     };
-                    content?: never;
+                    content: {
+                        "application/json": components["schemas"]["EventsAccepted"];
+                    };
                 };
-                /** @description Invalid event type/target combination */
+                /** @description Malformed body, empty or oversized batch, invalid type/target combination, non-UUID sessionId or bad clientTs. */
                 400: {
                     headers: {
                         [name: string]: unknown;
                     };
-                    content?: never;
+                    content: {
+                        "application/json": components["schemas"]["Error"];
+                    };
                 };
                 401: components["responses"]["Unauthorized"];
-                /** @description Rate limited */
+                /** @description Body too large. */
+                413: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["Error"];
+                    };
+                };
+                /** @description Rate limited. */
                 429: {
                     headers: {
                         [name: string]: unknown;
                     };
-                    content?: never;
+                    content: {
+                        "application/json": components["schemas"]["Error"];
+                    };
                 };
             };
         };
@@ -474,7 +492,14 @@ export interface components {
             featureTarget?: components["schemas"]["FeatureTarget"];
             /** Format: date-time */
             clientTs?: string;
+            /** Format: uuid */
             sessionId: string;
+        };
+        EventBatch: {
+            events: components["schemas"]["EventIn"][];
+        };
+        EventsAccepted: {
+            accepted: number;
         };
         Summary: {
             totalEvents?: number;

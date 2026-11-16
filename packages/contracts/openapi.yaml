@@ -81,7 +81,21 @@ components:
         eventType: { $ref: "#/components/schemas/EventType" }
         featureTarget: { $ref: "#/components/schemas/FeatureTarget" }
         clientTs: { type: string, format: date-time }
-        sessionId: { type: string }
+        sessionId: { type: string, format: uuid }
+    EventBatch:
+      type: object
+      required: [events]
+      properties:
+        events:
+          type: array
+          minItems: 1
+          maxItems: 50
+          items: { $ref: "#/components/schemas/EventIn" }
+    EventsAccepted:
+      type: object
+      required: [accepted]
+      properties:
+        accepted: { type: integer }
     Summary:
       type: object
       properties:
@@ -174,19 +188,37 @@ paths:
       tags: [events]
       summary: Batch ingest tracking events (max 50 per call)
       security: [{ session: [] }]
+      description: >
+        The whole batch is validated first; if any item is invalid nothing is
+        stored. ts, device_type, device_info and user_hash are derived on the
+        server. Rate limited to ~120 requests a minute per session.
       requestBody:
         required: true
         content:
           application/json:
-            schema:
-              type: array
-              maxItems: 50
-              items: { $ref: "#/components/schemas/EventIn" }
+            schema: { $ref: "#/components/schemas/EventBatch" }
       responses:
-        "202": { description: Accepted }
-        "400": { description: Invalid event type/target combination }
+        "202":
+          description: Accepted; every event in the batch was stored.
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/EventsAccepted" }
+        "400":
+          description: Malformed body, empty or oversized batch, invalid type/target combination, non-UUID sessionId or bad clientTs.
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/Error" }
         "401": { $ref: "#/components/responses/Unauthorized" }
-        "429": { description: Rate limited }
+        "413":
+          description: Body too large.
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/Error" }
+        "429":
+          description: Rate limited.
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/Error" }
 
   /api/admin/summary:
     get:
