@@ -73,14 +73,39 @@ export interface Faq {
   number: 1 | 2 | 3 | 4 | 5;
   /** Category after "Sự cố N · ", e.g. "Mùi". */
   category: string;
-  /** The question shown on the list card and as the detail heading. */
+  /** The full question, shown as the detail heading. */
   question: string;
+  /** Shorter title shown on the list cards and the desktop rail. */
+  listTitle: string;
   /** Optional short answer/summary under the heading. */
   summary?: string;
+  /** aria-label of the animation stage <section>, e.g. "Hoạt ảnh xử lý mùi hôi". */
+  stageLabel: string;
   /** aria-label for the illustration SVG. */
   illustrationLabel: string;
   substeps: Substep[];
+  /** Chip at the stage's top right, e.g. "Thối → Chua nhẹ". */
+  stageBadge?: { from: string; to: string };
+  /**
+   * Compare layout (FAQ 4 and 5): two side-by-side states instead of an ordered
+   * checklist. `options[i]` belongs to `substeps[i]`.
+   */
+  options?: readonly [FaqOption, FaqOption];
   /** Tint pair key: maps to `bg-bk-faq-<tint>-bg` / `text-bk-faq-<tint>-fg`. */
   tint: FaqSlug;
   featureTarget: FaqFeatureTarget;
+}
+
+/** One side of a compare-style FAQ (FAQ 4: white vs green/black mold; FAQ 5: the two outputs). */
+export interface FaqOption {
+  /** Figure caption inside the stage, e.g. "Mốc trắng mỏng". */
+  figureLabel: string;
+  /** Short label of the toggle button, e.g. "Mốc trắng". */
+  toggleLabel: string;
+  /** Pill under the figure, e.g. "Đạt chuẩn". */
+  tag: string;
+  /** Marker in the note row: a check or cross icon, or a letter such as "a". */
+  marker: "check" | "cross" | (string & {});
+  /** Note row text; `bold` is rendered in <b>. */
+  note: { before?: string; bold: string; after?: string };
 }
