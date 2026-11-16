@@ -41,7 +41,9 @@ const config: Config = {
           "accent-dark": "#B4531B", // warnings
           brown: "#8A7350", // upcoming badge border
           "brown-dark": "#5B4A33", // upcoming badge text, step badge text
-          "brown-tint": "#F3EAD7", // step badge background
+            "brown-tint": "#F3EAD7", // step badge background
+            "pill-neutral": "#EEF1EA", // neutral compare tag / letter marker
+            olive: "#6B7A1F", // stage badge "before" state (FAQ 1)
           // Per-FAQ tint pairs: bg-bk-faq-smell-bg text-bk-faq-smell-fg
           faq: {
             smell: faqTint("#F6E6D2", "#9A4F16"),
@@ -76,6 +78,29 @@ const config: Config = {
             "organic-peel": "#D9822B",
             "fly-body": "#1E2420",
             "fly-wing": "#DDE6F0",
+            // Shared illustration props (parts.tsx): liquids, metal, skin, mold, pot.
+            water: "#4F9BD3",
+            "water-light": "#6DB3E8",
+            "water-pale": "#DCE9F4",
+            metal: "#A9C4D6",
+            "metal-light": "#C9D8E0",
+            "metal-dark": "#6E8391",
+            skin: "#F2C9A0",
+            "skin-line": "#C98D5B",
+            bottle: "#F3E5B8",
+            pot: "#C8693A",
+            "pot-rim": "#B05A2F",
+            "lid-handle": "#24563A",
+            "mold-pale": "#F6F3EA",
+            "mold-pale-edge": "#D6CFBE",
+            "mold-mid": "#5B8A4D",
+            "mold-green": "#2F6B3A",
+            "mold-dark": "#1E2420",
+            // Household waste bag + collection bin (FAQ 5b).
+            "waste-bag": "#2C3A33",
+            "waste-bag-light": "#46574D",
+            "waste-bag-shade": "#56685D",
+            "waste-bin-green": "#4E8A61",
           },
         },
       },
@@ -204,6 +229,25 @@ const config: Config = {
           "0%, 30%": { transform: "translateY(-24px)" },
           "70%, 100%": { transform: "translateY(0)" },
         },
+        // FAQ 3 board: the bucket's water level rises as the leachate pours in.
+        fillUp: {
+          "0%": { transform: "scaleY(.08)" },
+          "100%": { transform: "scaleY(.85)" },
+        },
+        // FAQ 3 board: tilt / drain are animations, not transitions, so the
+        // player's pause (anim-paused) and reduced motion both stop them.
+        tilt: {
+          "0%": { transform: "rotate(0deg) scale(1)" },
+          "100%": { transform: "rotate(10deg) scale(.78)" },
+        },
+        untilt: {
+          "0%": { transform: "rotate(10deg) scale(.78)" },
+          "100%": { transform: "rotate(0deg) scale(1)" },
+        },
+        drain: {
+          "0%": { transform: "scaleY(1)" },
+          "100%": { transform: "scaleY(.35)" },
+        },
       },
       animation: {
         drop: "drop 2.4s cubic-bezier(.5,0,.9,.6) infinite",
@@ -228,6 +272,10 @@ const config: Config = {
         spread: "spread 2.4s ease-out infinite",
         faqDrop: "faqDrop 2.2s ease-in infinite",
         lidSeal: "lidSeal 2.6s ease-in-out infinite alternate",
+        fillUp: "fillUp 2.4s ease-out forwards",
+        tilt: "tilt .7s ease-in-out forwards",
+        untilt: "untilt .7s ease-in-out forwards",
+        drain: "drain 2.4s ease-out forwards",
       },
     },
   },

@@ -1,4 +1,4 @@
-import { cloneElement, isValidElement, type ReactElement, type ReactNode } from "react";
+import type { ReactNode } from "react";
 import { cn } from "@/lib/cn";
 import type { FaqOption } from "@/content/types";
 import type { StepIllustrationProps } from "../setup/types";
@@ -13,7 +13,7 @@ export interface CompareIllustrationProps extends StepIllustrationProps {
  * Row of white figure cards used by FAQ 4 and 5: caption, the SVG, and a tag
  * under it. Fills the stage's illustration slot (see AnimationStage size
  * "faqCompare"). The active card gets a ring and a slight scale on mobile;
- * on desktop both are shown at full size (DeskFaq).
+ * on desktop all are shown at full size (DeskFaq).
  */
 export function CompareRow({ label, paused, children }: { label: string; paused?: boolean; children: ReactNode }) {
   return (
@@ -23,18 +23,21 @@ export function CompareRow({ label, paused, children }: { label: string; paused?
   );
 }
 
+/** The figure's drawing: fills the card on mobile, capped at 300×280 on desktop. */
+const FIGURE_SLOT =
+  "flex min-h-0 w-full flex-1 items-center justify-center " +
+  "[&>svg]:h-auto [&>svg]:w-full " +
+  "lg:[&>svg]:h-[280px] lg:[&>svg]:w-full lg:[&>svg]:max-w-[300px]";
+
 export function CompareFigure({
   caption,
   active,
   tag,
-  svgClassName,
   children,
 }: {
   caption: string;
   active: boolean;
   tag: ReactNode;
-  /** Overrides the fixed-width `COMPARE_SVG` (e.g. 3 figures on the mobile canvas). */
-  svgClassName?: string;
   children: ReactNode;
 }) {
   return (
@@ -48,13 +51,8 @@ export function CompareFigure({
       )}
     >
       <figcaption className="self-start text-[13px] font-bold lg:text-[15px]">{caption}</figcaption>
-      {isValidElement(children)
-        ? cloneElement(children as ReactElement<{ className?: string }>, { className: svgClassName ?? COMPARE_SVG })
-        : children}
+      <div className={FIGURE_SLOT}>{children}</div>
       {tag}
     </figure>
   );
 }
-
-/** Class of the figure's SVG: 138×128 on mobile, up to 300×280 on desktop. */
-export const COMPARE_SVG = "h-auto w-[138px] flex-none lg:h-[280px] lg:w-full lg:max-w-[300px]";

@@ -8,8 +8,8 @@ import { cn } from "@/lib/cn";
  * stacks chips → illustration → caption → controls.
  *
  * - setup: Main/Step2/Step3 (canvas 336 px, SVG box 358×260 at top 30) and DeskSetup (SVG 480 px, max 560 px).
- * - faq:   Faq1–3 (canvas 300 px, SVG box 300×262 at top 4, centred) and DeskFaq (SVG 400 px, max 480 px).
- * - faqCompare: Faq4–5 (two figures filling the canvas above the caption bubble; full width on desktop).
+ * - faq:   Faq1–3 (canvas 300 px, SVG box 270×236 at top 4, centred) and DeskFaq (SVG 400 px, max 480 px).
+ * - faqCompare: Faq4–5 (figures filling the canvas above the caption bubble; full width on desktop).
  */
 export type AnimationStageSize = "setup" | "faq" | "faqCompare";
 
@@ -20,11 +20,15 @@ const SIZE: Record<AnimationStageSize, { canvas: string; illustration: string }>
   },
   setup: {
     canvas: "h-[336px]",
-    illustration: "left-0 top-[30px] h-[260px] w-full lg:h-[480px] lg:max-w-[560px]",
+    // 240 px tall keeps the bin's floor + shadow clear of a two-line caption
+    // bubble (which reaches up to canvas y≈274).
+    illustration: "left-0 top-[30px] h-[240px] w-full lg:h-[480px] lg:max-w-[560px]",
   },
   faq: {
     canvas: "h-[300px]",
-    illustration: "left-1/2 top-1 h-[262px] w-[300px] -translate-x-1/2 lg:h-[400px] lg:w-full lg:max-w-[480px] lg:translate-x-0",
+    // 270×236 keeps the 320×280 aspect and lifts the bin's floor + shadow above
+    // the caption bubble (which covers the canvas from y≈250).
+    illustration: "left-1/2 top-0 h-[236px] w-[270px] -translate-x-1/2 lg:h-[400px] lg:w-full lg:max-w-[480px] lg:translate-x-0",
   },
 };
 

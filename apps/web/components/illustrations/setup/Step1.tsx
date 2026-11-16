@@ -1,4 +1,5 @@
 import { BinBase } from "../BinBase";
+import { Bracket } from "../parts";
 import type { StepIllustrationProps } from "./types";
 
 /** Newspaper balls resting on the cans (static). [cx, cy] */
@@ -32,8 +33,7 @@ export function Step1({ active, paused, label }: StepIllustrationProps) {
       cans={active === 0 ? "drop" : "static"}
       overlay={
         <>
-          <path d="M66 229 L59 229 L59 262 L66 262" fill="none" strokeWidth="1.2" className="stroke-bk-muted" />
-          <text x="55" y="249" textAnchor="end" fontSize="10" className="fill-bk-illo-label">10–20%</text>
+          <Bracket x={59} y1={229} y2={262} text="10–20%" />
           <g fontSize="10" fontWeight="700" textAnchor="middle">
             {MARKERS.map((m) => {
               const state = m.n - 1 < active ? "done" : m.n - 1 === active ? "current" : "upcoming";
@@ -95,14 +95,14 @@ export function Step1({ active, paused, label }: StepIllustrationProps) {
       {active === 1 && (
         <>
           <g className="motion-safe:animate-hover" opacity="0.55">
-            <rect x="74" y="150" width="172" height="5" rx="1.5" fill="none" strokeWidth="1.4" strokeDasharray="4 3" stroke="#A57A3E" />
+            <rect x="74" y="150" width="172" height="5" rx="1.5" fill="none" strokeWidth="1.4" strokeDasharray="4 3" className="stroke-bk-brown" />
           </g>
-          <path d="M160 162 L160 210 M154 204 L160 211 L166 204" fill="none" stroke="#A57A3E" strokeWidth="1.4" strokeDasharray="3 3" opacity="0.6" />
+          <path d="M160 162 L160 210 M154 204 L160 211 L166 204" fill="none" strokeWidth="1.4" strokeDasharray="3 3" opacity="0.6" className="stroke-bk-brown" />
         </>
       )}
       {active >= 2 && (
         <g className={active === 2 ? "motion-safe:animate-settle" : undefined}>
-          <rect x="74" y="219" width="172" height="5" rx="1.5" strokeWidth="1" stroke="#A57A3E" className="fill-bk-illo-cardboard" />
+          <rect x="74" y="219" width="172" height="5" rx="1.5" strokeWidth="1" className="fill-bk-illo-cardboard stroke-bk-brown" />
         </g>
       )}
     </BinBase>

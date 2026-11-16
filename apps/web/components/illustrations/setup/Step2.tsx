@@ -1,12 +1,8 @@
 import { BinBase, useSvgId } from "../BinBase";
+import { Bottle, Bracket, PressPlate } from "../parts";
 import { OrganicPattern } from "./OrganicPattern";
 import type { StepIllustrationProps } from "./types";
 
-/** EM powder grains falling from the bottle. [cx, cy, delay s] */
-const GRAINS = [
-  [120, 112, 0], [138, 113, 0.3], [156, 112, 0.9], [172, 113, 0.5], [190, 112, 1.2],
-  [206, 113, 0.2], [146, 112, 1.5], [198, 113, 0.8], [128, 113, 1.1], [214, 112, 1.4],
-] as const;
 /** Chopped scraps falling onto layer 2 (sub-step 0). [x, y, w, delay s, class] */
 const SCRAPS = [
   [108, 146, 9, 0, "fill-bk-illo-organic-leaf"], [136, 147, 7, 0.4, "fill-bk-illo-organic-peel"],
@@ -38,15 +34,8 @@ export function Step2({ active, paused, label }: StepIllustrationProps) {
       }
       overlay={
         <>
-          {active === 2 && (
-            <g className="motion-safe:animate-shake" style={{ transformOrigin: "226px 30px" }}>
-              <rect x="214" y="12" width="24" height="36" rx="6" fill="#F3E5B8" strokeWidth="1.2" className="stroke-bk-brown" />
-              <rect x="217" y="6" width="18" height="8" rx="2" className="fill-bk-primary" />
-              <text x="226" y="34" textAnchor="middle" fontSize="9" fontWeight="700" className="fill-bk-brown-dark">EM</text>
-            </g>
-          )}
-          <path d="M66 82 L59 82 L59 226 L66 226" fill="none" strokeWidth="1.2" className="stroke-bk-muted" />
-          <text x="55" y="152" textAnchor="end" fontSize="10" className="fill-bk-illo-label">~70%</text>
+          {active === 2 && <Bottle x={150} y={6} shaking grainY={112} />}
+          <Bracket x={59} y1={82} y2={226} text="~70%" />
           <path d="M252 154 L262 154 M252 190 L262 190 M257 154 L257 190" fill="none" strokeWidth="1.2" className="stroke-bk-muted" />
           <text x="265" y="170" fontSize="10" className="fill-bk-illo-label">3–5</text>
           <text x="265" y="182" fontSize="10" className="fill-bk-illo-label">cm</text>
@@ -79,34 +68,13 @@ export function Step2({ active, paused, label }: StepIllustrationProps) {
         <g
           className={active === 1 ? "motion-safe:animate-spread" : undefined}
           style={active === 1 ? { transformBox: "fill-box", transformOrigin: "bottom" } : undefined}
-          opacity={active >= 2 ? 0.92 : undefined}
         >
           <rect x="70" y="114" width="180" height="40" fill={fill} />
           <rect x="70" y="112" width="180" height="2.5" opacity="0.6" className="fill-bk-illo-cardboard-line" />
         </g>
       )}
 
-      {active === 2 && (
-        <g className="fill-bk-illo-cardboard-line">
-          {GRAINS.map(([cx, cy, delay], i) => (
-            <circle
-              key={i}
-              cx={cx}
-              cy={cy}
-              r="1.6"
-              className="motion-safe:animate-sprinkle"
-              style={delay ? { animationDelay: `${delay}s` } : undefined}
-            />
-          ))}
-        </g>
-      )}
-
-      {active === 3 && (
-        <g className="motion-safe:animate-press">
-          <rect x="96" y="104" width="128" height="8" rx="3" className="fill-bk-brown" />
-          <rect x="150" y="90" width="20" height="14" rx="3" className="fill-bk-brown-dark" />
-        </g>
-      )}
+      {active === 3 && <PressPlate y={104} />}
       {active >= 2 && (
         <rect x="70" y="82" width="180" height="32" fill="none" strokeWidth="1" strokeDasharray="3 3" opacity="0.5" className="stroke-bk-muted" />
       )}

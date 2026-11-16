@@ -102,7 +102,7 @@ export function FaqDetail({ faq }: { faq: Faq }) {
 function StageBadge({ from, to }: { from: string; to: string }) {
   return (
     <Pill className="gap-1.5 px-2.5 py-[5px] text-xs lg:px-3 lg:py-1.5 lg:text-[13px]">
-      <span className="text-[#6B7A1F]">{from}</span>
+      <span className="text-bk-olive">{from}</span>
       <ArrowRight className="text-bk-muted" />
       <span className="text-bk-primary-dark">{to}</span>
     </Pill>

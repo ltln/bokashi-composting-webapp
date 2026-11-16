@@ -17,7 +17,7 @@ function Marker({ marker }: { marker: FaqOption["marker"] }) {
       aria-hidden="true"
       className={cn(
         "flex size-6 flex-none items-center justify-center rounded-full text-xs font-bold",
-        marker === "a" ? "bg-bk-faq-disposal-bg text-bk-faq-disposal-fg" : "bg-[#EEF1EA] text-bk-illo-label",
+        marker === "a" ? "bg-bk-faq-disposal-bg text-bk-faq-disposal-fg" : "bg-bk-pill-neutral text-bk-illo-label",
       )}
     >
       {marker}

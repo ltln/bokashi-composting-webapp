@@ -1,4 +1,4 @@
-import { CompareFigure, CompareRow, COMPARE_SVG, type CompareIllustrationProps } from "./CompareFigure";
+import { CompareFigure, CompareRow, type CompareIllustrationProps } from "./CompareFigure";
 import type { FaqOption } from "@/content/types";
 import { CHECK_PATH, CROSS_PATH, delay } from "./shared";
 
@@ -32,10 +32,10 @@ const WALLS = <path d="M12 20 L12 140 M138 20 L138 140" strokeWidth="6" classNam
 
 /** White mold patches (grow). [cx, cy, rx, ry, delay s] */
 const WHITE = [[32, 66, 9, 3.5, 0], [58, 65.5, 7, 3, 0.4], [84, 66, 10, 3.5, 0.8], [112, 65.5, 8, 3, 1.2]] as const;
-/** Green / black mold patches. [cx, cy, rx, ry, fill] */
+/** Green / black mold patches. [cx, cy, rx, ry, fill token class] */
 const DARK = [
-  [30, 66, 9, 3.5, "#2F6B3A"], [54, 65.5, 6, 3, "#1E2420"], [80, 66, 9, 3.5, "#5B8A4D"],
-  [106, 65.5, 7, 3, "#1E2420"], [124, 66, 5, 2.5, "#2F6B3A"],
+  [30, 66, 9, 3.5, "fill-bk-illo-mold-green"], [54, 65.5, 6, 3, "fill-bk-illo-mold-dark"], [80, 66, 9, 3.5, "fill-bk-illo-mold-mid"],
+  [106, 65.5, 7, 3, "fill-bk-illo-mold-dark"], [124, 66, 5, 2.5, "fill-bk-illo-mold-green"],
 ] as const;
 /** Down arrows pressing on the bag. [x, y1, y2] */
 const ARROWS = [[45, 26, 42], [75, 24, 40], [105, 26, 42]] as const;
@@ -54,15 +54,15 @@ export function Faq4({ active, paused, label, options }: CompareIllustrationProp
         caption={white.figureLabel}
         active={active === 0}
         tag={
-          <span className={`${TAG} bg-bk-faq-liquid-fg`}>
+          <span className={`${TAG} bg-bk-primary`}>
             {icon(CHECK_PATH)}
             {white.tag}
           </span>
         }
       >
-        <svg viewBox="0 0 150 140" role="img" aria-label="Mặt rác phủ mốc trắng mỏng, túi nilon áp sát" className={COMPARE_SVG}>
+        <svg viewBox="0 0 150 140" role="img" aria-label="Mặt rác phủ mốc trắng mỏng, túi nilon áp sát">
           <Scraps />
-          <g fill="#F6F3EA" stroke="#D6CFBE" strokeWidth="0.8">
+          <g strokeWidth="0.8" className="fill-bk-illo-mold-pale stroke-bk-illo-mold-pale-edge">
             {WHITE.map(([cx, cy, rx, ry, d]) => (
               <ellipse key={cx} cx={cx} cy={cy} rx={rx} ry={ry} className="svg-box motion-safe:animate-grow" style={delay(d)} />
             ))}
@@ -81,10 +81,10 @@ export function Faq4({ active, paused, label, options }: CompareIllustrationProp
           </span>
         }
       >
-        <svg viewBox="0 0 150 140" role="img" aria-label="Mặt rác có mốc xanh đen, túi nilon phồng hở khí; mũi tên nén chặt xuống" className={COMPARE_SVG}>
+        <svg viewBox="0 0 150 140" role="img" aria-label="Mặt rác có mốc xanh đen, túi nilon phồng hở khí; mũi tên nén chặt xuống">
           <Scraps />
           {DARK.map(([cx, cy, rx, ry, fill]) => (
-            <ellipse key={cx} cx={cx} cy={cy} rx={rx} ry={ry} fill={fill} />
+            <ellipse key={cx} cx={cx} cy={cy} rx={rx} ry={ry} className={fill} />
           ))}
           <path d="M15 60 Q35 46 55 58 Q75 44 95 57 Q115 46 135 60" fill="none" strokeWidth="2.4" className="stroke-bk-illo-bag" />
           <g fill="#FFFFFF" strokeWidth="0.8" className="stroke-bk-illo-bag">
