@@ -46,7 +46,7 @@ export default async function LoginPage({ searchParams }: { searchParams: Promis
         <LoginHero size={320} idPrefix="dl" />
         <ul className="m-0 flex max-w-[420px] list-none flex-col gap-3.5 p-0">
           {loginCopy.features.map((f, i) => (
-            <li key={f} className="flex items-start gap-3 text-[15px] leading-[22px]">
+            <li key={f} className="flex items-center gap-3 text-[15px] leading-[22px]">
               <span className="flex h-8 w-8 flex-none items-center justify-center rounded-[10px] bg-bk-surface text-bk-primary">
                 <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
                   {featureIcons[i]}
