@@ -94,7 +94,7 @@ export const faqs: readonly Faq[] = [
     listTitle: "Rác ra nhiều nước, đáy thùng đọng dịch?",
     stageLabel: "Hoạt ảnh xử lý dịch rỉ",
     illustrationLabel:
-      "Mặt cắt thùng: dịch rỉ dềnh quá mặt lon; thùng nghiêng rót bớt dịch vào xô; lớp rác mới vắt kiệt nước được nạp vào",
+      "Mặt cắt thùng: dịch rỉ dềnh quá mặt lon; thùng nghiêng rót bớt dịch vào xô; dịch đã rót ra pha loãng ~1:100 rồi tưới cây",
     tint: "liquid",
     featureTarget: "FAQ_3_Liquid",
     substeps: [
@@ -111,9 +111,9 @@ export const faqs: readonly Faq[] = [
         durationMs: SUBSTEP_MS,
       },
       {
-        id: "dry",
-        caption: "Nạp lớp rác tiếp theo đã vắt kiệt nước",
-        checklist: "Lót thêm giấy báo khô vo viên rồi nạp lớp rác đã vắt kiệt nước",
+        id: "water",
+        caption: "Dịch rỉ đã rót ra: pha loãng ~1:100 rồi tưới cây",
+        checklist: "Pha loãng dịch rỉ ~1:100 rồi tưới cây – không tưới đậm đặc",
         durationMs: SUBSTEP_MS,
       },
     ],
