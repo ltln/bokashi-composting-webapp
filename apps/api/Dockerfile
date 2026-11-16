@@ -4,14 +4,18 @@
 #   docker run --rm -p 8080:8080 -e DATABASE_URL=... ghcr.io/ltln/bokashi-api
 #   docker run --rm -e DATABASE_URL=... ghcr.io/ltln/bokashi-api migrate
 
-FROM golang:1.26-alpine AS build
+# Build on the native build platform and cross-compile, so arm64 images are
+# not compiled under QEMU.
+FROM --platform=$BUILDPLATFORM golang:1.26-alpine AS build
+ARG TARGETOS
+ARG TARGETARCH
 WORKDIR /src
 COPY apps/api/go.mod apps/api/go.sum ./
 RUN --mount=type=cache,target=/go/pkg/mod go mod download
 COPY apps/api/ ./
 RUN --mount=type=cache,target=/go/pkg/mod \
     --mount=type=cache,target=/root/.cache/go-build \
-    CGO_ENABLED=0 GOOS=linux go build -trimpath -ldflags="-s -w" -o /out/api ./cmd/api
+    CGO_ENABLED=0 GOOS=$TARGETOS GOARCH=$TARGETARCH go build -trimpath -ldflags="-s -w" -o /out/api ./cmd/api
 
 FROM gcr.io/distroless/static:nonroot
 # Migrations are embedded in the binary (apps/api/db/embed.go); the SQL files
