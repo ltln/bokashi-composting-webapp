@@ -1,0 +1,64 @@
+# Production stack for the home server, run from /opt/bokashi by deploy.sh.
+# Never shares anything with other projects: own project name, network and volume
+# (bokashi, bokashi_internal, bokashi_pgdata). COMPOSE_PROJECT_NAME is only
+# overridden for local dry runs, so a test never touches the real names.
+name: bokashi
+
+x-logging: &logging
+  driver: json-file
+  options:
+    max-size: "10m"
+    max-file: "3"
+
+services:
+  db:
+    image: postgres:16-alpine
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER:?set POSTGRES_USER in .env}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?set POSTGRES_PASSWORD in .env}
+      POSTGRES_DB: ${POSTGRES_DB:?set POSTGRES_DB in .env}
+    volumes:
+      - bokashi_pgdata:/var/lib/postgresql/data
+    networks: [internal]
+    logging: *logging
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U \"$$POSTGRES_USER\" -d \"$$POSTGRES_DB\""]
+      interval: 5s
+      timeout: 3s
+      retries: 20
+
+  api:
+    image: ghcr.io/ltln/bokashi-api:${API_TAG:-latest}
+    restart: unless-stopped
+    # ENV_FILE exists only so `compose config` can be checked against .env.example.
+    env_file: ${ENV_FILE:-.env}
+    environment:
+      DATABASE_URL: postgres://${POSTGRES_USER}:${POSTGRES_PASSWORD}@db:5432/${POSTGRES_DB}?sslmode=disable
+      PORT: "8080"
+    depends_on:
+      db:
+        condition: service_healthy
+    networks: [internal]
+    logging: *logging
+
+  web:
+    image: ghcr.io/ltln/bokashi-web:${WEB_TAG:-latest}
+    restart: unless-stopped
+    environment:
+      API_INTERNAL_URL: http://api:8080
+    depends_on:
+      - api
+    ports:
+      # Loopback only; Cloudflare Tunnel (cloudflared on the host) points here.
+      - "127.0.0.1:3100:3000"
+    networks: [internal]
+    logging: *logging
+
+networks:
+  internal:
+    name: ${COMPOSE_PROJECT_NAME:-bokashi}_internal
+
+volumes:
+  bokashi_pgdata:
+    name: ${COMPOSE_PROJECT_NAME:-bokashi}_pgdata

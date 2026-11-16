@@ -1,0 +1,12 @@
+# User unit: install to ~/.config/systemd/user/ (see deploy/README.md).
+[Unit]
+Description=Run the Bokashi deploy check every 2 minutes
+
+[Timer]
+OnBootSec=2min
+OnUnitActiveSec=2min
+Persistent=true
+Unit=bokashi-deploy.service
+
+[Install]
+WantedBy=timers.target

@@ -1,0 +1,10 @@
+# User unit: install to ~/.config/systemd/user/ (see deploy/README.md).
+[Unit]
+Description=Bokashi pull-based deploy (pull new images, migrate, restart, health check)
+Wants=network-online.target
+
+[Service]
+Type=oneshot
+ExecStart=/opt/bokashi/deploy.sh
+# A hung pull or health check must not block later runs forever.
+TimeoutStartSec=15min
