@@ -1,4 +1,5 @@
 import { CompareFigure, CompareRow, COMPARE_SVG, type CompareIllustrationProps } from "./CompareFigure";
+import type { FaqOption } from "@/content/types";
 import { CHECK_PATH, CROSS_PATH, delay } from "./shared";
 
 const icon = (d: string) => (
@@ -45,7 +46,8 @@ const ARROWS = [[45, 26, 42], [75, 24, 40], [105, 26, 42]] as const;
  * arrows pressing down ("Lọt khí"). `active` picks the emphasised panel.
  */
 export function Faq4({ active, paused, label, options }: CompareIllustrationProps) {
-  const [white, dark] = options;
+  // `noUncheckedIndexedAccess`: pin the content-guaranteed shape (2 options).
+  const [white, dark] = options as readonly [FaqOption, FaqOption];
   return (
     <CompareRow label={label} paused={paused}>
       <CompareFigure
