@@ -3,6 +3,7 @@
 **Bếp Gọn – Rác Đúng**: a Vietnamese, mobile-first guide to building a DIY Bokashi
 bin in a rented room. Spec: [`AGENTS.md`](AGENTS.md). Plan: [`docs/PLAN.md`](docs/PLAN.md).
 Design boards: [`docs/design/`](docs/design/README.md).
+Deploying to the home server: [`deploy/README.md`](deploy/README.md).
 
 ## Layout
 - `apps/web`: Next.js (App Router) + Tailwind. `/api/*` is proxied to the Go API.
