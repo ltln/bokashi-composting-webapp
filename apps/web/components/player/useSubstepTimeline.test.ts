@@ -157,7 +157,7 @@ describe("useSubstepTimeline", () => {
   it("does not reset when given a new array with the same durations", () => {
     const { result, rerender } = setup();
     advance(1200);
-    rerender({ d: [...DURATIONS] });
+    rerender({ d: [...DURATIONS], o: undefined });
     expect(result.current.active).toBe(1);
   });
 
