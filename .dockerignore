@@ -1,0 +1,15 @@
+# Build context for both Dockerfiles is the repo root.
+**/node_modules
+**/.next
+**/.turbo
+**/.env
+**/.env.*
+!**/.env.example
+.git
+.github
+docs
+infra
+apps/api/bin
+apps/api/tmp
+**/*.log
+**/.DS_Store
