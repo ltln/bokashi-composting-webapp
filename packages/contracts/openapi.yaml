@@ -1,0 +1,281 @@
+openapi: 3.1.0
+info:
+  title: Bếp Gọn – Rác Đúng API
+  version: 0.1.0
+  description: |
+    Go API behind the Next.js `/api/*` proxy (same origin, `sid` cookie).
+    Endpoints follow docs/PLAN.md §3.2. Schemas are intentionally minimal in M0;
+    the owning milestone fleshes them out (M1 auth, M5 events, M6 admin).
+    Event enums come from events.json; keep the enum lists below in sync.
+servers:
+  - url: /
+tags:
+  - name: auth
+  - name: events
+  - name: admin
+  - name: ops
+
+components:
+  securitySchemes:
+    session:
+      type: apiKey
+      in: cookie
+      name: sid
+  parameters:
+    Range:
+      name: range
+      in: query
+      schema:
+        type: string
+        enum: [today, 7d, 30d, all]
+    Device:
+      name: device
+      in: query
+      schema:
+        type: string
+        enum: [all, mobile, desktop]
+  responses:
+    Unauthorized:
+      description: No valid session.
+      content:
+        application/json:
+          schema: { $ref: "#/components/schemas/Error" }
+    Forbidden:
+      description: Authenticated but not an admin.
+      content:
+        application/json:
+          schema: { $ref: "#/components/schemas/Error" }
+  schemas:
+    Error:
+      type: object
+      required: [error]
+      properties:
+        error: { type: string }
+    EventType:
+      type: string
+      enum: [page_view, switch_tab, view_3d_step, click_faq_3d]
+    FeatureTarget:
+      type: string
+      enum:
+        - Tab_1_Setup
+        - Tab_2_FAQ
+        - 3D_Setup_Layer1
+        - 3D_Setup_Layer2
+        - 3D_Setup_Layer3
+        - FAQ_1_Smell
+        - FAQ_2_Maggots
+        - FAQ_3_Liquid
+        - FAQ_4_Mold
+        - FAQ_5_Disposal
+    Me:
+      type: object
+      required: [name, avatarUrl, isAdmin]
+      properties:
+        name: { type: string }
+        avatarUrl: { type: [string, "null"] }
+        isAdmin: { type: boolean }
+    EventIn:
+      type: object
+      required: [eventType, sessionId]
+      properties:
+        eventType: { $ref: "#/components/schemas/EventType" }
+        featureTarget: { $ref: "#/components/schemas/FeatureTarget" }
+        clientTs: { type: string, format: date-time }
+        sessionId: { type: string }
+    Summary:
+      type: object
+      properties:
+        totalEvents: { type: integer }
+        uniqueSessions: { type: integer }
+        pageViews: { type: integer }
+        mobilePct: { type: number }
+    CountRow:
+      type: object
+      required: [key, count]
+      properties:
+        key: { type: string }
+        count: { type: integer }
+    LogRow:
+      type: object
+      properties:
+        id: { type: integer }
+        ts: { type: string, format: date-time }
+        sessionId: { type: string }
+        eventType: { $ref: "#/components/schemas/EventType" }
+        featureTarget: { type: [string, "null"] }
+        deviceType: { type: string }
+        deviceInfo: { type: [string, "null"] }
+    LogsPage:
+      type: object
+      required: [items]
+      properties:
+        items:
+          type: array
+          items: { $ref: "#/components/schemas/LogRow" }
+        nextCursor: { type: [string, "null"] }
+
+paths:
+  /healthz:
+    get:
+      tags: [ops]
+      summary: Liveness
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status: { type: string }
+
+  /api/auth/google/login:
+    get:
+      tags: [auth]
+      summary: Redirect to Google (sets state + PKCE cookie)
+      responses:
+        "302": { description: Redirect to Google }
+
+  /api/auth/google/callback:
+    get:
+      tags: [auth]
+      summary: Exchange code, upsert user, set sid cookie, redirect to /setup/1
+      parameters:
+        - { name: code, in: query, schema: { type: string } }
+        - { name: state, in: query, schema: { type: string } }
+      responses:
+        "302": { description: Redirect into the app }
+        "400": { description: Invalid state or code }
+
+  /api/auth/logout:
+    post:
+      tags: [auth]
+      summary: Delete the current session
+      security: [{ session: [] }]
+      responses:
+        "204": { description: Logged out }
+        "401": { $ref: "#/components/responses/Unauthorized" }
+
+  /api/me:
+    get:
+      tags: [auth]
+      summary: Current user
+      security: [{ session: [] }]
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/Me" }
+        "401": { $ref: "#/components/responses/Unauthorized" }
+
+  /api/events:
+    post:
+      tags: [events]
+      summary: Batch ingest tracking events (max 50 per call)
+      security: [{ session: [] }]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: array
+              maxItems: 50
+              items: { $ref: "#/components/schemas/EventIn" }
+      responses:
+        "202": { description: Accepted }
+        "400": { description: Invalid event type/target combination }
+        "401": { $ref: "#/components/responses/Unauthorized" }
+        "429": { description: Rate limited }
+
+  /api/admin/summary:
+    get:
+      tags: [admin]
+      summary: KPIs
+      security: [{ session: [] }]
+      parameters:
+        - $ref: "#/components/parameters/Range"
+        - $ref: "#/components/parameters/Device"
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/Summary" }
+        "401": { $ref: "#/components/responses/Unauthorized" }
+        "403": { $ref: "#/components/responses/Forbidden" }
+
+  /api/admin/features:
+    get:
+      tags: [admin]
+      summary: Counts per feature_target, sorted desc
+      security: [{ session: [] }]
+      parameters:
+        - $ref: "#/components/parameters/Range"
+        - $ref: "#/components/parameters/Device"
+        - { name: tab, in: query, schema: { type: string, enum: [all, setup, faq] } }
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items: { $ref: "#/components/schemas/CountRow" }
+        "401": { $ref: "#/components/responses/Unauthorized" }
+        "403": { $ref: "#/components/responses/Forbidden" }
+
+  /api/admin/event-types:
+    get:
+      tags: [admin]
+      summary: Counts per event type
+      security: [{ session: [] }]
+      parameters:
+        - $ref: "#/components/parameters/Range"
+        - $ref: "#/components/parameters/Device"
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items: { $ref: "#/components/schemas/CountRow" }
+        "401": { $ref: "#/components/responses/Unauthorized" }
+        "403": { $ref: "#/components/responses/Forbidden" }
+
+  /api/admin/logs:
+    get:
+      tags: [admin]
+      summary: Paginated recent logs
+      security: [{ session: [] }]
+      parameters:
+        - $ref: "#/components/parameters/Range"
+        - $ref: "#/components/parameters/Device"
+        - { name: target, in: query, schema: { type: string } }
+        - { name: cursor, in: query, schema: { type: string } }
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/LogsPage" }
+        "401": { $ref: "#/components/responses/Unauthorized" }
+        "403": { $ref: "#/components/responses/Forbidden" }
+
+  /api/admin/export.csv:
+    get:
+      tags: [admin]
+      summary: Streamed CSV of raw logs
+      security: [{ session: [] }]
+      parameters:
+        - $ref: "#/components/parameters/Range"
+        - $ref: "#/components/parameters/Device"
+      responses:
+        "200":
+          description: CSV
+          content:
+            text/csv:
+              schema: { type: string }
+        "401": { $ref: "#/components/responses/Unauthorized" }
+        "403": { $ref: "#/components/responses/Forbidden" }
