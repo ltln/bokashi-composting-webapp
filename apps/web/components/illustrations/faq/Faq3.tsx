@@ -2,28 +2,20 @@ import { BinBase, useSvgId } from "../BinBase";
 import { OrganicPattern } from "../setup/OrganicPattern";
 import type { StepIllustrationProps } from "../setup/types";
 import { cn } from "@/lib/cn";
+import { LeaderLabel, Lid, PotSprout, WateringCan } from "../parts";
 import { RubbishBody, delay } from "./shared";
 
 /** Liquid drops seeping down through the rubbish. [x, y, delay s] */
-const DROPS = [[118, 110, 0], [150, 100, 0.7], [182, 112, 1.3], [206, 104, 1.9]] as const;
+const DROPS = [[118, 132, 0], [150, 128, 0.7], [182, 134, 1.3], [206, 126, 1.9]] as const;
 /** Paper balls already in the bin (cy offset by the board). [cx, cy] */
 const BASE_BALLS = [[108, 241], [134, 241.5], [160, 241], [186, 241.5], [212, 241]] as const;
-const STILL_BALLS = [[100, 77], [114, 78], [128, 77], [142, 78]] as const;
-/** Paper balls dropping onto the surface. [cx, cy, delay s] */
-const DROP_BALLS = [[156, 77, 0], [170, 78, 0.4], [184, 77, 0.8]] as const;
-/** Scraps of the next layer. [x, delay s, class] */
-const SCRAPS = [
-  [108, 0, "fill-bk-illo-organic-leaf"], [136, 0.4, "fill-bk-illo-organic-peel"],
-  [160, 0.9, "fill-bk-illo-organic-green"], [186, 0.2, "fill-bk-illo-organic-peel"],
-  [208, 0.7, "fill-bk-illo-organic-leaf"],
-] as const;
 
 /**
  * FAQ 3, "Đọng dịch rỉ". Sub-steps: 0 open the lid and check — leachate pools
  * above the false bottom ("Dịch dềnh quá mặt lon"), 1 the bin tilts and the
- * excess leachate pours through the rim into a bucket standing outside, 2 the
- * bin is upright again: dry paper balls drop in and a wrung-out layer of
- * scraps falls on them.
+ * excess leachate pours through the rim into a bucket whose water level rises,
+ * 2 the bucket is gone: a watering can pours the diluted (~1:100) leachate
+ * onto a potted sprout.
  */
 export function Faq3({ active, paused, label }: StepIllustrationProps) {
   const patternId = `${useSvgId()}-org`;
@@ -32,29 +24,25 @@ export function Faq3({ active, paused, label }: StepIllustrationProps) {
       {/* Tilt (origin = bin floor) only while pouring; 0.78 keeps the rotated 300×262 SVG inside the canvas. */}
       <div
         className={cn(
-          "h-full w-full origin-bottom transition-transform duration-700",
-          active === 1 && "rotate-[10deg] scale-[0.78]",
+          "relative h-full w-full origin-bottom",
+          active === 1 && "motion-safe:animate-tilt",
+          active === 2 && "motion-safe:animate-untilt",
         )}
       >
         <BinBase
           label={label}
           paused={paused}
           newspaper
-          newspaperClassName="fill-[#DCE5EA]"
+          newspaperClassName="fill-bk-illo-water-pale"
           underlay={
             <rect
               x="70"
               y="248"
               width="180"
               height="12"
-              fill="#4F9BD3"
               opacity="0.55"
-              className="transition-transform duration-700"
-              style={
-                active === 1
-                  ? { transform: "scaleY(0.35)", transformBox: "fill-box", transformOrigin: "bottom" }
-                  : undefined
-              }
+              className={cn("fill-bk-illo-water transition-none", active >= 1 && "motion-safe:animate-drain")}
+              style={{ transformBox: "fill-box", transformOrigin: "bottom" }}
             />
           }
           cardboard
@@ -69,6 +57,7 @@ export function Faq3({ active, paused, label }: StepIllustrationProps) {
           }
           overlay={
             <>
+              <Lid state={active === 2 ? "sealed" : "open"} />
               {active === 0 && (
                 <>
                   <rect
@@ -78,71 +67,78 @@ export function Faq3({ active, paused, label }: StepIllustrationProps) {
                     height="36"
                     rx="6"
                     fill="none"
-                    stroke="#1F5C94"
                     strokeWidth="1.6"
                     strokeDasharray="5 3"
-                    className="motion-safe:animate-pulse"
+                    className="stroke-bk-illo-water motion-safe:animate-pulse"
                   />
-                  <g fontSize="10" fill="#1F4D6E">
-                    <path d="M232 242 L256 230" strokeWidth="1" stroke="#1F5C94" />
-                    <text x="258" y="222">Dịch dềnh</text>
-                    <text x="258" y="234">quá mặt lon</text>
-                  </g>
+                  <LeaderLabel from={[232, 242]} to={[258, 226]} lines={["Dịch dềnh", "quá mặt lon"]} />
                 </>
-              )}
-              {active === 2 && (
-                <g fontSize="10" fill="#1F4D6E">
-                  <path d="M190 76 L256 70" strokeWidth="1" className="stroke-bk-muted" />
-                  <text x="258" y="66" className="fill-bk-illo-label">Giấy báo</text>
-                  <text x="258" y="78" className="fill-bk-illo-label">khô</text>
-                </g>
               )}
             </>
           }
         >
-          <g fill="#B9C6CF" stroke="#8597A3" strokeWidth="0.9">
+          <g strokeWidth="0.9" className="fill-bk-illo-metal stroke-bk-illo-metal-dark">
             {BASE_BALLS.map(([cx, cy]) => (
               <circle key={cx} cx={cx} cy={cy} r="4.5" />
             ))}
           </g>
           <RubbishBody fill={`url(#${patternId})`} />
           <rect x="70" y="82" width="180" height="2.5" className="fill-bk-illo-cardboard-line" />
-          {active <= 1 && (
-            <g fill="#6DB3E8">
+          {active === 0 && (
+            <g className="fill-bk-illo-water-light">
               {DROPS.map(([x, y, d]) => (
                 <path key={x} d={`M${x} ${y} q3 5 0 7 q-3 -2 0 -7z`} className="motion-safe:animate-seep" style={delay(d)} />
               ))}
             </g>
           )}
-          {active === 2 && (
-            <g fill="#F4F0E6" stroke="#B4AC9C" strokeWidth="0.9">
-              {STILL_BALLS.map(([cx, cy]) => (
-                <circle key={cx} cx={cx} cy={cy} r="4.5" />
-              ))}
-              {DROP_BALLS.map(([cx, cy, d]) => (
-                <circle key={cx} cx={cx} cy={cy} r="4.5" className="motion-safe:animate-faqDrop" style={delay(d)} />
-              ))}
-            </g>
-          )}
-          {active === 2 &&
-            SCRAPS.map(([x, d, cls]) => (
-              <rect key={x} x={x} y="62" width="9" height="4" rx="1.5" className={`${cls} motion-safe:animate-fall`} style={delay(d)} />
-            ))}
         </BinBase>
+        {active === 1 && (
+          /*
+           * The stream lives inside the tilting wrapper (local coords), so it
+           * pours from the tilted rim. It waits for the tilt to finish before
+           * appearing; the droplets cascade down the arc into the bucket.
+           */
+          <svg viewBox="0 0 320 280" aria-hidden="true" className="absolute inset-0 h-full w-full">
+            <g className="motion-safe:animate-faqDrop" style={delay(0.7)}>
+              <path d="M240 52 Q260 96 255 141" fill="none" strokeWidth="5" strokeLinecap="round" className="stroke-bk-illo-water motion-safe:animate-pulse" />
+              <g className="fill-bk-illo-water-light">
+                <path d="M248 74 q3 5 0 8 q-3 -3 0 -8z" className="motion-safe:animate-fall" />
+                <path d="M254 96 q3 5 0 8 q-3 -3 0 -8z" className="motion-safe:animate-fall" style={delay(0.3)} />
+                <path d="M256 119 q3 5 0 8 q-3 -3 0 -8z" className="motion-safe:animate-fall" style={delay(0.6)} />
+                <path d="M255 136 q3 5 0 8 q-3 -3 0 -8z" className="motion-safe:animate-fall" style={delay(0.9)} />
+              </g>
+            </g>
+          </svg>
+        )}
       </div>
       {active === 1 && (
-        <>
-          {/* Pour stream from the tilted rim's top-right corner into the bucket. */}
-          <svg viewBox="0 0 320 280" aria-hidden="true" className="absolute inset-0 h-full w-full">
-            <path d="M276 110 Q296 152 282 202" fill="none" stroke="#4F9BD3" strokeWidth="5" strokeLinecap="round" className="motion-safe:animate-pulse" />
-          </svg>
-          {/* Bucket stays upright as a sibling of the tilting wrapper. */}
-          <svg viewBox="0 0 64 56" aria-hidden="true" className="absolute bottom-[5%] right-[1%] w-[22%]">
-            <path d="M10 16 L54 16 L48 52 L16 52 Z" className="fill-bk-illo-bin-wall" stroke="#8597A3" strokeWidth="2" strokeLinejoin="round" />
-            <rect x="12" y="18" width="40" height="6" rx="2" fill="#4F9BD3" opacity="0.7" />
-            <path d="M14 16 Q32 2 50 16" fill="none" stroke="#8597A3" strokeWidth="4" strokeLinecap="round" />
-          </svg>
-        </>
+        /* Bucket stands upright beside the bin; its water level rises as the leachate pours in. */
+        <svg viewBox="0 0 320 280" aria-hidden="true" className="absolute inset-0 h-full w-full">
+          <path d="M228 186 Q252 168 276 186" fill="none" strokeWidth="3" strokeLinecap="round" className="stroke-bk-illo-metal-dark" />
+          <ellipse cx="252" cy="186" rx="28" ry="6" strokeWidth="1.5" className="fill-bk-illo-water-pale stroke-bk-illo-metal-dark" />
+          <path d="M224 186 L280 186 L272 248 L232 248 Z" strokeWidth="2" strokeLinejoin="round" className="fill-bk-illo-metal stroke-bk-illo-metal-dark" />
+          <rect
+            x="234"
+            y="194"
+            width="36"
+            height="52"
+            opacity="0.8"
+            className="fill-bk-illo-water motion-safe:animate-fillUp"
+            style={{ animationDelay: "0.7s", transform: "scaleY(.08)", transformBox: "fill-box", transformOrigin: "bottom" }}
+          />
+          <g className="fill-bk-illo-water-light">
+            <path d="M262 174 q3 5 0 8 q-3 -3 0 -8z" className="motion-safe:animate-fall" style={delay(1.0)} />
+            <path d="M274 178 q3 5 0 8 q-3 -3 0 -8z" className="motion-safe:animate-fall" style={delay(1.6)} />
+          </g>
+        </svg>
+      )}
+      {active === 2 && (
+        /* The diluted leachate waters a potted sprout beside the (upright) bin. */
+        <svg viewBox="0 0 320 280" aria-hidden="true" className="absolute inset-0 h-full w-full">
+          <LeaderLabel from={[262, 122]} to={[266, 98]} lines={["Pha loãng", "~1:100"]} />
+          <WateringCan x={220} y={126} pouring />
+          <PotSprout x={258} y={208} w={58} />
+        </svg>
       )}
     </div>
   );

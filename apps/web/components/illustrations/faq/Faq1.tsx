@@ -1,12 +1,13 @@
 import { BinBase, useSvgId } from "../BinBase";
 import { OrganicPattern } from "../setup/OrganicPattern";
 import type { StepIllustrationProps } from "../setup/types";
+import { BagCollar, Lid, PressPlate } from "../parts";
 import { RubbishBody, delay } from "./shared";
 
 /** EM grains falling from the spoon. [cx, delay s] */
 const GRAINS = [[176, 0], [182, 0.35], [188, 0.7], [179, 1], [185, 0.5]] as const;
-/** Smell wisps. [x, y, delay s] */
-const WISPS = [[104, 40, 0], [124, 42, 0.9], [144, 40, 1.8]] as const;
+/** Smell wisps rising from the bag's left opening. [x, y, delay s] */
+const WISPS = [[86, 66, 0], [96, 68, 0.9], [106, 66, 1.8]] as const;
 
 /**
  * FAQ 1, "Thùng bốc mùi hôi thối" (Faq1 board). Sub-steps: 0 the lid is off and
@@ -29,19 +30,15 @@ export function Faq1({ active, paused, label }: StepIllustrationProps) {
           <defs>
             <OrganicPattern id={patternId} />
           </defs>
-          {active < 3 ? (
-            <path d="M68 44 Q70 26 104 22 L190 18" fill="none" strokeWidth="2.6" strokeLinecap="round" className="stroke-bk-illo-bag" />
-          ) : (
-            <path d="M68 44 Q74 56 80 80 L240 80 Q246 56 252 44" fill="none" strokeWidth="2.6" strokeLinecap="round" strokeLinejoin="round" className="stroke-bk-illo-bag" />
-          )}
+          <BagCollar state={active < 3 ? "up" : "flat"} />
           {active === 1 && (
             <g>
               <path d="M252 34 L192 58" strokeWidth="4" strokeLinecap="round" className="stroke-bk-brown" />
-              <ellipse cx="183" cy="61" rx="11" ry="5" strokeWidth="1" transform="rotate(-22 183 61)" fill="#CBD2D6" stroke="#8D989E" />
+              <ellipse cx="183" cy="61" rx="11" ry="5" strokeWidth="1" transform="rotate(-22 183 61)" className="fill-bk-illo-metal stroke-bk-illo-metal-dark" />
               <ellipse cx="183" cy="60" rx="7" ry="2.6" transform="rotate(-22 183 60)" className="fill-bk-illo-cardboard-line" />
             </g>
           )}
-          <g fill="none" strokeWidth="2.2" strokeLinecap="round" stroke="#8FA33A">
+          <g fill="none" strokeWidth="2.2" strokeLinecap="round" className="stroke-bk-illo-organic-leaf">
             {wisps.map(([x, y, d]) => (
               <path key={x} d={`M${x} ${y} q-5 -5 0 -10 t0 -10`} className="motion-safe:animate-rise" style={delay(d)} />
             ))}
@@ -50,25 +47,13 @@ export function Faq1({ active, paused, label }: StepIllustrationProps) {
       }
       overlay={
         <>
-          {active <= 1 && (
-            <g>
-              <rect x="266" y="214" width="36" height="48" rx="7" fill="#F3E5B8" strokeWidth="1.2" className="stroke-bk-brown" />
-              <rect x="270" y="207" width="28" height="9" rx="3" className="fill-bk-primary" />
-              <text x="284" y="243" textAnchor="middle" fontSize="11" fontWeight="700" className="fill-bk-brown-dark">EM</text>
-            </g>
-          )}
           {active === 1 && (
             <g>
-              <rect x="226" y="62" width="70" height="20" rx="10" className="fill-bk-accent" />
-              <text x="261" y="76" textAnchor="middle" fontSize="10.5" fontWeight="700" fill="#FFFFFF">2–3 muỗng</text>
+              <rect x="214" y="20" width="70" height="20" rx="10" className="fill-bk-accent" />
+              <text x="249" y="34" textAnchor="middle" fontSize="10.5" fontWeight="700" fill="#FFFFFF">2–3 muỗng</text>
             </g>
           )}
-          {active === 3 && (
-            <g className="motion-safe:animate-lidSeal">
-              <rect x="62" y="36" width="196" height="12" rx="5" className="fill-bk-primary" />
-              <rect x="146" y="30" width="28" height="7" rx="3" className="fill-bk-faq-disposal-fg" />
-            </g>
-          )}
+          <Lid state={active === 3 ? "sealing" : "open"} />
         </>
       }
     >
@@ -81,12 +66,7 @@ export function Faq1({ active, paused, label }: StepIllustrationProps) {
           ))}
         </g>
       )}
-      {active === 2 && (
-        <g className="motion-safe:animate-press">
-          <rect x="96" y="66" width="128" height="8" rx="3" className="fill-bk-brown" />
-          <rect x="150" y="52" width="20" height="14" rx="3" className="fill-bk-brown-dark" />
-        </g>
-      )}
+      {active === 2 && <PressPlate y={66} />}
     </BinBase>
   );
 }

@@ -1,6 +1,7 @@
 import { BinBase, useSvgId } from "../BinBase";
 import { OrganicPattern } from "../setup/OrganicPattern";
 import type { StepIllustrationProps } from "../setup/types";
+import { BagCollar, Lid, LeaderLabel } from "../parts";
 import { Fly, RubbishBody, delay } from "./shared";
 
 /** Maggots at the gap in the bag. [x, y, w, delay s] */
@@ -30,11 +31,7 @@ export function Faq2({ active, paused, label }: StepIllustrationProps) {
           <defs>
             <OrganicPattern id={patternId} />
           </defs>
-          {active === 0 ? (
-            <path d="M68 44 Q76 46 79 58 L80 80 L190 80 Q199 79 201 70" fill="none" strokeWidth="2.6" strokeLinejoin="round" strokeLinecap="round" className="stroke-bk-illo-bag" />
-          ) : (
-            <path d="M68 44 Q76 46 79 58 L80 80 L242 80" fill="none" strokeWidth="2.6" strokeLinejoin="round" strokeLinecap="round" className="stroke-bk-illo-bag" />
-          )}
+          <BagCollar state={active === 0 ? "gap" : "lip"} />
           {active <= 1 && (
             <g
               fill="none"
@@ -50,23 +47,13 @@ export function Faq2({ active, paused, label }: StepIllustrationProps) {
       }
       overlay={
         <>
-          <g transform={active === 2 ? undefined : "rotate(-6 62 42)"}>
-            <g className={active === 2 ? "motion-safe:animate-lidSeal" : undefined}>
-              <rect x="62" y={active === 2 ? 36 : 30} width="196" height="12" rx="5" className="fill-bk-primary" />
-              <rect x="146" y={active === 2 ? 30 : 24} width="28" height="7" rx="3" className="fill-bk-faq-disposal-fg" />
-            </g>
-          </g>
+          <Lid state={active === 2 ? "sealing" : "ajar"} />
           {FLIES.slice(0, active === 2 ? 2 : 4).map(([x, y, d]) => (
             <g key={x} className="motion-safe:animate-buzz" style={delay(d)}>
               <Fly x={x} y={y} />
             </g>
           ))}
-          {active === 0 && (
-            <g fontSize="10" className="fill-bk-illo-label">
-              <path d="M242 82 L262 100" strokeWidth="1" className="stroke-bk-muted" />
-              <text x="264" y="108">vùng hở</text>
-            </g>
-          )}
+          {active === 0 && <LeaderLabel from={[242, 82]} to={[264, 104]} lines={["vùng hở"]} />}
         </>
       }
     >
@@ -75,7 +62,7 @@ export function Faq2({ active, paused, label }: StepIllustrationProps) {
       <rect x="202" y="80" width="40" height="5" rx="2" opacity="0.7" className="fill-bk-illo-cardboard-line" />
       {active === 0 && (
         <>
-          <g fill="#EFE6C8" stroke="#BFB08A" strokeWidth="0.8">
+          <g strokeWidth="0.8" className="fill-bk-illo-bran-light stroke-bk-brown">
             {MAGGOTS.map(([x, y, w, d]) => (
               <rect key={x} x={x} y={y} width={w} height="4" rx="2" className="svg-box motion-safe:animate-wiggle" style={delay(d)} />
             ))}
