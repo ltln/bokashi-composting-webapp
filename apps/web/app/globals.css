@@ -1,0 +1,40 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  a {
+    @apply text-bk-primary hover:text-bk-primary-dark;
+  }
+}
+
+@layer utilities {
+  /* Tiled background motif from the design (public/bg-motif.svg, 280 px). */
+  .bg-motif {
+    background-image: url("/bg-motif.svg");
+    background-size: 280px 280px;
+    background-repeat: repeat;
+  }
+
+  /* Make CSS transforms on SVG children rotate/scale around their own box. */
+  .svg-box {
+    transform-box: fill-box;
+    transform-origin: center;
+  }
+
+  /* Pause every animation inside a stage (player "pause" button). */
+  .anim-paused,
+  .anim-paused * {
+    animation-play-state: paused !important;
+  }
+}
+
+/* Backstop: stop all animations when the user prefers reduced motion. */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation: none !important;
+    transition: none !important;
+  }
+}

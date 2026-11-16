@@ -1,0 +1,20 @@
+{
+  "name": "@bokashi/contracts",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Source of truth shared by web and api: openapi.yaml, events.json and generated TS.",
+  "exports": {
+    "./events": "./ts/events.ts",
+    "./openapi": "./ts/openapi.ts"
+  },
+  "scripts": {
+    "gen": "pnpm run gen:enums && pnpm run gen:openapi",
+    "gen:enums": "node scripts/gen-enums.mjs",
+    "gen:openapi": "openapi-typescript openapi.yaml -o ts/openapi.ts"
+  },
+  "devDependencies": {
+    "openapi-typescript": "7.13.0",
+    "typescript": "5.9.3"
+  }
+}

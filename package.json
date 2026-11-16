@@ -1,0 +1,18 @@
+{
+  "name": "bokashi-composting-webapp",
+  "private": true,
+  "packageManager": "pnpm@9.15.9",
+  "engines": {
+    "node": ">=22"
+  },
+  "scripts": {
+    "dev": "turbo run dev",
+    "build": "turbo run build",
+    "lint": "turbo run lint",
+    "test": "turbo run test",
+    "gen": "pnpm --filter @bokashi/contracts gen"
+  },
+  "devDependencies": {
+    "turbo": "2.11.11"
+  }
+}

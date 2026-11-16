@@ -1,0 +1,41 @@
+{
+  "$comment": "Single source of truth for tracking enums (docs/PLAN.md §1). After editing, run `make gen` and commit the generated Go and TS files. `name` is the identifier used in generated code (Go: EventX / TargetX, TS: EventType.X / FeatureTarget.X).",
+  "eventTypes": [
+    {
+      "value": "page_view",
+      "name": "PageView",
+      "description": "App opened after login (fires once per (app) layout mount). Takes no feature target.",
+      "targets": []
+    },
+    {
+      "value": "switch_tab",
+      "name": "SwitchTab",
+      "description": "Bottom-nav or desktop-nav tab switch.",
+      "targets": ["Tab_1_Setup", "Tab_2_FAQ"]
+    },
+    {
+      "value": "view_3d_step",
+      "name": "View3DStep",
+      "description": "A setup step was selected (step route mount).",
+      "targets": ["3D_Setup_Layer1", "3D_Setup_Layer2", "3D_Setup_Layer3"]
+    },
+    {
+      "value": "click_faq_3d",
+      "name": "ClickFAQ3D",
+      "description": "An FAQ detail was opened (FAQ detail mount).",
+      "targets": ["FAQ_1_Smell", "FAQ_2_Maggots", "FAQ_3_Liquid", "FAQ_4_Mold", "FAQ_5_Disposal"]
+    }
+  ],
+  "featureTargets": [
+    { "value": "Tab_1_Setup", "name": "Tab1Setup", "tab": "setup" },
+    { "value": "Tab_2_FAQ", "name": "Tab2FAQ", "tab": "faq" },
+    { "value": "3D_Setup_Layer1", "name": "SetupLayer1", "tab": "setup" },
+    { "value": "3D_Setup_Layer2", "name": "SetupLayer2", "tab": "setup" },
+    { "value": "3D_Setup_Layer3", "name": "SetupLayer3", "tab": "setup" },
+    { "value": "FAQ_1_Smell", "name": "FAQ1Smell", "tab": "faq" },
+    { "value": "FAQ_2_Maggots", "name": "FAQ2Maggots", "tab": "faq" },
+    { "value": "FAQ_3_Liquid", "name": "FAQ3Liquid", "tab": "faq" },
+    { "value": "FAQ_4_Mold", "name": "FAQ4Mold", "tab": "faq" },
+    { "value": "FAQ_5_Disposal", "name": "FAQ5Disposal", "tab": "faq" }
+  ]
+}

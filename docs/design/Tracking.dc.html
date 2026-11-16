@@ -1,0 +1,184 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<title>Theo dõi truy cập – Web_Access_Logs</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0}
+a{color:#2F6B45}a:hover{color:#1F4D31}
+</style>
+</helmet>
+<div style="min-height: 100vh; background: #F6F7F2; font-family: 'Be Vietnam Pro', system-ui, sans-serif; color: #1E2B22">
+
+<header style="background: #FFFFFF; border-bottom: 1px solid #E1E6DC">
+<div style="max-width: 1200px; margin: 0 auto; padding: 12px 24px; display: flex; flex-wrap: wrap; align-items: center; gap: 12px">
+<svg width="32" height="32" viewBox="0 0 32 32" aria-hidden="true"><rect width="32" height="32" rx="10" fill="#2F6B45"></rect><path d="M9 13h14l-1.6 11a2 2 0 0 1-2 1.7h-6.8a2 2 0 0 1-2-1.7z" fill="none" stroke="#FFFFFF" stroke-width="1.8" stroke-linejoin="round"></path><path d="M16 13c0-4 2.5-6.5 6-6.5 0 3.6-2.4 6.5-6 6.5z" fill="#BFE0A8"></path></svg>
+<span style="font-size: 16px; font-weight: 700">Bếp Gọn – Rác Đúng</span>
+<span style="font-size: 13px; color: #56635A">Quản trị</span>
+<span style="flex: 1"></span>
+<span style="display: flex; align-items: center; gap: 6px; font-size: 13px; font-weight: 600; color: #1F4D31; background: #E3EEDF; border-radius: 999px; padding: 6px 12px"><svg width="8" height="8" viewBox="0 0 8 8" aria-hidden="true"><circle cx="4" cy="4" r="4" fill="#2F8F5B"></circle></svg>Đang ghi nhận theo thời gian thực</span>
+<button style="min-height: 40px; border-radius: 10px; border: 1px solid #D3DCCB; background: #FFFFFF; padding: 0 14px; font-family: inherit; font-size: 13px; font-weight: 600; color: #1E2B22">Nguồn: Supabase</button>
+</div>
+</header>
+
+<main style="max-width: 1200px; margin: 0 auto; padding: 28px 24px 48px; display: flex; flex-direction: column; gap: 24px">
+
+<div style="display: flex; flex-wrap: wrap; align-items: flex-end; gap: 16px">
+<div style="flex: 999 1 420px; display: flex; flex-direction: column; gap: 6px">
+<div style="display: flex; align-items: center; gap: 10px; flex-wrap: wrap">
+<h1 style="margin: 0; font-size: 28px; line-height: 36px; font-weight: 700">Theo dõi truy cập Web App</h1>
+<span style="font-size: 12px; font-weight: 700; color: #7A3E10; background: #F6E6D2; border-radius: 999px; padding: 4px 10px">DỮ LIỆU MẪU</span>
+</div>
+<p style="margin: 0; font-size: 14px; line-height: 20px; color: #56635A">Bảng Web_Access_Logs · ẩn danh, không lưu thông tin định danh cá nhân trong log.</p>
+</div>
+<div style="flex: 1 1 auto; display: flex; flex-wrap: wrap; gap: 8px">
+<button style="min-height: 44px; border-radius: 12px; border: 1px solid #D3DCCB; background: #FFFFFF; padding: 0 16px; font-family: inherit; font-size: 14px; font-weight: 600; color: #1E2B22; display: flex; align-items: center; gap: 8px"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v12M7 10l5 5 5-5M5 21h14"></path></svg>Xuất CSV</button>
+<button style="min-height: 44px; border-radius: 12px; border: none; background: #2F6B45; padding: 0 16px; font-family: inherit; font-size: 14px; font-weight: 600; color: #FFFFFF; display: flex; align-items: center; gap: 8px"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 20V10M10 20V4M16 20v-7M22 20H2"></path></svg>Tải biểu đồ cho báo cáo</button>
+</div>
+</div>
+
+<div style="display: flex; flex-wrap: wrap; gap: 12px; align-items: center">
+<div role="group" aria-label="Khoảng thời gian" style="display: flex; flex-wrap: wrap; background: #FFFFFF; border: 1px solid #D3DCCB; border-radius: 12px; padding: 3px; gap: 3px">
+<button aria-pressed="false" style="min-height: 38px; border: none; border-radius: 9px; background: transparent; padding: 0 14px; font-family: inherit; font-size: 13px; font-weight: 600; color: #1E2B22">Hôm nay</button>
+<button aria-pressed="true" style="min-height: 38px; border: none; border-radius: 9px; background: #2F6B45; padding: 0 14px; font-family: inherit; font-size: 13px; font-weight: 600; color: #FFFFFF">7 ngày</button>
+<button aria-pressed="false" style="min-height: 38px; border: none; border-radius: 9px; background: transparent; padding: 0 14px; font-family: inherit; font-size: 13px; font-weight: 600; color: #1E2B22">30 ngày</button>
+<button aria-pressed="false" style="min-height: 38px; border: none; border-radius: 9px; background: transparent; padding: 0 14px; font-family: inherit; font-size: 13px; font-weight: 600; color: #1E2B22">Toàn chiến dịch</button>
+</div>
+<div role="group" aria-label="Thiết bị" style="display: flex; background: #FFFFFF; border: 1px solid #D3DCCB; border-radius: 12px; padding: 3px; gap: 3px">
+<button aria-pressed="true" style="min-height: 38px; border: none; border-radius: 9px; background: #E3EEDF; padding: 0 14px; font-family: inherit; font-size: 13px; font-weight: 600; color: #1F4D31">Tất cả</button>
+<button aria-pressed="false" style="min-height: 38px; border: none; border-radius: 9px; background: transparent; padding: 0 14px; font-family: inherit; font-size: 13px; font-weight: 600; color: #1E2B22">Mobile</button>
+<button aria-pressed="false" style="min-height: 38px; border: none; border-radius: 9px; background: transparent; padding: 0 14px; font-family: inherit; font-size: 13px; font-weight: 600; color: #1E2B22">Desktop</button>
+</div>
+</div>
+
+<div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 12px">
+<div style="background: #FFFFFF; border-radius: 18px; padding: 18px; display: flex; flex-direction: column; gap: 6px"><span style="font-size: 13px; color: #56635A">Tổng sự kiện</span><span style="font-size: 30px; font-weight: 700; font-variant-numeric: tabular-nums">1.832</span><span style="font-size: 12px; color: #56635A">Mọi Event_Type</span></div>
+<div style="background: #FFFFFF; border-radius: 18px; padding: 18px; display: flex; flex-direction: column; gap: 6px"><span style="font-size: 13px; color: #56635A">Phiên truy cập</span><span style="font-size: 30px; font-weight: 700; font-variant-numeric: tabular-nums">312</span><span style="font-size: 12px; color: #56635A">Session_ID duy nhất</span></div>
+<div style="background: #FFFFFF; border-radius: 18px; padding: 18px; display: flex; flex-direction: column; gap: 6px"><span style="font-size: 13px; color: #56635A">Lượt mở app</span><span style="font-size: 30px; font-weight: 700; font-variant-numeric: tabular-nums">356</span><span style="font-size: 12px; color: #56635A">page_view</span></div>
+<div style="background: #FFFFFF; border-radius: 18px; padding: 18px; display: flex; flex-direction: column; gap: 6px"><span style="font-size: 13px; color: #56635A">Truy cập từ Mobile</span><span style="font-size: 30px; font-weight: 700; font-variant-numeric: tabular-nums">81%</span><span style="font-size: 12px; color: #56635A">Device_Info</span></div>
+</div>
+
+<div style="display: flex; flex-wrap: wrap; gap: 16px; align-items: stretch">
+<section style="flex: 999 1 560px; min-width: 0; background: #FFFFFF; border-radius: 20px; padding: 20px; display: flex; flex-direction: column; gap: 16px">
+<div style="display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 8px">
+<h2 style="margin: 0; font-size: 17px; font-weight: 700">Tính năng được quan tâm nhất</h2>
+<div style="display: flex; gap: 14px; font-size: 12px; color: #3F4B43">
+<span style="display: flex; align-items: center; gap: 6px"><svg width="10" height="10" viewBox="0 0 10 10" aria-hidden="true"><rect width="10" height="10" rx="2" fill="#2F6B45"></rect></svg>Tab 1 · Thiết lập</span>
+<span style="display: flex; align-items: center; gap: 6px"><svg width="10" height="10" viewBox="0 0 10 10" aria-hidden="true"><rect width="10" height="10" rx="2" fill="#7FB0D9"></rect></svg>Tab 2 · Sự cố</span>
+</div>
+</div>
+<div style="display: flex; flex-direction: column; gap: 12px">
+<sc-for list="{{features}}" as="f" hint-placeholder-count="8">
+<div style="display: flex; align-items: center; gap: 12px">
+<span style="width: 150px; flex: none; font-size: 13px; font-family: ui-monospace, Menlo, monospace; color: #1E2B22">{{f.name}}</span>
+<div style="flex: 1; min-width: 0; height: 22px; background: #F0F3EC; border-radius: 6px; overflow: hidden"><div style="height: 22px; border-radius: 6px; width: {{f.w}}; background: {{f.color}}"></div></div>
+<span style="width: 40px; flex: none; text-align: right; font-size: 13px; font-weight: 600; font-variant-numeric: tabular-nums">{{f.n}}</span>
+</div>
+</sc-for>
+</div>
+</section>
+
+<section style="flex: 1 1 320px; min-width: 0; background: #FFFFFF; border-radius: 20px; padding: 20px; display: flex; flex-direction: column; gap: 16px">
+<h2 style="margin: 0; font-size: 17px; font-weight: 700">Theo loại sự kiện</h2>
+<div style="display: flex; flex-direction: column; gap: 12px">
+<sc-for list="{{types}}" as="t" hint-placeholder-count="4">
+<div style="display: flex; flex-direction: column; gap: 6px">
+<div style="display: flex; justify-content: space-between; font-size: 13px"><span style="font-family: ui-monospace, Menlo, monospace">{{t.name}}</span><span style="font-weight: 600; font-variant-numeric: tabular-nums">{{t.n}}</span></div>
+<div style="height: 8px; background: #F0F3EC; border-radius: 4px; overflow: hidden"><div style="height: 8px; border-radius: 4px; background: #E07A2E; width: {{t.w}}"></div></div>
+</div>
+</sc-for>
+</div>
+<h2 style="margin: 8px 0 0; font-size: 17px; font-weight: 700">Thiết bị</h2>
+<div style="display: flex; height: 28px; border-radius: 8px; overflow: hidden">
+<div style="width: 81%; background: #2F6B45; color: #FFFFFF; font-size: 12px; font-weight: 600; display: flex; align-items: center; padding-left: 10px">Mobile 81%</div>
+<div style="flex: 1; background: #D3DCCB; color: #1E2B22; font-size: 12px; font-weight: 600; display: flex; align-items: center; justify-content: center">19%</div>
+</div>
+</section>
+</div>
+
+<section style="background: #FFFFFF; border-radius: 20px; padding: 20px; display: flex; flex-direction: column; gap: 14px">
+<div style="display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 8px">
+<h2 style="margin: 0; font-size: 17px; font-weight: 700">Nhật ký gần nhất</h2>
+<label style="display: flex; align-items: center; gap: 8px; font-size: 13px; color: #56635A">Lọc Feature_Target
+<input type="search" placeholder="vd. FAQ_1_Smell" style="min-height: 40px; border-radius: 10px; border: 1px solid #C9D2C1; padding: 0 12px; font-family: inherit; font-size: 13px; width: 200px; box-sizing: border-box"></label>
+</div>
+<div style="overflow-x: auto; border: 1px solid #E1E6DC; border-radius: 12px">
+<table style="width: 100%; border-collapse: collapse; font-size: 13px; min-width: 720px">
+<thead><tr style="background: #F3F6EF; text-align: left">
+<th style="padding: 10px 14px; font-weight: 600">Timestamp</th><th style="padding: 10px 14px; font-weight: 600">Session_ID</th><th style="padding: 10px 14px; font-weight: 600">Event_Type</th><th style="padding: 10px 14px; font-weight: 600">Feature_Target</th><th style="padding: 10px 14px; font-weight: 600">Device_Info</th>
+</tr></thead>
+<tbody>
+<sc-for list="{{logs}}" as="r" hint-placeholder-count="10">
+<tr style="border-top: 1px solid #E1E6DC">
+<td style="padding: 10px 14px; font-variant-numeric: tabular-nums; color: #3F4B43">{{r.ts}}</td>
+<td style="padding: 10px 14px; font-family: ui-monospace, Menlo, monospace">{{r.sid}}</td>
+<td style="padding: 10px 14px; font-family: ui-monospace, Menlo, monospace">{{r.type}}</td>
+<td style="padding: 10px 14px; font-family: ui-monospace, Menlo, monospace">{{r.target}}</td>
+<td style="padding: 10px 14px">{{r.device}}</td>
+</tr>
+</sc-for>
+</tbody>
+</table>
+</div>
+</section>
+
+<section style="display: flex; flex-wrap: wrap; gap: 16px">
+<div style="flex: 1 1 420px; min-width: 0; background: #FFFFFF; border-radius: 20px; padding: 20px; display: flex; flex-direction: column; gap: 12px">
+<h2 style="margin: 0; font-size: 17px; font-weight: 700">Khi nào sự kiện được ghi</h2>
+<dl style="margin: 0; display: grid; grid-template-columns: minmax(0, 140px) minmax(0, 1fr); gap: 10px 16px; font-size: 13px; line-height: 19px">
+<dt style="font-family: ui-monospace, Menlo, monospace; font-weight: 600">page_view</dt><dd style="margin: 0; color: #3F4B43">Mở app sau khi đăng nhập</dd>
+<dt style="font-family: ui-monospace, Menlo, monospace; font-weight: 600">switch_tab</dt><dd style="margin: 0; color: #3F4B43">Chuyển giữa Tab 1 và Tab 2</dd>
+<dt style="font-family: ui-monospace, Menlo, monospace; font-weight: 600">view_3d_step</dt><dd style="margin: 0; color: #3F4B43">Chọn Bước 1 / 2 / 3 → 3D_Setup_Layer1–3</dd>
+<dt style="font-family: ui-monospace, Menlo, monospace; font-weight: 600">click_faq_3d</dt><dd style="margin: 0; color: #3F4B43">Mở một sự cố → FAQ_1_Smell … FAQ_5_Disposal</dd>
+</dl>
+</div>
+<div style="flex: 1 1 320px; min-width: 0; background: #1F4D31; color: #FFFFFF; border-radius: 20px; padding: 20px; display: flex; flex-direction: column; gap: 10px">
+<h2 style="margin: 0; font-size: 17px; font-weight: 700">Nơi lưu dữ liệu</h2>
+<p style="margin: 0; font-size: 13px; line-height: 19px; color: #E3EEDF">Chọn một: Google Sheets, Supabase hoặc Firebase. Mỗi sự kiện được ghi kèm timestamp ngay khi xảy ra.</p>
+<div style="display: flex; flex-wrap: wrap; gap: 8px">
+<span style="font-size: 12px; font-weight: 600; background: #FFFFFF; color: #1F4D31; border-radius: 999px; padding: 5px 12px">Supabase</span>
+<span style="font-size: 12px; font-weight: 600; border: 1px solid #8FB89A; border-radius: 999px; padding: 4px 12px">Google Sheets</span>
+<span style="font-size: 12px; font-weight: 600; border: 1px solid #8FB89A; border-radius: 999px; padding: 4px 12px">Firebase</span>
+</div>
+</div>
+</section>
+
+</main>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1280,"height":1760}}'>
+class Component extends DCLogic {
+renderVals() {
+const raw = [
+['FAQ_1_Smell', 214, 2], ['3D_Setup_Layer1', 198, 1], ['3D_Setup_Layer2', 176, 1], ['FAQ_3_Liquid', 151, 2],
+['3D_Setup_Layer3', 149, 1], ['FAQ_4_Mold', 132, 2], ['FAQ_2_Maggots', 118, 2], ['FAQ_5_Disposal', 97, 2]
+];
+const max = 214;
+const features = raw.map(([name, n, tab]) => ({ name, n, w: Math.round(n / max * 100) + '%', color: tab === 1 ? '#2F6B45' : '#7FB0D9' }));
+const traw = [['click_faq_3d', 712], ['view_3d_step', 523], ['page_view', 356], ['switch_tab', 241]];
+const types = traw.map(([name, n]) => ({ name, n, w: Math.round(n / 712 * 100) + '%' }));
+const logs = [
+['2026-11-15 20:41:07', 's_7f3a9c', 'click_faq_3d', 'FAQ_1_Smell', 'Mobile'],
+['2026-11-15 20:40:52', 's_7f3a9c', 'switch_tab', 'Tab_2_FAQ', 'Mobile'],
+['2026-11-15 20:40:31', 's_7f3a9c', 'view_3d_step', '3D_Setup_Layer2', 'Mobile'],
+['2026-11-15 20:39:58', 's_7f3a9c', 'page_view', 'App', 'Mobile'],
+['2026-11-15 20:37:14', 's_c21e04', 'click_faq_3d', 'FAQ_4_Mold', 'Desktop'],
+['2026-11-15 20:36:49', 's_c21e04', 'click_faq_3d', 'FAQ_3_Liquid', 'Desktop'],
+['2026-11-15 20:35:20', 's_c21e04', 'switch_tab', 'Tab_2_FAQ', 'Desktop'],
+['2026-11-15 20:34:02', 's_9b80d1', 'view_3d_step', '3D_Setup_Layer3', 'Mobile'],
+['2026-11-15 20:33:45', 's_9b80d1', 'view_3d_step', '3D_Setup_Layer1', 'Mobile'],
+['2026-11-15 20:33:10', 's_9b80d1', 'page_view', 'App', 'Mobile']
+].map(([ts, sid, type, target, device]) => ({ ts, sid, type, target, device }));
+return { features, types, logs };
+}
+}
+</script>
+</body>
+</html>

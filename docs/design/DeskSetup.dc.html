@@ -1,0 +1,259 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<title>Thiết lập thùng ủ – Desktop</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0}
+.bg-motif{background-image:url(/_blob/c681baba0b0d2877549aaba5bea8bfd2);background-size:320px 320px;background-repeat:repeat}
+a{color:#2F6B45}a:hover{color:#1F4D31}
+button:focus-visible,a:focus-visible{outline:3px solid #E07A2E;outline-offset:2px}
+@keyframes drop{0%{transform:translateY(-70px);opacity:0}15%{opacity:1}70%{transform:translateY(0);opacity:1}100%{transform:translateY(0);opacity:0}}
+.anim-drop{animation:drop 2.4s cubic-bezier(.5,0,.9,.6) infinite;transform-box:fill-box}
+@keyframes hover{0%,100%{transform:translateY(0)}50%{transform:translateY(-4px)}}
+.anim-hover{animation:hover 2.6s ease-in-out infinite}
+@keyframes fall{0%{transform:translateY(-50px);opacity:0}20%{opacity:1}75%{transform:translateY(0);opacity:1}100%{transform:translateY(0);opacity:0}}
+.anim-fall{animation:fall 1.8s ease-in infinite;transform-box:fill-box}
+@keyframes shake{0%,100%{transform:rotate(-28deg)}50%{transform:rotate(-40deg)}}
+.anim-shake{animation:shake .7s ease-in-out infinite;transform-origin:226px 30px}
+@keyframes outL{0%{transform:translateX(0);opacity:1}75%{opacity:1}100%{transform:translateX(-62px);opacity:0}}
+@keyframes outR{0%{transform:translateX(0);opacity:1}75%{opacity:1}100%{transform:translateX(62px);opacity:0}}
+.anim-outL{animation:outL 2.2s ease-in-out infinite;transform-box:fill-box}
+.anim-outR{animation:outR 2.2s ease-in-out infinite;transform-box:fill-box}
+@keyframes lidDown{0%,30%{transform:translateY(-24px)}70%,100%{transform:translateY(-6px)}}
+.anim-lid{animation:lidDown 2.6s ease-in-out infinite alternate}
+@media (prefers-reduced-motion: reduce){*{animation:none!important}}
+</style>
+</helmet>
+<div class="bg-motif" style="min-height: 100vh; background-color: #F6F7F2; font-family: 'Be Vietnam Pro', system-ui, sans-serif; color: #1E2B22">
+
+<header style="background: #FFFFFF; border-bottom: 1px solid #E1E6DC">
+<div style="max-width: 1280px; margin: 0 auto; padding: 10px 32px; display: flex; flex-wrap: wrap; align-items: center; gap: 16px">
+<a href="DeskSetup.dc.html" style="display: flex; align-items: center; gap: 10px; text-decoration: none; color: #1E2B22">
+<svg width="34" height="34" viewBox="0 0 32 32" aria-hidden="true"><rect width="32" height="32" rx="10" fill="#2F6B45"></rect><path d="M9 13h14l-1.6 11a2 2 0 0 1-2 1.7h-6.8a2 2 0 0 1-2-1.7z" fill="none" stroke="#FFFFFF" stroke-width="1.8" stroke-linejoin="round"></path><path d="M16 13c0-4 2.5-6.5 6-6.5 0 3.6-2.4 6.5-6 6.5z" fill="#BFE0A8"></path></svg>
+<span style="display: flex; flex-direction: column"><span style="font-size: 16px; font-weight: 700; line-height: 20px">Bếp Gọn – Rác Đúng</span><span style="font-size: 12px; color: #56635A; line-height: 16px">Ủ Bokashi tại phòng trọ</span></span>
+</a>
+<nav aria-label="Điều hướng chính" style="flex: 1; display: flex; justify-content: center; gap: 6px">
+<a href="DeskSetup.dc.html" aria-current="page" style="min-height: 44px; padding: 0 18px; border-radius: 12px; background: #E3EEDF; color: #1F4D31; font-size: 14px; font-weight: 600; text-decoration: none; display: flex; align-items: center; gap: 8px"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 7h16l-1.6 12.2a2 2 0 0 1-2 1.8H7.6a2 2 0 0 1-2-1.8z"></path><path d="M3 4h18v3H3z"></path><path d="M6 15h12"></path></svg>Thiết lập thùng</a>
+<a href="DeskFaq.dc.html" style="min-height: 44px; padding: 0 18px; border-radius: 12px; color: #3F4B43; font-size: 14px; font-weight: 600; text-decoration: none; display: flex; align-items: center; gap: 8px"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"></circle><path d="M9.5 9a2.5 2.5 0 1 1 3.5 2.3c-.6.3-1 .9-1 1.6v.6"></path><path d="M12 17h.01"></path></svg>Cẩm nang sự cố</a>
+</nav>
+<button aria-label="Tài khoản Google" style="min-height: 44px; border: 1px solid #D3DCCB; background: #FFFFFF; border-radius: 22px; padding: 0 12px 0 4px; display: flex; align-items: center; gap: 8px; font-family: inherit; font-size: 13px; font-weight: 600; color: #1E2B22"><span style="width: 34px; height: 34px; border-radius: 17px; background: #2F6B45; color: #FFFFFF; display: flex; align-items: center; justify-content: center"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="8" r="4"></circle><path d="M4 21c1.5-4 4.5-6 8-6s6.5 2 8 6"></path></svg></span>Tài khoản<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9l6 6 6-6"></path></svg></button>
+</div>
+</header>
+
+<main style="max-width: 1280px; margin: 0 auto; padding: 24px 32px 40px; display: flex; flex-wrap: wrap; gap: 24px; align-items: flex-start">
+
+<section aria-label="Mô phỏng thiết lập thùng ủ" style="flex: 999 1 640px; min-width: 0; background: #E8EFE2; border-radius: 28px; padding: 20px; box-sizing: border-box; display: flex; flex-direction: column; gap: 14px">
+<div style="display: flex; justify-content: space-between; align-items: center; gap: 8px; flex-wrap: wrap">
+<span style="background: #FFFFFF; border-radius: 999px; padding: 6px 12px; font-size: 13px; font-weight: 600; color: #1F4D31">{{chip}}</span>
+<span style="font-size: 13px; color: #3F4B43">Mặt cắt thùng nhựa 10L</span>
+</div>
+
+<div style="display: flex; justify-content: center">
+<sc-if value="{{s1}}" hint-placeholder-val="{{ true }}">
+<svg viewBox="0 0 320 280" width="100%" height="480" role="img" aria-label="Mặt cắt thùng 10L: lon nhôm bóp dẹp xếp ngang dưới đáy, giấy báo vo viên đang được chèn vào khe" style="max-width: 560px">
+<defs><clipPath id="d1-in"><path d="M77 0 L243 0 L243 52 L229 257 L91 257 L77 52 Z"></path></clipPath></defs>
+<ellipse cx="160" cy="266" rx="104" ry="7" fill="#D3DCCB"></ellipse>
+<path d="M77 52 L91 257 L229 257 L243 52 Z" fill="#F8FBF9"></path>
+<g clip-path="url(#d1-in)">
+<g><rect x="97" y="247" width="22" height="10" rx="4" fill="#C0392B"></rect><rect x="123" y="247" width="22" height="10" rx="4" fill="#2E86C1"></rect><rect x="149" y="247" width="22" height="10" rx="4" fill="#D4A017"></rect><rect x="175" y="247" width="22" height="10" rx="4" fill="#2F8F5B"></rect><rect x="201" y="247" width="22" height="10" rx="4" fill="#7D5BA6"></rect><rect x="110" y="236" width="22" height="10" rx="4" fill="#2E86C1"></rect><rect x="136" y="236" width="22" height="10" rx="4" fill="#C0392B"></rect><rect x="162" y="236" width="22" height="10" rx="4" fill="#7D5BA6"></rect><rect x="188" y="236" width="22" height="10" rx="4" fill="#D4A017"></rect></g>
+<g fill="#CBD2D6"><rect x="97" y="247" width="3" height="10" rx="1.5"></rect><rect x="116" y="247" width="3" height="10" rx="1.5"></rect><rect x="123" y="247" width="3" height="10" rx="1.5"></rect><rect x="142" y="247" width="3" height="10" rx="1.5"></rect><rect x="149" y="247" width="3" height="10" rx="1.5"></rect><rect x="168" y="247" width="3" height="10" rx="1.5"></rect><rect x="175" y="247" width="3" height="10" rx="1.5"></rect><rect x="194" y="247" width="3" height="10" rx="1.5"></rect><rect x="201" y="247" width="3" height="10" rx="1.5"></rect><rect x="220" y="247" width="3" height="10" rx="1.5"></rect></g>
+<g fill="#ECE7DC" stroke="#B4AC9C" stroke-width="0.9">
+<circle cx="108" cy="241" r="4.5"></circle><circle cx="134" cy="241.5" r="4.5"></circle><circle cx="160" cy="241" r="4.5"></circle><circle cx="186" cy="241.5" r="4.5"></circle><circle cx="212" cy="241" r="4.5"></circle>
+<circle cx="99" cy="230" r="4.5"></circle><circle cx="112" cy="229" r="4.5"></circle><circle cx="125" cy="230.5" r="4.5"></circle><circle cx="138" cy="229" r="4.5"></circle><circle cx="151" cy="230" r="4.5"></circle><circle cx="164" cy="229.5" r="4.5"></circle><circle cx="177" cy="230" r="4.5"></circle>
+</g>
+<circle class="anim-drop" cx="196" cy="230" r="4.5" fill="#ECE7DC" stroke="#B4AC9C" stroke-width="0.9"></circle>
+<circle class="anim-drop" cx="210" cy="229.5" r="4.5" fill="#ECE7DC" stroke="#B4AC9C" stroke-width="0.9" style="animation-delay: .6s"></circle>
+<circle class="anim-drop" cx="222" cy="230" r="4.5" fill="#ECE7DC" stroke="#B4AC9C" stroke-width="0.9" style="animation-delay: 1.2s"></circle>
+<g class="anim-hover" opacity="0.55"><rect x="74" y="150" width="172" height="5" rx="1.5" fill="none" stroke="#A57A3E" stroke-width="1.4" stroke-dasharray="4 3"></rect></g>
+<path d="M160 162 L160 210 M154 204 L160 211 L166 204" fill="none" stroke="#A57A3E" stroke-width="1.4" stroke-dasharray="3 3" opacity="0.6"></path>
+</g>
+<path d="M72 48 L86 262 L234 262 L248 48" fill="none" stroke="#A9BCC0" stroke-width="7" stroke-linejoin="round"></path>
+<rect x="64" y="43" width="16" height="8" rx="3" fill="#8FA6AB"></rect><rect x="240" y="43" width="16" height="8" rx="3" fill="#8FA6AB"></rect>
+<path d="M66 229 L59 229 L59 262 L66 262" fill="none" stroke="#56635A" stroke-width="1.2"></path>
+<text x="55" y="249" text-anchor="end" font-size="10" fill="#3F4B43" font-family="Be Vietnam Pro, sans-serif">10–20%</text>
+<g font-family="Be Vietnam Pro, sans-serif" font-size="10" font-weight="700" text-anchor="middle">
+<path d="M222 252 L268 252" stroke="#2F6B45" stroke-width="1"></path><circle cx="276" cy="252" r="8" fill="#2F6B45"></circle><text x="276" y="255.5" fill="#FFFFFF">1</text>
+<path d="M214 230 L268 226" stroke="#E07A2E" stroke-width="1"></path><circle cx="276" cy="226" r="8" fill="#E07A2E"></circle><text x="276" y="229.5" fill="#FFFFFF">2</text>
+<path d="M246 152 L268 152" stroke="#8A7350" stroke-width="1" stroke-dasharray="2 2"></path><circle cx="276" cy="152" r="8" fill="#FFFFFF" stroke="#8A7350"></circle><text x="276" y="155.5" fill="#5B4A33">3</text>
+</g>
+</svg>
+</sc-if>
+<sc-if value="{{s2}}" hint-placeholder-val="{{ false }}">
+<svg viewBox="0 0 320 280" width="100%" height="480" role="img" aria-label="Mặt cắt thùng: tầng đáy giả, hai lớp rác đã nén, lớp thứ ba đang được rắc bột EM" style="max-width: 560px">
+<defs>
+<clipPath id="d2-in"><path d="M77 0 L243 0 L243 52 L229 257 L91 257 L77 52 Z"></path></clipPath>
+<pattern id="d2-org" width="28" height="18" patternUnits="userSpaceOnUse"><rect width="28" height="18" fill="#5C4630"></rect><rect x="2" y="3" width="6" height="3" rx="1" fill="#7FA04A"></rect><circle cx="14" cy="6" r="2" fill="#D9822B"></circle><rect x="19" y="11" width="5" height="3" rx="1" fill="#9BB35A"></rect><circle cx="7" cy="13" r="1.6" fill="#E3B04B"></circle><rect x="22" y="2" width="3" height="2" fill="#3E3022"></rect><circle cx="12" cy="15" r="0.9" fill="#EADBA9"></circle><circle cx="25" cy="8" r="0.9" fill="#EADBA9"></circle></pattern>
+</defs>
+<ellipse cx="160" cy="266" rx="104" ry="7" fill="#D3DCCB"></ellipse>
+<path d="M77 52 L91 257 L229 257 L243 52 Z" fill="#F8FBF9"></path>
+<g clip-path="url(#d2-in)">
+<rect x="70" y="230" width="180" height="30" fill="#ECE7DC"></rect>
+<g><rect x="97" y="247" width="22" height="10" rx="4" fill="#C0392B"></rect><rect x="123" y="247" width="22" height="10" rx="4" fill="#2E86C1"></rect><rect x="149" y="247" width="22" height="10" rx="4" fill="#D4A017"></rect><rect x="175" y="247" width="22" height="10" rx="4" fill="#2F8F5B"></rect><rect x="201" y="247" width="22" height="10" rx="4" fill="#7D5BA6"></rect><rect x="110" y="236" width="22" height="10" rx="4" fill="#2E86C1"></rect><rect x="136" y="236" width="22" height="10" rx="4" fill="#C0392B"></rect><rect x="162" y="236" width="22" height="10" rx="4" fill="#7D5BA6"></rect><rect x="188" y="236" width="22" height="10" rx="4" fill="#D4A017"></rect></g>
+<rect x="70" y="226" width="180" height="4.5" fill="#C79B5B"></rect>
+<rect x="70" y="190" width="180" height="36" fill="url(#d2-org)"></rect><rect x="70" y="190" width="180" height="2.5" fill="#E7D6A2"></rect>
+<rect x="70" y="154" width="180" height="36" fill="url(#d2-org)"></rect><rect x="70" y="154" width="180" height="2.5" fill="#E7D6A2"></rect>
+<rect x="70" y="114" width="180" height="40" fill="url(#d2-org)" opacity="0.92"></rect>
+<g fill="#E7D6A2">
+<circle class="anim-fall" cx="120" cy="112" r="1.6"></circle><circle class="anim-fall" cx="138" cy="113" r="1.6" style="animation-delay: .3s"></circle><circle class="anim-fall" cx="156" cy="112" r="1.6" style="animation-delay: .9s"></circle><circle class="anim-fall" cx="172" cy="113" r="1.6" style="animation-delay: .5s"></circle><circle class="anim-fall" cx="190" cy="112" r="1.6" style="animation-delay: 1.2s"></circle><circle class="anim-fall" cx="206" cy="113" r="1.6" style="animation-delay: .2s"></circle><circle class="anim-fall" cx="146" cy="112" r="1.6" style="animation-delay: 1.5s"></circle><circle class="anim-fall" cx="198" cy="113" r="1.6" style="animation-delay: .8s"></circle><circle class="anim-fall" cx="128" cy="113" r="1.6" style="animation-delay: 1.1s"></circle><circle class="anim-fall" cx="214" cy="112" r="1.6" style="animation-delay: 1.4s"></circle>
+</g>
+<rect x="70" y="112" width="180" height="2.5" fill="#E7D6A2" opacity="0.6"></rect>
+<rect x="70" y="82" width="180" height="32" fill="none" stroke="#56635A" stroke-width="1" stroke-dasharray="3 3" opacity="0.5"></rect>
+</g>
+<g class="anim-shake"><rect x="214" y="12" width="24" height="36" rx="6" fill="#F3E5B8" stroke="#8A7350" stroke-width="1.2"></rect><rect x="217" y="6" width="18" height="8" rx="2" fill="#2F6B45"></rect><text x="226" y="34" text-anchor="middle" font-size="9" font-weight="700" fill="#5B4A33" font-family="Be Vietnam Pro, sans-serif">EM</text></g>
+<path d="M72 48 L86 262 L234 262 L248 48" fill="none" stroke="#A9BCC0" stroke-width="7" stroke-linejoin="round"></path>
+<rect x="64" y="43" width="16" height="8" rx="3" fill="#8FA6AB"></rect><rect x="240" y="43" width="16" height="8" rx="3" fill="#8FA6AB"></rect>
+<path d="M66 82 L59 82 L59 226 L66 226" fill="none" stroke="#56635A" stroke-width="1.2"></path>
+<text x="55" y="152" text-anchor="end" font-size="10" fill="#3F4B43" font-family="Be Vietnam Pro, sans-serif">~70%</text>
+<path d="M252 154 L262 154 M252 190 L262 190 M257 154 L257 190" fill="none" stroke="#56635A" stroke-width="1.2"></path>
+<text x="265" y="170" font-size="10" fill="#3F4B43" font-family="Be Vietnam Pro, sans-serif">3–5</text>
+<text x="265" y="182" font-size="10" fill="#3F4B43" font-family="Be Vietnam Pro, sans-serif">cm</text>
+</svg>
+</sc-if>
+<sc-if value="{{s3}}" hint-placeholder-val="{{ false }}">
+<svg viewBox="0 0 320 280" width="100%" height="480" role="img" aria-label="Mặt cắt thùng đầy: túi nilon phủ sát mặt rác, bọt khí được miết ra thành thùng, nắp chuẩn bị đậy" style="max-width: 560px">
+<defs>
+<clipPath id="d3-in"><path d="M77 0 L243 0 L243 52 L229 257 L91 257 L77 52 Z"></path></clipPath>
+<pattern id="d3-org" width="28" height="18" patternUnits="userSpaceOnUse"><rect width="28" height="18" fill="#5C4630"></rect><rect x="2" y="3" width="6" height="3" rx="1" fill="#7FA04A"></rect><circle cx="14" cy="6" r="2" fill="#D9822B"></circle><rect x="19" y="11" width="5" height="3" rx="1" fill="#9BB35A"></rect><circle cx="7" cy="13" r="1.6" fill="#E3B04B"></circle><rect x="22" y="2" width="3" height="2" fill="#3E3022"></rect><circle cx="12" cy="15" r="0.9" fill="#EADBA9"></circle><circle cx="25" cy="8" r="0.9" fill="#EADBA9"></circle></pattern>
+</defs>
+<ellipse cx="160" cy="266" rx="104" ry="7" fill="#D3DCCB"></ellipse>
+<path d="M77 52 L91 257 L229 257 L243 52 Z" fill="#F8FBF9"></path>
+<g clip-path="url(#d3-in)">
+<rect x="70" y="230" width="180" height="30" fill="#ECE7DC"></rect>
+<g><rect x="97" y="247" width="22" height="10" rx="4" fill="#C0392B"></rect><rect x="123" y="247" width="22" height="10" rx="4" fill="#2E86C1"></rect><rect x="149" y="247" width="22" height="10" rx="4" fill="#D4A017"></rect><rect x="175" y="247" width="22" height="10" rx="4" fill="#2F8F5B"></rect><rect x="201" y="247" width="22" height="10" rx="4" fill="#7D5BA6"></rect><rect x="110" y="236" width="22" height="10" rx="4" fill="#2E86C1"></rect><rect x="136" y="236" width="22" height="10" rx="4" fill="#C0392B"></rect><rect x="162" y="236" width="22" height="10" rx="4" fill="#7D5BA6"></rect><rect x="188" y="236" width="22" height="10" rx="4" fill="#D4A017"></rect></g>
+<rect x="70" y="226" width="180" height="4.5" fill="#C79B5B"></rect>
+<rect x="70" y="82" width="180" height="144" fill="url(#d3-org)"></rect>
+<rect x="70" y="190" width="180" height="2.5" fill="#E7D6A2"></rect><rect x="70" y="154" width="180" height="2.5" fill="#E7D6A2"></rect><rect x="70" y="118" width="180" height="2.5" fill="#E7D6A2"></rect><rect x="70" y="82" width="180" height="2.5" fill="#E7D6A2"></rect>
+<g fill="#FFFFFF" stroke="#8CC1D6" stroke-width="1">
+<ellipse class="anim-outL" cx="140" cy="77" rx="6" ry="3.5"></ellipse>
+<ellipse class="anim-outL" cx="118" cy="78" rx="4" ry="2.5" style="animation-delay: .5s"></ellipse>
+<ellipse class="anim-outR" cx="178" cy="77" rx="6" ry="3.5" style="animation-delay: .2s"></ellipse>
+<ellipse class="anim-outR" cx="200" cy="78" rx="4" ry="2.5" style="animation-delay: .8s"></ellipse>
+</g>
+</g>
+<path d="M68 44 Q76 46 79 58 L80 80 Q160 73 240 80 L241 58 Q244 46 252 44" fill="none" stroke="#7FB6CC" stroke-width="2.6" stroke-linejoin="round"></path>
+<g fill="none" stroke="#E07A2E" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M152 64 L104 64 M110 59 L104 64 L110 69"></path><path d="M168 64 L216 64 M210 59 L216 64 L210 69"></path></g>
+<ellipse cx="160" cy="64" rx="7" ry="5" fill="#F2C9A0" stroke="#C98D5B" stroke-width="1"></ellipse>
+<path d="M72 48 L86 262 L234 262 L248 48" fill="none" stroke="#A9BCC0" stroke-width="7" stroke-linejoin="round"></path>
+<rect x="64" y="43" width="16" height="8" rx="3" fill="#8FA6AB"></rect><rect x="240" y="43" width="16" height="8" rx="3" fill="#8FA6AB"></rect>
+<g class="anim-lid"><rect x="62" y="30" width="196" height="12" rx="5" fill="#2F6B45"></rect><rect x="146" y="24" width="28" height="7" rx="3" fill="#24563A"></rect></g>
+<path d="M66 82 L59 82 L59 226 L66 226" fill="none" stroke="#56635A" stroke-width="1.2"></path>
+<text x="55" y="152" text-anchor="end" font-size="10" fill="#3F4B43" font-family="Be Vietnam Pro, sans-serif">~70%</text>
+</svg>
+</sc-if>
+</div>
+
+<p aria-live="polite" style="margin: 0; background: #FFFFFF; border-radius: 16px; padding: 14px 16px; font-size: 16px; line-height: 22px; font-weight: 500">{{caption}}</p>
+
+<div style="display: flex; align-items: center; gap: 14px">
+<button aria-label="Tạm dừng hoạt ảnh" style="width: 48px; height: 48px; flex: none; border-radius: 24px; border: none; background: #2F6B45; color: #FFFFFF; display: flex; align-items: center; justify-content: center"><svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><rect x="6" y="5" width="4" height="14" rx="1"></rect><rect x="14" y="5" width="4" height="14" rx="1"></rect></svg></button>
+<div style="flex: 1; display: flex; gap: 6px; align-items: center">
+<sc-for list="{{segs}}" as="g" hint-placeholder-count="3">
+<div style="flex: 1; height: 8px; border-radius: 4px; overflow: hidden; background: {{g.bg}}"><div style="height: 8px; background: #E07A2E; width: {{g.inner}}"></div></div>
+</sc-for>
+</div>
+<span style="font-size: 13px; color: #3F4B43; font-variant-numeric: tabular-nums">{{phaseLabel}}</span>
+<button aria-label="Xem lại từ đầu" style="width: 48px; height: 48px; flex: none; border-radius: 24px; border: 1px solid #C9D2C1; background: #FFFFFF; color: #1E2B22; display: flex; align-items: center; justify-content: center"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 12a9 9 0 1 0 3-6.7L3 8"></path><path d="M3 3v5h5"></path></svg></button>
+</div>
+</section>
+
+<aside style="flex: 1 1 360px; min-width: 0; display: flex; flex-direction: column; gap: 16px">
+<div style="display: flex; flex-direction: column; gap: 6px">
+<h1 style="margin: 0; font-size: 26px; line-height: 32px; font-weight: 700">Thiết lập thùng ủ DIY</h1>
+<p style="margin: 0; font-size: 14px; line-height: 20px; color: #56635A">Thùng nhựa 10L có nắp, không khoan lỗ. Chọn một bước để xem hoạt ảnh.</p>
+</div>
+<div style="display: flex; flex-wrap: wrap; gap: 6px" aria-label="Vật liệu cần chuẩn bị">
+<span style="font-size: 12px; font-weight: 600; background: #FFFFFF; border: 1px solid #D3DCCB; border-radius: 999px; padding: 5px 10px">Thùng 10L có nắp</span>
+<span style="font-size: 12px; font-weight: 600; background: #FFFFFF; border: 1px solid #D3DCCB; border-radius: 999px; padding: 5px 10px">Vỏ lon nhôm</span>
+<span style="font-size: 12px; font-weight: 600; background: #FFFFFF; border: 1px solid #D3DCCB; border-radius: 999px; padding: 5px 10px">Giấy báo cũ</span>
+<span style="font-size: 12px; font-weight: 600; background: #FFFFFF; border: 1px solid #D3DCCB; border-radius: 999px; padding: 5px 10px">Bìa carton</span>
+<span style="font-size: 12px; font-weight: 600; background: #FFFFFF; border: 1px solid #D3DCCB; border-radius: 999px; padding: 5px 10px">Bột vi sinh EM</span>
+<span style="font-size: 12px; font-weight: 600; background: #FFFFFF; border: 1px solid #D3DCCB; border-radius: 999px; padding: 5px 10px">Túi nilon dày</span>
+</div>
+
+<ol style="list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 10px">
+<sc-for list="{{steps}}" as="s" hint-placeholder-count="3">
+<li style="background: #FFFFFF; border-radius: 18px; box-sizing: border-box; {{s.ring}}">
+<button onClick="{{s.pick}}" aria-pressed="{{s.pressed}}" style="width: 100%; min-height: 64px; border: none; background: transparent; padding: 12px 14px; display: flex; align-items: center; gap: 12px; text-align: left; font-family: inherit; color: #1E2B22; cursor: pointer">
+<span style="width: 32px; height: 32px; flex: none; border-radius: 16px; display: flex; align-items: center; justify-content: center; font-size: 14px; font-weight: 700; box-sizing: border-box; {{s.badge}}">{{s.n}}</span>
+<span style="flex: 1; display: flex; flex-direction: column; gap: 2px"><span style="font-size: 15px; font-weight: 700">{{s.title}}</span><span style="font-size: 12px; color: #56635A">{{s.band}}</span></span>
+<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#56635A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 6l6 6-6 6"></path></svg>
+</button>
+<sc-if value="{{s.active}}" hint-placeholder-val="{{ false }}">
+<ul style="list-style: none; margin: 0; padding: 0 14px 14px 58px; display: flex; flex-direction: column; gap: 8px">
+<sc-for list="{{s.actions}}" as="a" hint-placeholder-count="3">
+<li style="font-size: 14px; line-height: 20px; display: flex; gap: 8px; align-items: flex-start; {{a.style}}"><span style="width: 8px; height: 8px; flex: none; margin-top: 6px; border-radius: 4px; {{a.dot}}"></span>{{a.text}}</li>
+</sc-for>
+</ul>
+</sc-if>
+</li>
+</sc-for>
+</ol>
+
+<div style="display: flex; gap: 10px">
+<button onClick="{{prev}}" disabled="{{atFirst}}" style="flex: 1; min-height: 48px; border-radius: 14px; border: 1px solid #C9D2C1; background: #FFFFFF; font-family: inherit; font-size: 14px; font-weight: 600; color: #1E2B22; display: flex; align-items: center; justify-content: center; gap: 6px; {{prevStyle}}"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 6l-6 6 6 6"></path></svg>Bước trước</button>
+<sc-if value="{{notLast}}" hint-placeholder-val="{{ true }}">
+<button onClick="{{next}}" style="flex: 1; min-height: 48px; border-radius: 14px; border: none; background: #2F6B45; font-family: inherit; font-size: 14px; font-weight: 600; color: #FFFFFF; display: flex; align-items: center; justify-content: center; gap: 6px">Bước tiếp theo<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 6l6 6-6 6"></path></svg></button>
+</sc-if>
+<sc-if value="{{atLast}}" hint-placeholder-val="{{ false }}">
+<a href="DeskFaq.dc.html" style="flex: 1; min-height: 48px; border-radius: 14px; background: #2F6B45; font-size: 14px; font-weight: 600; color: #FFFFFF; display: flex; align-items: center; justify-content: center; gap: 6px; text-decoration: none">Xem cẩm nang sự cố<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 6l6 6-6 6"></path></svg></a>
+</sc-if>
+</div>
+
+<div style="background: #1F4D31; color: #FFFFFF; border-radius: 16px; padding: 12px 14px; display: flex; gap: 10px; align-items: flex-start">
+<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#BFE0A8" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="flex: none; margin-top: 2px"><rect x="5" y="11" width="14" height="10" rx="2"></rect><path d="M8 11V7a4 4 0 0 1 8 0v4"></path></svg>
+<span style="font-size: 13px; line-height: 19px">Các ngày sau: mở túi, nạp lớp mới, miết khí, đậy nắp. <b>3 ngày cuối khóa kín</b>, không mở.</span>
+</div>
+</aside>
+</main>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1440,"height":900}}'>
+class Component extends DCLogic {
+renderVals() {
+const st = (this.state && this.state.step) || 1;
+const data = [
+{ n: 1, title: 'Tầng đáy giả', band: '10–20% chiều cao', chip: 'Bước 1/3 · Tầng đáy giả', cur: 1,
+  actions: ['Xếp vỏ lon nhôm bóp dẹp nằm ngang dưới đáy', 'Chèn chặt giấy báo vo tròn vào khe trống để hút dịch rỉ', 'Phủ tấm bìa carton phẳng lên trên'] },
+{ n: 2, title: 'Cơ chất nạp theo lớp', band: '~70% chiều cao · lớp 3–5 cm', chip: 'Bước 2/3 · Nạp cơ chất · Lớp 3', cur: 2,
+  actions: ['Băm nhỏ rác hữu cơ, vắt kiệt nước thừa', 'Rải thành lớp dày 3–5 cm', 'Rắc đều bột vi sinh EM lên mặt rác', 'Ấn nén chặt, lặp lại cho lớp tiếp theo'] },
+{ n: 3, title: 'Khóa yếm khí & nạp gối đầu', band: 'Phủ túi nilon, đậy nắp kín', chip: 'Bước 3/3 · Khóa yếm khí', cur: 1,
+  actions: ['Phủ túi nilon dày sát mặt rác', 'Miết từ tâm ra thành thùng để đẩy hết bọt khí', 'Đậy nắp kín'] }
+];
+const d = data[st - 1];
+const steps = data.map((s) => {
+  const active = s.n === st;
+  return {
+    n: s.n, title: s.title, band: s.band, active, pressed: active ? 'true' : 'false',
+    ring: active ? 'border: 2px solid #2F6B45;' : 'border: 1px solid #D3DCCB;',
+    badge: active ? 'background: #2F6B45; color: #FFFFFF;' : 'border: 1.5px solid #8A7350; color: #5B4A33;',
+    pick: () => this.setState({ step: s.n }),
+    actions: s.actions.map((text, i) => ({
+      text,
+      style: i === s.cur ? 'font-weight: 600; color: #1E2B22;' : (i < s.cur ? 'color: #56635A;' : 'color: #1E2B22;'),
+      dot: i < s.cur ? 'background: #2F6B45;' : (i === s.cur ? 'background: #E07A2E;' : 'border: 1.5px solid #8A7350; box-sizing: border-box;')
+    }))
+  };
+});
+const segs = d.actions.map((_, i) => ({ bg: i < d.cur ? '#2F6B45' : '#D3DCCB', inner: i === d.cur ? '55%' : '0%' }));
+return {
+  s1: st === 1, s2: st === 2, s3: st === 3,
+  chip: d.chip, caption: d.actions[d.cur], segs, phaseLabel: (d.cur + 1) + '/' + d.actions.length,
+  steps,
+  atFirst: st === 1, atLast: st === 3, notLast: st !== 3,
+  prevStyle: st === 1 ? 'opacity: .45; cursor: not-allowed;' : 'cursor: pointer;',
+  prev: () => this.setState({ step: Math.max(1, st - 1) }),
+  next: () => this.setState({ step: Math.min(3, st + 1) })
+};
+}
+}
+</script>
+</body>
+</html>
