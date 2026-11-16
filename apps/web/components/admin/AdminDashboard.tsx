@@ -18,7 +18,7 @@ import { useDevices, useEventTypes, useFeatures, useLogs, useSummary } from "./u
 const SEARCH_DEBOUNCE_MS = 300;
 
 const btnBase =
-  "inline-flex min-h-touch items-center gap-2 rounded-bk-sm px-4 text-sm font-semibold no-underline focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-bk-primary disabled:opacity-60";
+  "inline-flex min-h-touch items-center gap-2 whitespace-nowrap rounded-bk-sm px-4 text-sm font-semibold no-underline focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-bk-primary disabled:opacity-60";
 
 function Icon({ d }: { d: string }) {
   return (
@@ -103,7 +103,7 @@ export function AdminDashboard() {
             <h1 className="m-0 text-[28px] font-bold leading-9">{admin.heading}</h1>
             <p className="m-0 text-sm leading-5 text-bk-muted">{admin.subheading}</p>
           </div>
-          <div className="flex flex-1 flex-wrap gap-2">
+          <div className="flex flex-[1_0_auto] flex-wrap gap-2">
             <a
               href={exportHref(filters, target)}
               download
