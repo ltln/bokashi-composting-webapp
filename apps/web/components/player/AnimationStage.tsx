@@ -8,11 +8,16 @@ import { cn } from "@/lib/cn";
  * stacks chips → illustration → caption → controls.
  *
  * - setup: Main/Step2/Step3 (canvas 336 px, SVG box 358×260 at top 30) and DeskSetup (SVG 480 px, max 560 px).
- * - faq:   Faq1–5 (canvas 300 px, SVG box 300×262 at top 4, centred) and DeskFaq (SVG 400 px, max 480 px).
+ * - faq:   Faq1–3 (canvas 300 px, SVG box 300×262 at top 4, centred) and DeskFaq (SVG 400 px, max 480 px).
+ * - faqCompare: Faq4–5 (two figures filling the canvas above the caption bubble; full width on desktop).
  */
-export type AnimationStageSize = "setup" | "faq";
+export type AnimationStageSize = "setup" | "faq" | "faqCompare";
 
 const SIZE: Record<AnimationStageSize, { canvas: string; illustration: string }> = {
+  faqCompare: {
+    canvas: "h-[300px]",
+    illustration: "inset-x-3 top-3 bottom-[68px]",
+  },
   setup: {
     canvas: "h-[336px]",
     illustration: "left-0 top-[30px] h-[260px] w-full lg:h-[480px] lg:max-w-[560px]",
