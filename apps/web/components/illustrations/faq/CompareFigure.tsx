@@ -1,12 +1,12 @@
-import type { ReactNode } from "react";
+import { cloneElement, isValidElement, type ReactElement, type ReactNode } from "react";
 import { cn } from "@/lib/cn";
 import type { FaqOption } from "@/content/types";
 import type { StepIllustrationProps } from "../setup/types";
 
 /** Props of the compare-style FAQ illustrations (FAQ 4 and 5). */
 export interface CompareIllustrationProps extends StepIllustrationProps {
-  /** The two states; `options[active]` is emphasised on mobile. */
-  options: readonly [FaqOption, FaqOption];
+  /** The states; `options[active]` is emphasised on mobile. */
+  options: readonly FaqOption[];
 }
 
 /**
@@ -27,11 +27,14 @@ export function CompareFigure({
   caption,
   active,
   tag,
+  svgClassName,
   children,
 }: {
   caption: string;
   active: boolean;
   tag: ReactNode;
+  /** Overrides the fixed-width `COMPARE_SVG` (e.g. 3 figures on the mobile canvas). */
+  svgClassName?: string;
   children: ReactNode;
 }) {
   return (
@@ -45,7 +48,9 @@ export function CompareFigure({
       )}
     >
       <figcaption className="self-start text-[13px] font-bold lg:text-[15px]">{caption}</figcaption>
-      {children}
+      {isValidElement(children)
+        ? cloneElement(children as ReactElement<{ className?: string }>, { className: svgClassName ?? COMPARE_SVG })
+        : children}
       {tag}
     </figure>
   );

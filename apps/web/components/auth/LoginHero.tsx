@@ -44,8 +44,8 @@ export function LoginHero({ size, idPrefix }: { size: number; idPrefix: string }
       />
       <rect x="38" y="34" width="84" height="9" rx="4" className="fill-bk-primary" />
       <rect x="72" y="29" width="16" height="6" rx="2.5" className="fill-bk-primary-dark" />
-      <path d="M118 30c0-9 6-15 15-15 0 9-6 15-15 15z" className="fill-bk-illo-organic-green" />
-      <path d="M118 30v-6" strokeWidth="2" strokeLinecap="round" className="stroke-bk-primary" />
+      <path d="M104 34v-10" strokeWidth="2" strokeLinecap="round" className="stroke-bk-primary" />
+      <path d="M104 24c0-9 6-15 15-15 0 9-6 15-15 15z" className="fill-bk-illo-organic-green" />
     </svg>
   );
 }

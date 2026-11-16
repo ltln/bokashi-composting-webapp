@@ -5,6 +5,9 @@
  *
  * The boards each render one sub-step. Captions they don't show reuse that
  * sub-step's checklist text (same convention as content/setupSteps.ts).
+ *
+ * FAQ 3 and FAQ 5 copy diverged from the boards docs/design per product
+ * decision 2026-11-16 (drain-by-tilting remedy, third disposal option).
  */
 import type { Faq, FaqSlug } from "./types";
 
@@ -91,26 +94,26 @@ export const faqs: readonly Faq[] = [
     listTitle: "Rác ra nhiều nước, đáy thùng đọng dịch?",
     stageLabel: "Hoạt ảnh xử lý dịch rỉ",
     illustrationLabel:
-      "Mặt cắt thùng: dịch rỉ thấm xuống tầng đáy giả, lon nhôm và giấy báo giữ và hút dịch; giấy báo khô được lót thêm lên mặt rác",
+      "Mặt cắt thùng: dịch rỉ dềnh quá mặt lon; thùng nghiêng rót bớt dịch vào xô; lớp rác mới vắt kiệt nước được nạp vào",
     tint: "liquid",
     featureTarget: "FAQ_3_Liquid",
     substeps: [
       {
-        id: "base",
-        caption: "Tầng đáy giả (lon nhôm + giấy báo) giữ và hút dịch rỉ",
-        checklist: "Tầng đáy giả (lon nhôm + giấy báo) giữ và hút dịch rỉ",
+        id: "check",
+        caption: "Mở nắp kiểm tra: dịch dềnh quá mặt lon thì cần rót bớt",
+        checklist: "Mở nắp kiểm tra định kỳ – mở nắp ngắn không hư mẻ ủ, chỉ kỵ không khí lưu thông lâu",
         durationMs: SUBSTEP_MS,
       },
       {
-        id: "paper",
-        caption: "Lót thêm giấy báo khô vo viên / bìa carton trước lớp rác mới",
-        checklist: "Lót thêm giấy báo khô vo viên hoặc bìa carton hút ẩm",
+        id: "pour",
+        caption: "Nghiêng thùng, rót bớt dịch qua khe nắp vào xô",
+        checklist: "Nghiêng thùng rót bớt dịch; dịch đem pha loãng ~1:100 để tưới cây",
         durationMs: SUBSTEP_MS,
       },
       {
-        id: "layer",
+        id: "dry",
         caption: "Nạp lớp rác tiếp theo đã vắt kiệt nước",
-        checklist: "Nạp lớp rác tiếp theo đã vắt kiệt nước",
+        checklist: "Lót thêm giấy báo khô vo viên rồi nạp lớp rác đã vắt kiệt nước",
         durationMs: SUBSTEP_MS,
       },
     ],
@@ -162,14 +165,14 @@ export const faqs: readonly Faq[] = [
     category: "Đầu ra",
     question: "Sau khi ủ xong một mẻ thì xử lý đống rác trong thùng như thế nào?",
     listTitle: "Ủ xong một mẻ thì xử lý rác thế nào?",
-    stageLabel: "Hai lựa chọn đầu ra",
-    illustrationLabel: "Hai lựa chọn đầu ra",
+    stageLabel: "Ba lựa chọn đầu ra",
+    illustrationLabel: "Ba lựa chọn đầu ra",
     tint: "disposal",
     featureTarget: "FAQ_5_Disposal",
     substeps: [
       {
         id: "plant",
-        caption: "Rác đã lên men chua ngọt – không còn mùi thối, không rỉ nước",
+        caption: "Vùi rác đã lên men vào chậu cây / đất trồng",
         checklist: "(a) Vùi rác đã lên men chua ngọt vào chậu cây / đất trồng",
         durationMs: SUBSTEP_MS,
       },
@@ -177,6 +180,12 @@ export const faqs: readonly Faq[] = [
         id: "bin",
         caption: "Cho vào túi rác buộc kín, bỏ ra điểm thu gom sinh hoạt",
         checklist: "(b) Cho vào túi rác buộc kín, bỏ ra điểm thu gom sinh hoạt",
+        durationMs: SUBSTEP_MS,
+      },
+      {
+        id: "juice",
+        caption: "Dịch rỉ pha loãng ~1:100 thành phân bón lỏng tưới cây",
+        checklist: "(c) Dịch rỉ pha loãng ~1:100 rồi tưới cây",
         durationMs: SUBSTEP_MS,
       },
     ],
@@ -194,6 +203,13 @@ export const faqs: readonly Faq[] = [
         tag: "Điểm thu gom",
         marker: "b",
         note: { before: "Cho vào ", bold: "túi rác buộc kín", after: ", bỏ ra điểm thu gom sinh hoạt." },
+      },
+      {
+        figureLabel: "(c) Tưới cây bằng dịch rỉ",
+        toggleLabel: "Dịch rỉ",
+        tag: "Pha loãng ~1:100",
+        marker: "c",
+        note: { before: "Dịch rỉ ", bold: "pha loãng ~1:100", after: " rồi tưới cây – không tưới đậm đặc." },
       },
     ],
   },

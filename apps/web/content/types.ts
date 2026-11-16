@@ -87,16 +87,16 @@ export interface Faq {
   /** Chip at the stage's top right, e.g. "Thối → Chua nhẹ". */
   stageBadge?: { from: string; to: string };
   /**
-   * Compare layout (FAQ 4 and 5): two side-by-side states instead of an ordered
-   * checklist. `options[i]` belongs to `substeps[i]`.
+   * Compare layout (FAQ 4 and 5): two or three side-by-side states instead of
+   * an ordered checklist. `options[i]` belongs to `substeps[i]`.
    */
-  options?: readonly [FaqOption, FaqOption];
+  options?: readonly FaqOption[];
   /** Tint pair key: maps to `bg-bk-faq-<tint>-bg` / `text-bk-faq-<tint>-fg`. */
   tint: FaqSlug;
   featureTarget: FaqFeatureTarget;
 }
 
-/** One side of a compare-style FAQ (FAQ 4: white vs green/black mold; FAQ 5: the two outputs). */
+/** One side of a compare-style FAQ (FAQ 4: white vs green/black mold; FAQ 5: the outputs). */
 export interface FaqOption {
   /** Figure caption inside the stage, e.g. "Mốc trắng mỏng". */
   figureLabel: string;
