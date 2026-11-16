@@ -1,13 +1,17 @@
 import type { Metadata } from "next";
-import { placeholders } from "@/content/placeholders";
+import { FaqListView } from "@/components/faq";
+import { faqPageCopy, faqs } from "@/content/faqs";
 
-export const metadata: Metadata = { title: placeholders.faqList };
+export const metadata: Metadata = { title: faqPageCopy.listMetaTitle };
 
-// Placeholder (M0). M4 builds the FAQ list.
 export default function FaqListPage() {
   return (
-    <main className="p-4">
-      <h1 className="text-2xl font-bold">{placeholders.faqList}</h1>
+    <main>
+      <FaqListView faqs={faqs} />
+      {/* Desktop: the rail in the layout is the list; the right side invites a pick. */}
+      <p className="m-0 hidden rounded-[28px] bg-bk-surface-tint p-8 text-base text-bk-illo-label lg:block">
+        {faqPageCopy.list.emptyDetail}
+      </p>
     </main>
   );
 }
