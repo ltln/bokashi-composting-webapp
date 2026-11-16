@@ -1,13 +1,9 @@
 import type { Metadata } from "next";
-import { placeholders } from "@/content/placeholders";
+import { LegalPage } from "@/components/shell/LegalPage";
+import { legal } from "@/content/legal";
 
-export const metadata: Metadata = { title: placeholders.privacy };
+export const metadata: Metadata = { title: legal.privacy.title, description: legal.privacy.description };
 
-// Placeholder (M0). Static legal page explaining anonymous tracking, filled in M7.
 export default function PrivacyPage() {
-  return (
-    <main className="p-4">
-      <h1 className="text-2xl font-bold">{placeholders.privacy}</h1>
-    </main>
-  );
+  return <LegalPage content={legal.privacy} />;
 }
