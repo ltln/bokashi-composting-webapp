@@ -1,7 +1,7 @@
 import { BinBase, useSvgId } from "../BinBase";
 import { OrganicPattern } from "../setup/OrganicPattern";
 import type { StepIllustrationProps } from "../setup/types";
-import { BagCollar, Lid, LeaderLabel } from "../parts";
+import { BagCollar, Callout, Lid } from "../parts";
 import { Fly, RubbishBody, delay } from "./shared";
 
 /** Maggots at the gap in the bag. [x, y, w, delay s] */
@@ -13,8 +13,9 @@ const FLIES = [[246, 30, 0], [266, 20, 0.4], [230, 12, 0.8], [280, 40, 0.2]] as 
 
 /**
  * FAQ 2, "Ruồi giấm và giòi" (Faq2 board). Sub-steps: 0 EM bran is sprinkled
- * over the exposed patch where maggots wiggle, flies buzz around the tilted
- * lid (the board's frame), 1 the bag edge is smoothed against the wall (the
+ * over the exposed patch where maggots wiggle (labelled: bag edge lifted,
+ * maggots at the gap), flies buzz around the tilted
+ * lid (the board's frame), 1 the bag edge is smoothed against the wall (arrow;
  * patch is covered), 2 the lid is checked: it sits flat and the flies stay out.
  */
 export function Faq2({ active, paused, label }: StepIllustrationProps) {
@@ -32,13 +33,13 @@ export function Faq2({ active, paused, label }: StepIllustrationProps) {
             <OrganicPattern id={patternId} />
           </defs>
           <BagCollar state={active === 0 ? "gap" : "lip"} />
-          {active <= 1 && (
+          {active === 1 && (
             <g
               fill="none"
               strokeWidth="1.8"
               strokeLinecap="round"
               strokeLinejoin="round"
-              className={`stroke-bk-accent ${active === 1 ? "motion-safe:animate-hop" : ""}`}
+              className="stroke-bk-accent motion-safe:animate-hop"
             >
               <path d="M204 64 L236 64 M230 59 L236 64 L230 69" />
             </g>
@@ -53,7 +54,13 @@ export function Faq2({ active, paused, label }: StepIllustrationProps) {
               <Fly x={x} y={y} />
             </g>
           ))}
-          {active === 0 && <LeaderLabel from={[242, 82]} to={[264, 104]} lines={["vùng hở"]} />}
+          {active === 0 && (
+            <>
+              <Callout path="M200 70 L180 62" at={[177, 64]} anchor="end" title="Mép túi bị bong" titleClassName="fill-bk-faq-maggots-fg" />
+              <Callout path="M242 82 L262 100" at={[264, 108]} title="Giòi ở" sub="vùng hở" titleClassName="fill-bk-accent-dark" />
+            </>
+          )}
+          <Callout path="M225 10 L232 13" at={[222, 8]} anchor="end" title="Ruồi giấm" />
         </>
       }
     >

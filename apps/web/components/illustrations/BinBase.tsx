@@ -40,7 +40,8 @@ export interface BinBaseProps {
    * The false-bottom can layer.
    * - "none": not drawn
    * - "static": drawn at rest (default)
-   * - "drop": the top row of cans falls in (`motion-safe:animate-drop`, staggered)
+   * - "drop": every can falls in one after another, turning from upright to
+   *   lying flat (`motion-safe:animate-canIn`, staggered 0.39 s; plays once)
    */
   cans?: "none" | "static" | "drop";
   /** Draw the pull-tab highlights on the cans (step 1 board does, steps 2-3 don't). Default true. */
@@ -110,12 +111,12 @@ export function BinBase({
         {underlay}
         {cans !== "none" &&
           CANS.map((c, i) => {
-            const falling = cans === "drop" && c.row === 1;
+            const falling = cans === "drop";
             return (
               <g
                 key={i}
-                className={falling ? "motion-safe:animate-drop" : undefined}
-                style={falling ? { animationDelay: `${(i - 5) * 0.4}s` } : undefined}
+                className={falling ? "svg-box motion-safe:animate-canIn" : undefined}
+                style={falling ? { animationDelay: `${(0.2 + i * 0.39).toFixed(2)}s` } : undefined}
               >
                 <rect x={c.x} y={c.y} width="22" height="10" rx="4" className={c.fill} />
                 {canTabs && (

@@ -11,6 +11,7 @@
  * - annotations use `bk-illo-label` at 10 px and `bk-muted` leader lines;
  * - animate `transform`/`opacity` only, always behind `motion-safe:`.
  */
+import type { CSSProperties } from "react";
 import { cn } from "@/lib/cn";
 import { delay } from "./faq/shared";
 
@@ -78,6 +79,82 @@ export function LeaderLabel({
           {t}
         </text>
       ))}
+    </g>
+  );
+}
+
+/**
+ * Leader line + a bold, coloured title and an optional plain second line
+ * ("Lon nhôm / bóp dẹp", "Bọt khí / còn kẹt"). `at` is the title baseline;
+ * the second line sits 11 px below it.
+ */
+export function Callout({
+  path,
+  at,
+  title,
+  sub,
+  titleClassName = "fill-bk-illo-label",
+  anchor = "start",
+  plain,
+  className,
+  style,
+}: {
+  path?: string;
+  at: [number, number];
+  title: string;
+  sub?: string;
+  titleClassName?: string;
+  anchor?: "start" | "end";
+  /** Regular weight title (a plain two-line label). */
+  plain?: boolean;
+  className?: string;
+  style?: CSSProperties;
+}) {
+  return (
+    <g fontSize="10" className={className} style={style}>
+      {path && <path d={path} strokeWidth="1" className="stroke-bk-muted" />}
+      <text x={at[0]} y={at[1]} textAnchor={anchor} fontWeight={plain ? undefined : "700"} className={titleClassName}>
+        {title}
+      </text>
+      {sub && (
+        <text x={at[0]} y={at[1] + 11} textAnchor={anchor} className="fill-bk-illo-label">
+          {sub}
+        </text>
+      )}
+    </g>
+  );
+}
+
+/**
+ * A hand seen from above, smoothing towards +x (fingers point right), in a
+ * green sleeve. Drawn around (cx, cy) at `scale` (the step 3 board uses 0.6).
+ */
+export function Hand({ cx, cy, scale = 1 }: { cx: number; cy: number; scale?: number }) {
+  const shapes = (
+    <>
+      <path d="M-12 -16 Q-20 -12.5 -26 -12 L-66 -13.5 L-66 13.5 L-26 12 Q-20 12.5 -12 16 Z" />
+      <rect x="-22" y="-19" width="40" height="38" rx="12" />
+      <rect x="6" y="-18.6" width="38" height="8.6" rx="4.3" transform="rotate(-5 6 -14.3)" />
+      <rect x="6" y="-8.9" width="43" height="8.8" rx="4.4" />
+      <rect x="6" y="0.9" width="40" height="8.6" rx="4.3" transform="rotate(4 6 5.2)" />
+      <rect x="4" y="10.4" width="31" height="7.6" rx="3.8" transform="rotate(10 4 14.2)" />
+      <rect x="-18" y="-21.5" width="27" height="10" rx="5" transform="rotate(-42 -18 -16.5)" />
+    </>
+  );
+  return (
+    <g transform={`translate(${cx} ${cy}) scale(${scale})`}>
+      {/* Outline pass (stroked), then the fill pass on top, so overlaps show no seams. */}
+      <g strokeWidth="2.2" strokeLinejoin="round" className="fill-bk-illo-skin-outline stroke-bk-illo-skin-outline">
+        {shapes}
+      </g>
+      <g className="fill-bk-illo-skin">{shapes}</g>
+      <path
+        d="M-80 -17 L-46 -16 Q-43 -16 -43 -13 L-43 13 Q-43 16 -46 16 L-80 17 Z"
+        strokeWidth="1.76"
+        strokeLinejoin="round"
+        className="fill-bk-primary stroke-bk-illo-lid-handle"
+      />
+      <path d="M-49 -15.5 L-49 15.5" strokeWidth="1.2" className="stroke-bk-illo-lid-handle" />
     </g>
   );
 }
@@ -195,7 +272,7 @@ export function WateringCan({ x, y, pouring }: { x: number; y: number; pouring?:
  * the top, `flat` smoothed across the rim, `lip` edge lying on the surface,
  * `gap` edge lifted where the seal is broken.
  */
-export type BagCollarState = "up" | "open" | "flat" | "lip" | "gap";
+export type BagCollarState = "up" | "open" | "flat" | "lip" | "gap" | "smoothing";
 
 const BAG_PATHS: Record<BagCollarState, string> = {
   up: "M68 44 Q70 26 104 22 L190 18",
@@ -203,9 +280,20 @@ const BAG_PATHS: Record<BagCollarState, string> = {
   flat: "M68 44 Q74 56 80 80 L240 80 Q246 56 252 44",
   lip: "M68 44 Q76 46 79 58 L80 80 L242 80",
   gap: "M68 44 Q76 46 79 58 L80 80 L190 80 Q199 79 201 70",
+  // Step 3: left side already smoothed flat, a bubble of air still trapped near the right wall.
+  smoothing: "M68 44 Q76 46 79 58 L80 80 L212 80 Q218 79 221 74 Q229 67 236 74 Q240 77 240 80 L241 58 Q244 46 252 44",
 };
 
-export function BagCollar({ state, className }: { state: BagCollarState; className?: string }) {
+export function BagCollar({
+  state,
+  strong,
+  className,
+}: {
+  state: BagCollarState;
+  /** Darker outline, for the bag being worked on (step 3 smoothing). */
+  strong?: boolean;
+  className?: string;
+}) {
   return (
     <path
       d={BAG_PATHS[state]}
@@ -213,7 +301,7 @@ export function BagCollar({ state, className }: { state: BagCollarState; classNa
       strokeWidth="2.6"
       strokeLinecap="round"
       strokeLinejoin="round"
-      className={cn("stroke-bk-illo-bag", className)}
+      className={cn(strong ? "stroke-bk-illo-bag-strong" : "stroke-bk-illo-bag", className)}
     />
   );
 }
