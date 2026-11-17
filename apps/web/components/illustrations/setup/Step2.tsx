@@ -1,5 +1,5 @@
 import { BinBase, useSvgId } from "../BinBase";
-import { Bottle, Bracket, PressPlate } from "../parts";
+import { Bottle, Bracket, Callout, PressPlate } from "../parts";
 import { OrganicPattern } from "./OrganicPattern";
 import type { StepIllustrationProps } from "./types";
 
@@ -34,11 +34,25 @@ export function Step2({ active, paused, label }: StepIllustrationProps) {
       }
       overlay={
         <>
-          {active === 2 && <Bottle x={150} y={6} shaking grainY={112} />}
+          {active === 2 && (
+            <>
+              <Bottle x={150} y={6} shaking grainY={112} />
+              <Callout at={[198, 14]} title="Bột EM" sub="rắc đều" titleClassName="fill-bk-brown-dark" />
+            </>
+          )}
           <Bracket x={59} y1={82} y2={226} text="~70%" />
-          <path d="M252 154 L262 154 M252 190 L262 190 M257 154 L257 190" fill="none" strokeWidth="1.2" className="stroke-bk-muted" />
-          <text x="265" y="170" fontSize="10" className="fill-bk-illo-label">3–5</text>
-          <text x="265" y="182" fontSize="10" className="fill-bk-illo-label">cm</text>
+          {active >= 1 && (
+            <>
+              <path d="M252 114 L262 114 M252 154 L262 154 M257 114 L257 154" fill="none" strokeWidth="1.2" className="stroke-bk-muted" />
+              <Callout at={[265, 130]} title="Lớp mới" sub="dày 3–5 cm" titleClassName="fill-bk-accent-dark" />
+            </>
+          )}
+          <Callout path="M232 186 L262 194" at={[265, 196]} title="Lớp cũ" sub="đã nén" titleClassName="fill-bk-primary-dark" />
+          {active === 2 && (
+            <text x="160" y="101" textAnchor="middle" fontSize="9" className="fill-bk-muted">
+              chỗ cho lớp tiếp theo
+            </text>
+          )}
         </>
       }
     >

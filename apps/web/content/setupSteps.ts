@@ -19,18 +19,18 @@ export const setupSteps: readonly SetupStep[] = [
     badge: "10–20% chiều cao",
     description: "Thùng nhựa 10L có nắp, không khoan lỗ.",
     illustrationLabel:
-      "Mặt cắt thùng 10L: lon nhôm bóp dẹp xếp ngang dưới đáy, giấy báo vo viên đang được chèn vào khe",
+      "Hoạt ảnh mặt cắt thùng 10L: lần lượt xếp lon nhôm bóp dẹp nằm ngang dưới đáy, chèn giấy báo vo viên vào khe, rồi phủ tấm bìa carton lên trên",
     featureTarget: "3D_Setup_Layer1",
     substeps: [
       {
         id: "cans",
-        caption: "Xếp vỏ lon nhôm bóp dẹp nằm ngang dưới đáy",
+        caption: "Xếp vỏ lon bóp dẹp nằm ngang dưới đáy",
         checklist: "Xếp vỏ lon nhôm bóp dẹp nằm ngang dưới đáy",
         durationMs: SUBSTEP_MS,
       },
       {
         id: "paper",
-        caption: "Chèn chặt giấy báo vo tròn vào khe trống để hút dịch rỉ",
+        caption: "Chèn giấy báo vo viên vào khe để hút dịch",
         checklist: "Chèn chặt giấy báo vo tròn vào khe trống để hút dịch rỉ",
         durationMs: SUBSTEP_MS,
       },
@@ -89,7 +89,7 @@ export const setupSteps: readonly SetupStep[] = [
     stageLabel: "Khóa yếm khí",
     summary: "Phủ túi nilon, đậy nắp kín",
     illustrationLabel:
-      "Mặt cắt thùng đầy: túi nilon phủ sát mặt rác, bọt khí được miết ra thành thùng, nắp chuẩn bị đậy",
+      "Mặt cắt thùng đầy: túi nilon phủ sát mặt rác; nửa trái đã miết phẳng, bàn tay đang miết từ tâm ra mép phải, đẩy bọt khí còn kẹt ra ngoài qua mép thùng",
     featureTarget: "3D_Setup_Layer3",
     substeps: [
       {

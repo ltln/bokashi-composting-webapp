@@ -58,6 +58,7 @@ const config: Config = {
             "bin-inner": "#F8FBF9",
             "bin-handle": "#8FA6AB",
             bag: "#7FB6CC", // bag / lid outline
+            "bag-strong": "#5E9DB8", // bag being smoothed + its air bubbles (step 3)
             label: "#3F4B43", // SVG annotation text
             "can-red": "#C0392B",
             "can-blue": "#2E86C1",
@@ -87,6 +88,7 @@ const config: Config = {
             "metal-dark": "#6E8391",
             skin: "#F2C9A0",
             "skin-line": "#C98D5B",
+            "skin-outline": "#9C6B44", // hand outline (step 3)
             bottle: "#F3E5B8",
             pot: "#C8693A",
             "pot-rim": "#B05A2F",
@@ -248,6 +250,43 @@ const config: Config = {
           "0%": { transform: "scaleY(1)" },
           "100%": { transform: "scaleY(.35)" },
         },
+        // Step 1 board: one-shot sequence, staggered per item with animation-delay.
+        // Played once per sub-step (fill-mode both: hidden before, kept after).
+        canIn: {
+          "0%": { transform: "translateY(-190px) rotate(90deg)", opacity: "0" },
+          "1%": { opacity: "1" },
+          "100%": { transform: "translateY(0) rotate(0deg)", opacity: "1" },
+        },
+        ballIn: {
+          "0%": { transform: "translateY(-200px)", opacity: "0" },
+          "1%": { opacity: "1" },
+          "100%": { transform: "translateY(0)", opacity: "1" },
+        },
+        cartonIn: {
+          "0%": { transform: "translateY(-175px)", opacity: "0" },
+          "1%": { opacity: "1" },
+          "100%": { transform: "translateY(0)", opacity: "1" },
+        },
+        fadeIn: {
+          "0%": { opacity: "0" },
+          "100%": { opacity: "1" },
+        },
+        // Step 3 board: the hand smooths the bag towards the rim, the trapped
+        // bubbles drift out and escape over the rim as puffs.
+        nudge: {
+          "0%, 100%": { transform: "translateX(-6px)" },
+          "50%": { transform: "translateX(6px)" },
+        },
+        drift: {
+          "0%": { transform: "translateX(0)", opacity: "1" },
+          "80%": { opacity: "1" },
+          "100%": { transform: "translateX(14px)", opacity: "0" },
+        },
+        puff: {
+          "0%": { transform: "translateY(0)", opacity: "0" },
+          "20%": { opacity: "1" },
+          "100%": { transform: "translateY(-18px)", opacity: "0" },
+        },
       },
       animation: {
         drop: "drop 2.4s cubic-bezier(.5,0,.9,.6) infinite",
@@ -276,6 +315,13 @@ const config: Config = {
         tilt: "tilt .7s ease-in-out forwards",
         untilt: "untilt .7s ease-in-out forwards",
         drain: "drain 2.4s ease-out forwards",
+        canIn: "canIn .51s cubic-bezier(.5,0,.9,.6) both",
+        ballIn: "ballIn .31s cubic-bezier(.5,0,.9,.6) both",
+        cartonIn: "cartonIn .86s ease-in-out both",
+        fadeIn: "fadeIn .2s linear both",
+        nudge: "nudge 1.8s ease-in-out infinite",
+        drift: "drift 2s ease-in infinite",
+        puff: "puff 1.8s ease-out infinite",
       },
     },
   },
