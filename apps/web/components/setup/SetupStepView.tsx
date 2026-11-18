@@ -2,16 +2,19 @@
 
 import { useEffect } from "react";
 import { AnimationStage, PlayerControls, useAnimationPlayer } from "@/components/player";
-import { Step1, Step2, Step3 } from "@/components/illustrations/setup";
 import { Pill } from "@/components/ui";
 import { track } from "@/lib/tracking";
 import { playerCopy, setupPageCopy, setupSteps } from "@/content/setupSteps";
-import type { SetupStep } from "@/content/types";
+import type { SetupStep, SetupStepNumber } from "@/content/types";
 import { DeskStepList } from "./DeskStepList";
 import { SetupChecklist } from "./SetupChecklist";
 import { StepSwitcher } from "./StepSwitcher";
 
-const ILLUSTRATIONS = { 1: Step1, 2: Step2, 3: Step3 } as const;
+const STEP_VIDEOS: Record<SetupStepNumber, { src: string; poster: string }> = {
+  1: { src: "/animations/step-1.mp4", poster: "/animations/step-1-poster.png" },
+  2: { src: "/animations/step-2.mp4", poster: "/animations/step-2-poster.png" },
+  3: { src: "/animations/step-3.mp4", poster: "/animations/step-3-poster.png" },
+};
 
 /**
  * Tab 1 content for one step: stage + controls, mobile switcher + checklist
@@ -21,7 +24,7 @@ const ILLUSTRATIONS = { 1: Step1, 2: Step2, 3: Step3 } as const;
 export function SetupStepView({ step }: { step: SetupStep }) {
   const player = useAnimationPlayer(step.substeps.map((s) => s.durationMs));
   const total = setupSteps.length;
-  const Illustration = ILLUSTRATIONS[step.number];
+  const media = STEP_VIDEOS[step.number];
 
   useEffect(() => {
     track("view_3d_step", step.featureTarget);
@@ -33,6 +36,12 @@ export function SetupStepView({ step }: { step: SetupStep }) {
         label={setupPageCopy.stageLabel(step.number)}
         caption={step.substeps[player.active]?.caption ?? ""}
         paused={!player.playing}
+        videoSrc={media.src}
+        posterSrc={media.poster}
+        illustrationLabel={step.illustrationLabel}
+        active={player.active}
+        epoch={player.epoch}
+        reducedMotion={player.reducedMotion}
         className="lg:flex-[999_1_640px]"
         badgeStart={
           <Pill className="lg:px-3 lg:py-1.5 lg:text-[13px]">
@@ -59,9 +68,7 @@ export function SetupStepView({ step }: { step: SetupStep }) {
             labels={playerCopy}
           />
         }
-      >
-        <Illustration key={player.epoch} active={player.active} paused={!player.playing} label={step.illustrationLabel} />
-      </AnimationStage>
+      />
 
       <StepSwitcher steps={setupSteps} current={step.number} />
       <SetupChecklist step={step} active={player.active} />

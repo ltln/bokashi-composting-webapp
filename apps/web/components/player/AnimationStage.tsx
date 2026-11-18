@@ -1,4 +1,6 @@
-import type { ReactNode } from "react";
+"use client";
+
+import { useEffect, useRef, type ReactNode } from "react";
 import { cn } from "@/lib/cn";
 
 /**
@@ -9,14 +11,14 @@ import { cn } from "@/lib/cn";
  *
  * - setup: Main/Step2/Step3 (canvas 336 px, SVG box 358×260 at top 30) and DeskSetup (SVG 480 px, max 560 px).
  * - faq:   Faq1–3 (canvas 300 px, SVG box 270×236 at top 4, centred) and DeskFaq (SVG 400 px, max 480 px).
- * - faqCompare: Faq4–5 (figures filling the canvas above the caption bubble; full width on desktop).
+ * - faqCompare: Faq4–5 (figures filling the canvas above the caption bubble; 16:9 stage on desktop).
  */
 export type AnimationStageSize = "setup" | "faq" | "faqCompare";
 
 const SIZE: Record<AnimationStageSize, { canvas: string; illustration: string }> = {
   faqCompare: {
     canvas: "h-[300px]",
-    illustration: "inset-x-3 top-3 bottom-[68px]",
+    illustration: "inset-x-3 top-3 bottom-[68px] lg:h-[380px] lg:max-w-[680px]",
   },
   setup: {
     canvas: "h-[336px]",
@@ -37,17 +39,28 @@ export interface AnimationStageProps {
   label: string;
   /** Caption bubble text (the active sub-step's caption). Announced politely. */
   caption: string;
-  /** Pauses every CSS animation inside the canvas (`.anim-paused`). */
+  /** Pauses every animation inside the canvas (`.anim-paused` and `<video>`). */
   paused: boolean;
   /** Chip(s) at the top left, e.g. <Pill>Bước 1/3 · Tầng đáy giả</Pill>. */
   badgeStart?: ReactNode;
   /** Chip(s) at the top right, e.g. <Pill tone="primary">Lớp 3</Pill>. */
   badgeEnd?: ReactNode;
-  /**
-   * The illustration: an <svg> that fills its box (BinBase does). It is placed
-   * by the `size` preset.
-   */
-  children: ReactNode;
+  /** Optional custom illustration node when not using `videoSrc`. */
+  children?: ReactNode;
+  /** Pre-rendered 1920×1080@60fps board clip under `/animations/*.mp4`. */
+  videoSrc?: string;
+  /** Final settled frame poster under `/animations/*-poster.png`. */
+  posterSrc?: string;
+  /** Accessible label for the rendered illustration wrapper (`role="img"`). */
+  illustrationLabel?: string;
+  /** 0-based active sub-step driving video seek targets (`active * substepSeconds`). */
+  active?: number;
+  /** Incremented on replay/goTo to force immediate video seek. */
+  epoch?: number;
+  /** When true and paused, keeps poster visible on mount and seeks to sub-step end on manual select. */
+  reducedMotion?: boolean;
+  /** Sub-step length in seconds (default 4.5 matching SUBSTEP_MS = 4500). */
+  substepSeconds?: number;
   /**
    * Usually <PlayerControls>. Rendered under the canvas on mobile and inside
    * the tinted panel on desktop, as in the boards.
@@ -59,9 +72,9 @@ export interface AnimationStageProps {
 }
 
 /**
- * The rounded `bk-surface-tint` animation stage: chip slots, an illustration
- * slot, a caption bubble and an optional controls slot. Server-safe (no
- * state); pair it with `useAnimationPlayer` in a client component.
+ * The rounded `bk-surface-tint` animation stage: chip slots, a pre-rendered
+ * Remotion video (or fallback illustration slot), a caption bubble and an
+ * optional controls slot. Pair with `useAnimationPlayer` in a client component.
  */
 export function AnimationStage({
   label,
@@ -70,11 +83,71 @@ export function AnimationStage({
   badgeStart,
   badgeEnd,
   children,
+  videoSrc,
+  posterSrc,
+  illustrationLabel,
+  active = 0,
+  epoch = 0,
+  reducedMotion = false,
+  substepSeconds = 4.5,
   controls,
   size = "setup",
   className,
 }: AnimationStageProps) {
   const preset = SIZE[size];
+  const videoRef = useRef<HTMLVideoElement | null>(null);
+  const prevEpochRef = useRef(epoch);
+
+  // Sync play/pause state with player controls and prefers-reduced-motion.
+  useEffect(() => {
+    const video = videoRef.current;
+    if (!video || !videoSrc) return;
+    if (paused) {
+      try {
+        video.pause();
+      } catch {
+        // jsdom does not implement HTMLMediaElement.pause
+      }
+      return;
+    }
+    try {
+      const p = video.play();
+      if (p && typeof p.catch === "function") {
+        p.catch(() => {});
+      }
+    } catch {
+      // jsdom does not implement HTMLMediaElement.play
+    }
+  }, [paused, videoSrc]);
+
+  // Sync active sub-step and manual replay/goTo jumps (`epoch`) with video timeline.
+  useEffect(() => {
+    const video = videoRef.current;
+    if (!video || !videoSrc) return;
+    const epochChanged = prevEpochRef.current !== epoch;
+    prevEpochRef.current = epoch;
+
+    if (reducedMotion && paused) {
+      if (!epochChanged) return;
+      const settledTime = Math.max(0, (active + 1) * substepSeconds - 0.08);
+      try {
+        video.currentTime = settledTime;
+      } catch {
+        // Ignore unseekable media state in headless test DOMs
+      }
+      return;
+    }
+
+    const targetTime = active * substepSeconds;
+    if (epochChanged || Math.abs((video.currentTime || 0) - targetTime) > 0.35) {
+      try {
+        video.currentTime = targetTime;
+      } catch {
+        // Ignore unseekable media state in headless test DOMs
+      }
+    }
+  }, [active, epoch, paused, reducedMotion, substepSeconds, videoSrc]);
+
   return (
     <section
       aria-label={label}
@@ -99,7 +172,31 @@ export function AnimationStage({
             <div className="flex items-center gap-2">{badgeEnd}</div>
           </div>
         )}
-        <div className={cn("absolute lg:static lg:mx-auto lg:w-full", preset.illustration)}>{children}</div>
+        <div className={cn("absolute lg:static lg:mx-auto lg:w-full", preset.illustration)}>
+          {videoSrc ? (
+            <div
+              role="img"
+              aria-label={illustrationLabel ?? label}
+              className="relative h-full w-full overflow-hidden rounded-2xl"
+            >
+              <video
+                ref={videoRef}
+                src={videoSrc}
+                poster={posterSrc}
+                muted
+                playsInline
+                preload="auto"
+                aria-hidden="true"
+                className={cn(
+                  "block h-full w-full object-center",
+                  size === "faqCompare" ? "object-contain" : "object-cover",
+                )}
+              />
+            </div>
+          ) : (
+            children
+          )}
+        </div>
         <p
           aria-live="polite"
           className={cn(

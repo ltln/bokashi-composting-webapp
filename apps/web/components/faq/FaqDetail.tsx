@@ -4,16 +4,23 @@ import Link from "next/link";
 import { useEffect } from "react";
 import { AnimationStage, PlayerControls, useAnimationPlayer } from "@/components/player";
 import type { AnimationPlayer } from "@/components/player";
-import { Faq1, Faq2, Faq3, Faq4, Faq5 } from "@/components/illustrations/faq";
 import { IconButton, Pill } from "@/components/ui";
 import { cn } from "@/lib/cn";
 import { track } from "@/lib/tracking";
 import { faqPageCopy, faqs, getFaqNeighbours } from "@/content/faqs";
 import { playerCopy } from "@/content/setupSteps";
-import type { Faq } from "@/content/types";
+import type { Faq, FaqSlug } from "@/content/types";
 import { FaqChecklist } from "./FaqChecklist";
 import { ArrowRight, ChevronLeft } from "./icons";
 import { FAQ_TINT } from "./tints";
+
+const FAQ_VIDEOS: Record<FaqSlug, { src: string; poster: string }> = {
+  smell: { src: "/animations/faq-1.mp4", poster: "/animations/faq-1-poster.png" },
+  maggots: { src: "/animations/faq-2.mp4", poster: "/animations/faq-2-poster.png" },
+  liquid: { src: "/animations/faq-3.mp4", poster: "/animations/faq-3-poster.png" },
+  mold: { src: "/animations/faq-4.mp4", poster: "/animations/faq-4-poster.png" },
+  disposal: { src: "/animations/faq-5.mp4", poster: "/animations/faq-5-poster.png" },
+};
 
 /** Tab 2 detail for one FAQ. Render with `key={faq.slug}` so the player restarts. */
 export function FaqDetail({ faq }: { faq: Faq }) {
@@ -23,20 +30,11 @@ export function FaqDetail({ faq }: { faq: Faq }) {
   const d = faqPageCopy.detail;
   const total = faqs.length;
   const compare = faq.options !== undefined;
+  const media = FAQ_VIDEOS[faq.slug];
 
   useEffect(() => {
     track("click_faq_3d", faq.featureTarget);
   }, [faq.featureTarget]);
-
-  const props = { active: player.active, paused: !player.playing, label: faq.illustrationLabel };
-  // `key` restarts the CSS animations on replay.
-  const illustration = {
-    smell: <Faq1 key={player.epoch} {...props} />,
-    maggots: <Faq2 key={player.epoch} {...props} />,
-    liquid: <Faq3 key={player.epoch} {...props} />,
-    mold: faq.options && <Faq4 key={player.epoch} {...props} options={faq.options} />,
-    disposal: faq.options && <Faq5 key={player.epoch} {...props} options={faq.options} />,
-  }[faq.slug];
 
   const categoryPill = (
     <span className={cn("rounded-full px-2.5 py-1 text-xs font-semibold", tint.bg, tint.fg)}>{faq.category}</span>
@@ -71,6 +69,12 @@ export function FaqDetail({ faq }: { faq: Faq }) {
         label={faq.stageLabel}
         caption={faq.substeps[player.active]?.caption ?? ""}
         paused={!player.playing}
+        videoSrc={media.src}
+        posterSrc={media.poster}
+        illustrationLabel={faq.illustrationLabel}
+        active={player.active}
+        epoch={player.epoch}
+        reducedMotion={player.reducedMotion}
         badgeEnd={faq.stageBadge && <StageBadge from={faq.stageBadge.from} to={faq.stageBadge.to} />}
         controls={
           compare && faq.options ? (
@@ -89,9 +93,7 @@ export function FaqDetail({ faq }: { faq: Faq }) {
             />
           )
         }
-      >
-        {illustration}
-      </AnimationStage>
+      />
 
       <FaqChecklist faq={faq} active={player.active} prev={prev} next={next} />
     </main>
