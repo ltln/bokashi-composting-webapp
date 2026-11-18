@@ -5,8 +5,12 @@ import { delay } from "./shared";
 
 const TAG = "rounded-full px-2.5 py-1 text-xs font-semibold lg:px-3 lg:py-[5px] lg:text-[13px]";
 
-/** Scraps tumbling from the bin's mouth to the soil. [x, y, delay s] */
-const SCRAPS = [[56, 104, 0], [68, 96, 0.35], [82, 100, 0.7], [94, 104, 1.05]] as const;
+/**
+ * Scraps along the fall from the bin's lip into the pot's mouth: the rest
+ * position of each piece, from which `tumble` starts it up and to the left.
+ * [x, y, delay s]
+ */
+const SCRAPS = [[96, 92, 0], [102, 95.5, 0.35], [107, 98.5, 0.7], [111, 100.5, 1.05]] as const;
 /** Fill token per scrap, matching SCRAPS order. */
 const SCRAP_FILLS = ["fill-bk-illo-organic-leaf", "fill-bk-illo-organic-peel", "fill-bk-illo-organic", "fill-bk-illo-organic-peel"] as const;
 
@@ -17,8 +21,14 @@ const SCRAP_FILLS = ["fill-bk-illo-organic-leaf", "fill-bk-illo-organic-peel", "
  * diluted leachate onto a plant. `active` picks the emphasised option.
  *
  * The board's pouring stream was a liquid-looking dashed path; per the product
- * decision 2026-11-16 the waste goes out as solid scraps, animated with the
- * transform/opacity-only `fall` keyframes.
+ * decision 2026-11-16 the waste goes out as solid scraps. `tumble` drops each
+ * scrap down and slightly right (transform/opacity only), so the pieces read as
+ * one stream from the lip to the pot's mouth even with the animation frozen.
+ *
+ * Option (a)'s bin is tipped past the horizontal (`rotate(112)` about its mouth
+ * centre) so the open lip faces down into the pot: the walls stop at the lip,
+ * the waste sits against it, and the scraps fall into the pot. A bin tipped
+ * only 45° reads as a closed box emptying through its side.
  */
 export function Faq5({ active, paused, label, options }: CompareIllustrationProps) {
   // `noUncheckedIndexedAccess`: pin the content-guaranteed shape (3 options).
@@ -30,23 +40,39 @@ export function Faq5({ active, paused, label, options }: CompareIllustrationProp
         active={active === 0}
         tag={<span className={`${TAG} bg-bk-faq-disposal-bg text-bk-faq-disposal-fg`}>{plant.tag}</span>}
       >
-        <svg viewBox="0 0 150 140" role="img" aria-label="Thùng nghiêng trút rác đã lên men thành từng mảnh xác xơ vào chậu đất trồng, cây non mọc lên">
+        <svg viewBox="0 0 150 140" role="img" aria-label="Thùng nghiêng trút rác đã lên men vào chậu đất trồng, cây non mọc lên">
           <ellipse cx="80" cy="134" rx="66" ry="4" className="fill-bk-divider" />
-          <g transform="rotate(45 52 118)">
-            <path d="M14 118 L52 118 L58 58 L8 58 Z" strokeWidth="4" strokeLinejoin="round" className="fill-bk-illo-bin-inner stroke-bk-illo-bin-wall" />
-            <path d="M17 115 L49 115 L52 92 L13 92 Z" className="fill-bk-illo-organic" />
+          {/* Mouth centre at (103, 64), tipped 112°: the lip overhangs the pot's soil. */}
+          <g transform="translate(103 64) rotate(112) translate(-33 -58)">
+            <path d="M14 118 L52 118 L58 58 L8 58 Z" className="fill-bk-illo-bin-inner" />
+            {/* Fermented waste piled against the lip, with its scraps showing. */}
+            <path d="M11 57 L55 57 L54 88 L12 88 Z" className="fill-bk-illo-organic" />
+            <g>
+              <rect x="15" y="62" width="7" height="3.5" rx="1.5" className="fill-bk-illo-organic-leaf" />
+              <circle cx="34" cy="64" r="2.2" className="fill-bk-illo-organic-peel" />
+              <rect x="41" y="70" width="7" height="3.5" rx="1.5" className="fill-bk-illo-organic-green" />
+              <circle cx="24" cy="78" r="2" className="fill-bk-illo-organic-peel" />
+            </g>
+            {/* Walls + floor only: the mouth stays open. */}
+            <path
+              d="M8 58 L14 118 L52 118 L58 58"
+              fill="none"
+              strokeWidth="4"
+              strokeLinejoin="round"
+              className="stroke-bk-illo-bin-wall"
+            />
           </g>
-          {/* Solid scraps tumble out of the bin's mouth onto the soil. */}
+          {/* Solid scraps tumble out of the lip into the pot's soil. */}
           <g>
             {SCRAPS.map(([x, y, d], i) =>
               i % 2 === 0 ? (
-                <rect key={x} x={x} y={y} width="9" height="4.5" rx="1.5" className={`${SCRAP_FILLS[i]} motion-safe:animate-fall`} style={delay(d)} />
+                <rect key={x} x={x} y={y} width="6" height="3.5" rx="1.5" className={`${SCRAP_FILLS[i]} motion-safe:animate-tumble`} style={delay(d)} />
               ) : (
-                <circle key={x} cx={x} cy={y} r={i === 1 ? 3 : 2.6} className={`${SCRAP_FILLS[i]} motion-safe:animate-fall`} style={delay(d)} />
+                <circle key={x} cx={x} cy={y} r={i === 1 ? 2.2 : 2} className={`${SCRAP_FILLS[i]} motion-safe:animate-tumble`} style={delay(d)} />
               ),
             )}
           </g>
-          <PotSprout x={98} y={106} w={42} />
+          <PotSprout x={90} y={103} w={44} soilMound />
         </svg>
       </CompareFigure>
       <CompareFigure

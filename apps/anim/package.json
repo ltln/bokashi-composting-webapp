@@ -1,0 +1,24 @@
+{
+  "name": "@bokashi/anim",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "studio": "./node_modules/.bin/remotion studio src/index.ts --port=3007 --no-open",
+    "typecheck": "./node_modules/.bin/tsc --noEmit",
+    "render:all": "node scripts/render-all.mjs",
+    "qa": "python3 scripts/qa_verify.py"
+  },
+  "dependencies": {
+    "@fontsource/be-vietnam-pro": "^5.3.0",
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0",
+    "remotion": "4.0.544"
+  },
+  "devDependencies": {
+    "@remotion/cli": "4.0.544",
+    "@remotion/renderer": "4.0.544",
+    "@types/react": "^19.0.0",
+    "@types/react-dom": "^19.0.0",
+    "typescript": "5.9.3"
+  }
+}

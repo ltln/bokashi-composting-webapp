@@ -221,15 +221,20 @@ export function PressPlate({ cx = 160, y }: { cx?: number; y: number }) {
 /**
  * Potted sprout, 70 wide: (x, y) is the top-left of the rim. `w` scales it, so
  * the 320×280 boards and the 150×140 compare boards share one drawing.
- * The sprout pulses (`animate-sprout`).
+ * `soilMound` heaps the soil over the rim, for a pot being filled; the sprout
+ * always grows out of the soil either way. The sprout pulses (`animate-sprout`).
  */
-export function PotSprout({ x, y, w = 70 }: { x: number; y: number; w?: number }) {
+export function PotSprout({ x, y, w = 70, soilMound }: { x: number; y: number; w?: number; soilMound?: boolean }) {
   const s = w / 70;
   return (
     <g transform={`translate(${x} ${y}) scale(${s})`}>
       <path d="M3 7 L61 7 L53 48 L11 48 Z" className="fill-bk-illo-pot" />
       <rect x="-3" y="0" width="70" height="7" rx="2" className="fill-bk-illo-pot-rim" />
-      <rect x="6" y="2" width="52" height="4" className="fill-bk-illo-organic" />
+      {soilMound ? (
+        <ellipse cx="32" cy="4" rx="27" ry="6.5" className="fill-bk-illo-organic" />
+      ) : (
+        <rect x="6" y="2" width="52" height="4" className="fill-bk-illo-organic" />
+      )}
       <g className="motion-safe:animate-sprout" style={{ transformBox: "fill-box", transformOrigin: "bottom" }}>
         <path d="M32 2 V-16" strokeWidth="2.4" strokeLinecap="round" className="stroke-bk-primary" />
         <path d="M32 -8 C24 -10 20 -16 20 -20 C26 -20 31 -16 32 -8 Z" className="fill-bk-illo-organic-leaf" />

@@ -21,13 +21,19 @@ export function Faq3({ active, paused, label }: StepIllustrationProps) {
   const patternId = `${useSvgId()}-org`;
   return (
     <div className="relative h-full w-full">
-      {/* Tilt (origin = bin floor) only while pouring; 0.78 keeps the rotated 300×262 SVG inside the canvas. */}
+      {/*
+       * Tilt (origin = bin floor) only while pouring; 0.78 keeps the rotated
+       * 300×262 SVG inside the canvas. The same transform is set inline so the
+       * reduced-motion final frame is the tilted bin too — otherwise the stream
+       * would start in mid-air and miss the bucket.
+       */}
       <div
         className={cn(
           "relative h-full w-full origin-bottom",
           active === 1 && "motion-safe:animate-tilt",
           active === 2 && "motion-safe:animate-untilt",
         )}
+        style={active === 1 ? { transform: "rotate(10deg) scale(.78)" } : undefined}
       >
         <BinBase
           label={label}
@@ -92,43 +98,47 @@ export function Faq3({ active, paused, label }: StepIllustrationProps) {
             </g>
           )}
         </BinBase>
-        {active === 1 && (
-          /*
-           * The stream lives inside the tilting wrapper (local coords), so it
-           * pours from the tilted rim. It waits for the tilt to finish before
-           * appearing; the droplets cascade down the arc into the bucket.
-           */
-          <svg viewBox="0 0 320 280" aria-hidden="true" className="absolute inset-0 h-full w-full">
-            <g className="motion-safe:animate-faqDrop" style={delay(0.7)}>
-              <path d="M240 52 Q260 96 255 141" fill="none" strokeWidth="5" strokeLinecap="round" className="stroke-bk-illo-water motion-safe:animate-pulse" />
-              <g className="fill-bk-illo-water-light">
-                <path d="M248 74 q3 5 0 8 q-3 -3 0 -8z" className="motion-safe:animate-fall" />
-                <path d="M254 96 q3 5 0 8 q-3 -3 0 -8z" className="motion-safe:animate-fall" style={delay(0.3)} />
-                <path d="M256 119 q3 5 0 8 q-3 -3 0 -8z" className="motion-safe:animate-fall" style={delay(0.6)} />
-                <path d="M255 136 q3 5 0 8 q-3 -3 0 -8z" className="motion-safe:animate-fall" style={delay(0.9)} />
-              </g>
-            </g>
-          </svg>
-        )}
       </div>
       {active === 1 && (
-        /* Bucket stands upright beside the bin; its water level rises as the leachate pours in. */
+        /*
+         * Bucket on the floor to the right; its water level rises as the
+         * leachate pours in. It sits clear of the bin's wall so the stream falls
+         * beside the bin instead of running along it.
+         */
         <svg viewBox="0 0 320 280" aria-hidden="true" className="absolute inset-0 h-full w-full">
-          <path d="M228 186 Q252 168 276 186" fill="none" strokeWidth="3" strokeLinecap="round" className="stroke-bk-illo-metal-dark" />
-          <ellipse cx="252" cy="186" rx="28" ry="6" strokeWidth="1.5" className="fill-bk-illo-water-pale stroke-bk-illo-metal-dark" />
-          <path d="M224 186 L280 186 L272 248 L232 248 Z" strokeWidth="2" strokeLinejoin="round" className="fill-bk-illo-metal stroke-bk-illo-metal-dark" />
+          <ellipse cx="273" cy="263" rx="30" ry="4" className="fill-bk-border" />
+          <ellipse cx="273" cy="200" rx="28" ry="6" strokeWidth="1.5" className="fill-bk-illo-water-pale stroke-bk-illo-metal-dark" />
+          {/*
+           * The stream is drawn in world coords, between the back rim and the
+           * bucket body, so it is visible entering the mouth and then disappears
+           * behind the front rim. It leaves the tilted lip (the wrapper's
+           * rotate(10°) scale(.78) puts it at ~(262, 114)) and drifts right as
+           * it falls.
+           */}
+          <g className="motion-safe:animate-pour">
+            <path
+              d="M259.7 116.0 L260.3 121.9 L261.2 127.8 L262.2 133.5 L263.1 139.2 L263.9 144.9 L264.5 150.6 L264.9 156.3 L265.1 162.2 L265.3 168.1 L265.8 174.1 L266.5 180.0 L267.4 185.8 L268.4 191.5 L269.6 201.4 L274.9 200.8 L274.2 190.8 L273.6 184.9 L272.9 179.1 L272.1 173.4 L271.6 167.7 L271.2 162.0 L271.1 156.2 L271.2 150.3 L271.2 144.4 L271.0 138.4 L270.5 132.4 L269.8 126.5 L269.0 120.8 L268.3 115.0 Z"
+              opacity="0.92"
+              className="fill-bk-illo-water-light"
+            />
+          </g>
+          <path d="M245 200 L301 200 L293 262 L253 262 Z" strokeWidth="2" strokeLinejoin="round" className="fill-bk-illo-metal stroke-bk-illo-metal-dark" />
           <rect
-            x="234"
-            y="194"
+            x="255"
+            y="202"
             width="36"
-            height="52"
+            height="58"
             opacity="0.8"
             className="fill-bk-illo-water motion-safe:animate-fillUp"
-            style={{ animationDelay: "0.7s", transform: "scaleY(.08)", transformBox: "fill-box", transformOrigin: "bottom" }}
+            style={{ transformBox: "fill-box", transformOrigin: "bottom" }}
           />
-          <g className="fill-bk-illo-water-light">
-            <path d="M262 174 q3 5 0 8 q-3 -3 0 -8z" className="motion-safe:animate-fall" style={delay(1.0)} />
-            <path d="M274 178 q3 5 0 8 q-3 -3 0 -8z" className="motion-safe:animate-fall" style={delay(1.6)} />
+          {/* Foam + spray where the stream meets the water. */}
+          <g className="motion-safe:animate-pour">
+            <ellipse cx="272" cy="198.4" rx="6.5" ry="1.5" opacity="0.8" className="fill-bk-illo-water-light motion-safe:animate-pulse" />
+            <g className="fill-bk-illo-water-light">
+              <path d="M265 194 q2.2 3.6 0 5.4 q-2.2 -1.8 0 -5.4z" className="motion-safe:animate-fall" />
+              <path d="M279 194 q2.2 3.6 0 5.4 q-2.2 -1.8 0 -5.4z" className="motion-safe:animate-fall" style={delay(0.6)} />
+            </g>
           </g>
         </svg>
       )}
