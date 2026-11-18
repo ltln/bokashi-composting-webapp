@@ -202,6 +202,13 @@ const config: Config = {
           "0%, 100%": { transform: "translateX(0)" },
           "50%": { transform: "translateX(8px)" },
         },
+        // FAQ 5: scraps arcing out of the tipped bin's lip, down and to the right.
+        tumble: {
+          "0%": { transform: "translate(-8px, -18px)", opacity: "0" },
+          "20%": { opacity: "1" },
+          "80%": { transform: "translate(0, 0)", opacity: "1" },
+          "100%": { transform: "translate(0, 0)", opacity: "0" },
+        },
         // Setup step boards (Step2 "fall" and Step3 "lidDown" differ from the FAQ ones above).
         sprinkle: {
           "0%": { transform: "translateY(-50px)", opacity: "0" },
@@ -218,12 +225,6 @@ const config: Config = {
         spread: {
           "0%": { transform: "scaleY(.3)", opacity: ".6" },
           "55%, 100%": { transform: "scaleY(1)", opacity: "1" },
-        },
-        // FAQ 3 board: paper balls drop in and stay (unlike `drop`, which fades out).
-        faqDrop: {
-          "0%": { transform: "translateY(-40px)", opacity: "0" },
-          "20%": { opacity: "1" },
-          "75%, 100%": { transform: "translateY(0)", opacity: "1" },
         },
         lidSeal: {
           "0%, 30%": { transform: "translateY(-24px)" },
@@ -243,6 +244,11 @@ const config: Config = {
         untilt: {
           "0%": { transform: "rotate(10deg) scale(.78)" },
           "100%": { transform: "rotate(0deg) scale(1)" },
+        },
+        // Once-off fade for the leachate stream, which starts after the tilt.
+        pour: {
+          "0%": { opacity: "0" },
+          "100%": { opacity: "1" },
         },
         drain: {
           "0%": { transform: "scaleY(1)" },
@@ -267,14 +273,15 @@ const config: Config = {
         grow: "grow 2.4s ease-in-out infinite",
         sprout: "sprout 2.4s ease-in-out infinite",
         hop: "hop 1.6s ease-in-out infinite",
+        tumble: "tumble 1.4s ease-in infinite",
         sprinkle: "sprinkle 1.8s ease-in infinite",
         settle: "settle 2.6s cubic-bezier(.5,0,.9,.6) infinite",
         spread: "spread 2.4s ease-out infinite",
-        faqDrop: "faqDrop 2.2s ease-in infinite",
         lidSeal: "lidSeal 2.6s ease-in-out infinite alternate",
-        fillUp: "fillUp 2.4s ease-out forwards",
+        fillUp: "fillUp 2.4s ease-out .7s both",
         tilt: "tilt .7s ease-in-out forwards",
         untilt: "untilt .7s ease-in-out forwards",
+        pour: "pour .35s ease-out .7s both",
         drain: "drain 2.4s ease-out forwards",
       },
     },
