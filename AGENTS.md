@@ -23,7 +23,12 @@ Spec for AI agents (and humans) working in this repo. The full product and techn
   | `click_faq_3d` | `FAQ_1_Smell` … `FAQ_5_Disposal` |
 
   The login screen is **not** tracked.
-- **Admin dashboard (`/admin`):** KPIs, most-viewed features, a logs table, CSV export and a chart PNG download.
+- **Admin dashboard (`/admin`):** "Tổng quan truy cập", served by one endpoint (`GET /api/admin/overview`).
+  - Online count; visits, users and screen-view KPIs compared with the previous period.
+  - Traffic chart, pages viewed, new vs returning users, device split, peak hours and the user-journey funnel.
+  - "Xuất báo cáo" downloads the raw logs as CSV and the pages-viewed chart as a PNG.
+  - A visit ends after 30 minutes of inactivity.
+  - Only counts derived from `user_hash` are shown, never the hash itself.
 
 Design source: https://claude.ai/artifact/EXpQLcEuR3uSV8xMzb8DVo
 

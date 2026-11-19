@@ -44,6 +44,17 @@ const config: Config = {
             "brown-tint": "#F3EAD7", // step badge background
             "pill-neutral": "#EEF1EA", // neutral compare tag / letter marker
             olive: "#6B7A1F", // stage badge "before" state (FAQ 1)
+          // Admin overview (Tracking board)
+          admin: {
+            bg: "#F3F5EF", // page background, metric switch track
+            delta: "#1F6F43", // "+18%" pill text
+            returning: "#A9C7A6", // returning users bar
+            prev: "#8C9A90", // previous-period line
+            grid: "#E6EBE1", // chart grid lines
+            crosshair: "#B7C4B6", // hover guide
+            "hour-low": "#C9D8C4", // off-peak hour bars
+            "tip-muted": "#C9D4CB", // tooltip secondary line
+          },
           // Per-FAQ tint pairs: bg-bk-faq-smell-bg text-bk-faq-smell-fg
           faq: {
             smell: faqTint("#F6E6D2", "#9A4F16"),

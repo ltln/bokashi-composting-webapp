@@ -2,7 +2,7 @@
 <html lang="vi">
 <head>
 <meta charset="utf-8">
-<title>Theo dõi truy cập – Web_Access_Logs</title>
+<title>Quản trị – Tổng quan truy cập</title>
 <script src="./support.js"></script>
 </head>
 <body>
@@ -13,115 +13,141 @@
 <style>
 body{margin:0}
 a{color:#2F6B45}a:hover{color:#1F4D31}
+button{font-family:inherit}
+button:focus-visible{outline:3px solid #E07A2E;outline-offset:2px}
+.hit:hover,.hit:focus-visible{background:rgba(47,107,69,.06)}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.35}}
+.live-dot{animation:pulse 1.6s ease-in-out infinite}
+@media (prefers-reduced-motion: reduce){*{animation:none!important}}
 </style>
 </helmet>
-<div style="min-height: 100vh; background: #F6F7F2; font-family: 'Be Vietnam Pro', system-ui, sans-serif; color: #1E2B22">
+<div style="min-height: 100vh; background: #F3F5EF; font-family: 'Be Vietnam Pro', system-ui, sans-serif; color: #1E2B22">
 
 <header style="background: #FFFFFF; border-bottom: 1px solid #E1E6DC">
-<div style="max-width: 1200px; margin: 0 auto; padding: 12px 24px; display: flex; flex-wrap: wrap; align-items: center; gap: 12px">
+<div style="max-width: 1240px; margin: 0 auto; padding: 10px 24px; display: flex; flex-wrap: wrap; align-items: center; gap: 12px">
 <svg width="32" height="32" viewBox="0 0 32 32" aria-hidden="true"><rect width="32" height="32" rx="10" fill="#2F6B45"></rect><path d="M9 13h14l-1.6 11a2 2 0 0 1-2 1.7h-6.8a2 2 0 0 1-2-1.7z" fill="none" stroke="#FFFFFF" stroke-width="1.8" stroke-linejoin="round"></path><path d="M16 13c0-4 2.5-6.5 6-6.5 0 3.6-2.4 6.5-6 6.5z" fill="#BFE0A8"></path></svg>
 <span style="font-size: 16px; font-weight: 700">Bếp Gọn – Rác Đúng</span>
-<span style="font-size: 13px; color: #56635A">Quản trị</span>
+<span style="font-size: 12px; font-weight: 600; color: #3F4B43; background: #EEF1EA; border-radius: 999px; padding: 4px 10px">Quản trị</span>
 <span style="flex: 1"></span>
-<span style="display: flex; align-items: center; gap: 6px; font-size: 13px; font-weight: 600; color: #1F4D31; background: #E3EEDF; border-radius: 999px; padding: 6px 12px"><svg width="8" height="8" viewBox="0 0 8 8" aria-hidden="true"><circle cx="4" cy="4" r="4" fill="#2F8F5B"></circle></svg>Đang ghi nhận theo thời gian thực</span>
-<button style="min-height: 40px; border-radius: 10px; border: 1px solid #D3DCCB; background: #FFFFFF; padding: 0 14px; font-family: inherit; font-size: 13px; font-weight: 600; color: #1E2B22">Nguồn: Supabase</button>
+<span style="display: flex; align-items: center; gap: 8px; font-size: 13px; font-weight: 600; color: #1F4D31; background: #E3EEDF; border-radius: 999px; padding: 6px 12px"><svg class="live-dot" width="8" height="8" viewBox="0 0 8 8" aria-hidden="true"><circle cx="4" cy="4" r="4" fill="#2F8F5B"></circle></svg>{{online}} người đăng nhập đang online</span>
+<button aria-label="Tài khoản quản trị" style="width: 40px; height: 40px; border-radius: 20px; border: 1px solid #D3DCCB; background: #FFFFFF; color: #1E2B22; display: flex; align-items: center; justify-content: center"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="8" r="4"></circle><path d="M4 21c1.5-4 4.5-6 8-6s6.5 2 8 6"></path></svg></button>
 </div>
 </header>
 
-<main style="max-width: 1200px; margin: 0 auto; padding: 28px 24px 48px; display: flex; flex-direction: column; gap: 24px">
+<main style="max-width: 1240px; margin: 0 auto; padding: 24px 24px 48px; display: flex; flex-direction: column; gap: 20px">
 
 <div style="display: flex; flex-wrap: wrap; align-items: flex-end; gap: 16px">
-<div style="flex: 999 1 420px; display: flex; flex-direction: column; gap: 6px">
+<div style="flex: 999 1 360px; display: flex; flex-direction: column; gap: 6px">
 <div style="display: flex; align-items: center; gap: 10px; flex-wrap: wrap">
-<h1 style="margin: 0; font-size: 28px; line-height: 36px; font-weight: 700">Theo dõi truy cập Web App</h1>
+<h1 style="margin: 0; font-size: 28px; line-height: 36px; font-weight: 700">Tổng quan truy cập</h1>
 <span style="font-size: 12px; font-weight: 700; color: #7A3E10; background: #F6E6D2; border-radius: 999px; padding: 4px 10px">DỮ LIỆU MẪU</span>
 </div>
-<p style="margin: 0; font-size: 14px; line-height: 20px; color: #56635A">Bảng Web_Access_Logs · ẩn danh, không lưu thông tin định danh cá nhân trong log.</p>
+<p style="margin: 0; font-size: 14px; line-height: 20px; color: #56635A">Chỉ tính người dùng đã đăng nhập · {{rangeText}}</p>
 </div>
-<div style="flex: 1 1 auto; display: flex; flex-wrap: wrap; gap: 8px">
-<button style="min-height: 44px; border-radius: 12px; border: 1px solid #D3DCCB; background: #FFFFFF; padding: 0 16px; font-family: inherit; font-size: 14px; font-weight: 600; color: #1E2B22; display: flex; align-items: center; gap: 8px"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v12M7 10l5 5 5-5M5 21h14"></path></svg>Xuất CSV</button>
-<button style="min-height: 44px; border-radius: 12px; border: none; background: #2F6B45; padding: 0 16px; font-family: inherit; font-size: 14px; font-weight: 600; color: #FFFFFF; display: flex; align-items: center; gap: 8px"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 20V10M10 20V4M16 20v-7M22 20H2"></path></svg>Tải biểu đồ cho báo cáo</button>
-</div>
-</div>
-
-<div style="display: flex; flex-wrap: wrap; gap: 12px; align-items: center">
-<div role="group" aria-label="Khoảng thời gian" style="display: flex; flex-wrap: wrap; background: #FFFFFF; border: 1px solid #D3DCCB; border-radius: 12px; padding: 3px; gap: 3px">
-<button aria-pressed="false" style="min-height: 38px; border: none; border-radius: 9px; background: transparent; padding: 0 14px; font-family: inherit; font-size: 13px; font-weight: 600; color: #1E2B22">Hôm nay</button>
-<button aria-pressed="true" style="min-height: 38px; border: none; border-radius: 9px; background: #2F6B45; padding: 0 14px; font-family: inherit; font-size: 13px; font-weight: 600; color: #FFFFFF">7 ngày</button>
-<button aria-pressed="false" style="min-height: 38px; border: none; border-radius: 9px; background: transparent; padding: 0 14px; font-family: inherit; font-size: 13px; font-weight: 600; color: #1E2B22">30 ngày</button>
-<button aria-pressed="false" style="min-height: 38px; border: none; border-radius: 9px; background: transparent; padding: 0 14px; font-family: inherit; font-size: 13px; font-weight: 600; color: #1E2B22">Toàn chiến dịch</button>
+<div style="flex: 1 1 auto; display: flex; flex-wrap: wrap; gap: 8px; justify-content: flex-end">
+<div role="group" aria-label="Khoảng thời gian" style="display: flex; background: #FFFFFF; border: 1px solid #D3DCCB; border-radius: 12px; padding: 3px; gap: 3px">
+<sc-for list="{{ranges}}" as="r" hint-placeholder-count="3">
+<button onClick="{{r.pick}}" aria-pressed="{{r.pressed}}" style="min-height: 38px; border: none; border-radius: 9px; padding: 0 14px; font-size: 13px; font-weight: 600; cursor: pointer; {{r.style}}">{{r.label}}</button>
+</sc-for>
 </div>
 <div role="group" aria-label="Thiết bị" style="display: flex; background: #FFFFFF; border: 1px solid #D3DCCB; border-radius: 12px; padding: 3px; gap: 3px">
-<button aria-pressed="true" style="min-height: 38px; border: none; border-radius: 9px; background: #E3EEDF; padding: 0 14px; font-family: inherit; font-size: 13px; font-weight: 600; color: #1F4D31">Tất cả</button>
-<button aria-pressed="false" style="min-height: 38px; border: none; border-radius: 9px; background: transparent; padding: 0 14px; font-family: inherit; font-size: 13px; font-weight: 600; color: #1E2B22">Mobile</button>
-<button aria-pressed="false" style="min-height: 38px; border: none; border-radius: 9px; background: transparent; padding: 0 14px; font-family: inherit; font-size: 13px; font-weight: 600; color: #1E2B22">Desktop</button>
+<sc-for list="{{devices}}" as="d" hint-placeholder-count="3">
+<button onClick="{{d.pick}}" aria-pressed="{{d.pressed}}" style="min-height: 38px; border: none; border-radius: 9px; padding: 0 14px; font-size: 13px; font-weight: 600; cursor: pointer; {{d.style}}">{{d.label}}</button>
+</sc-for>
+</div>
+<button style="min-height: 44px; border-radius: 12px; border: 1px solid #D3DCCB; background: #FFFFFF; padding: 0 14px; font-size: 13px; font-weight: 600; color: #1E2B22; display: flex; align-items: center; gap: 8px; cursor: pointer"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v12M7 10l5 5 5-5M5 21h14"></path></svg>Xuất báo cáo</button>
 </div>
 </div>
 
-<div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 12px">
-<div style="background: #FFFFFF; border-radius: 18px; padding: 18px; display: flex; flex-direction: column; gap: 6px"><span style="font-size: 13px; color: #56635A">Tổng sự kiện</span><span style="font-size: 30px; font-weight: 700; font-variant-numeric: tabular-nums">1.832</span><span style="font-size: 12px; color: #56635A">Mọi Event_Type</span></div>
-<div style="background: #FFFFFF; border-radius: 18px; padding: 18px; display: flex; flex-direction: column; gap: 6px"><span style="font-size: 13px; color: #56635A">Phiên truy cập</span><span style="font-size: 30px; font-weight: 700; font-variant-numeric: tabular-nums">312</span><span style="font-size: 12px; color: #56635A">Session_ID duy nhất</span></div>
-<div style="background: #FFFFFF; border-radius: 18px; padding: 18px; display: flex; flex-direction: column; gap: 6px"><span style="font-size: 13px; color: #56635A">Lượt mở app</span><span style="font-size: 30px; font-weight: 700; font-variant-numeric: tabular-nums">356</span><span style="font-size: 12px; color: #56635A">page_view</span></div>
-<div style="background: #FFFFFF; border-radius: 18px; padding: 18px; display: flex; flex-direction: column; gap: 6px"><span style="font-size: 13px; color: #56635A">Truy cập từ Mobile</span><span style="font-size: 30px; font-weight: 700; font-variant-numeric: tabular-nums">81%</span><span style="font-size: 12px; color: #56635A">Device_Info</span></div>
+<section aria-label="Chỉ số chính" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 12px">
+<sc-for list="{{kpis}}" as="k" hint-placeholder-count="3">
+<div style="background: #FFFFFF; border-radius: 18px; padding: 18px 18px 14px; display: flex; flex-direction: column; gap: 6px">
+<div style="display: flex; align-items: center; justify-content: space-between; gap: 8px"><span style="font-size: 13px; font-weight: 600; color: #3F4B43">{{k.label}}</span><span style="font-size: 12px; font-weight: 700; color: #1F6F43; background: #E3EEDF; border-radius: 999px; padding: 2px 8px">{{k.delta}}</span></div>
+<span style="font-size: 32px; line-height: 40px; font-weight: 700; font-variant-numeric: tabular-nums">{{k.value}}</span>
+<svg viewBox="0 0 100 28" width="100%" height="28" preserveAspectRatio="none" aria-hidden="true"><path d="{{k.spark}}" fill="none" stroke="{{k.color}}" stroke-width="2" vector-effect="non-scaling-stroke" stroke-linejoin="round"></path></svg>
+<span style="font-size: 12px; color: #56635A">{{k.sub}}</span>
 </div>
+</sc-for>
+</section>
+
+<section aria-label="Lưu lượng truy cập" style="background: #FFFFFF; border-radius: 20px; padding: 20px; display: flex; flex-direction: column; gap: 14px">
+<div style="display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 12px">
+<div style="display: flex; flex-direction: column; gap: 2px">
+<h2 style="margin: 0; font-size: 18px; font-weight: 700">Lưu lượng truy cập</h2>
+<span style="font-size: 13px; color: #56635A">{{chartSub}}</span>
+</div>
+<div role="group" aria-label="Chỉ số trên biểu đồ" style="display: flex; flex-wrap: wrap; background: #F3F5EF; border-radius: 12px; padding: 3px; gap: 3px">
+<sc-for list="{{metrics}}" as="m" hint-placeholder-count="3">
+<button onClick="{{m.pick}}" aria-pressed="{{m.pressed}}" style="min-height: 36px; border: none; border-radius: 9px; padding: 0 12px; font-size: 13px; font-weight: 600; cursor: pointer; {{m.style}}">{{m.label}}</button>
+</sc-for>
+</div>
+</div>
+<div style="display: flex; gap: 14px; font-size: 12px; color: #3F4B43">
+<span style="display: flex; align-items: center; gap: 6px"><svg width="18" height="4" viewBox="0 0 18 4" aria-hidden="true"><rect width="18" height="4" rx="2" fill="#2F6B45"></rect></svg>{{rangeShort}}</span>
+<span style="display: flex; align-items: center; gap: 6px"><svg width="18" height="4" viewBox="0 0 18 4" aria-hidden="true"><path d="M0 2 L18 2" stroke="#8C9A90" stroke-width="2" stroke-dasharray="4 3"></path></svg>Kỳ trước</span>
+</div>
+<div style="display: flex; gap: 10px">
+<div style="width: 44px; flex: none; position: relative; height: 260px">
+<sc-for list="{{yTicks}}" as="t" hint-placeholder-count="5">
+<span style="position: absolute; right: 0; transform: translateY(-50%); font-size: 12px; color: #56635A; font-variant-numeric: tabular-nums; top: {{t.top}}">{{t.label}}</span>
+</sc-for>
+</div>
+<div style="flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 8px">
+<div style="position: relative; height: 260px" role="img" aria-label="{{chartAria}}">
+<svg viewBox="0 0 1000 260" width="100%" height="260" preserveAspectRatio="none" aria-hidden="true" style="position: absolute; left: 0; top: 0">
+<path d="{{gridPath}}" stroke="#E6EBE1" stroke-width="1" vector-effect="non-scaling-stroke"></path>
+<path d="{{areaPath}}" fill="#2F6B45" fill-opacity="0.10"></path>
+<path d="{{prevPath}}" fill="none" stroke="#8C9A90" stroke-width="2" stroke-dasharray="5 4" vector-effect="non-scaling-stroke"></path>
+<path d="{{linePath}}" fill="none" stroke="#2F6B45" stroke-width="2.5" stroke-linejoin="round" vector-effect="non-scaling-stroke"></path>
+</svg>
+<sc-if value="{{tipOn}}" hint-placeholder-val="{{ false }}">
+<div style="position: absolute; top: 0; bottom: 0; width: 1px; background: #B7C4B6; left: {{tip.x}}"></div>
+</sc-if>
+<sc-for list="{{dots}}" as="p" hint-placeholder-count="7">
+<div style="position: absolute; width: 8px; height: 8px; border-radius: 4px; background: #FFFFFF; border: 2px solid #2F6B45; box-sizing: border-box; transform: translate(-50%, -50%); left: {{p.left}}; top: {{p.top}}"></div>
+</sc-for>
+<sc-for list="{{hits}}" as="h" hint-placeholder-count="7">
+<button class="hit" aria-label="{{h.aria}}" onMouseEnter="{{h.show}}" onFocus="{{h.show}}" onMouseLeave="{{hide}}" onBlur="{{hide}}" style="position: absolute; top: 0; bottom: 0; border: none; padding: 0; background: transparent; cursor: default; left: {{h.left}}; width: {{h.width}}"></button>
+</sc-for>
+<sc-if value="{{tipOn}}" hint-placeholder-val="{{ false }}">
+<div style="position: absolute; top: 6px; transform: translateX(-50%); background: #1E2B22; color: #FFFFFF; border-radius: 10px; padding: 8px 12px; font-size: 12px; line-height: 18px; white-space: nowrap; pointer-events: none; left: {{tip.left}}">
+<div style="font-weight: 700">{{tip.title}}</div>
+<div>{{tip.value}}</div>
+<div style="color: #C9D4CB">{{tip.prev}}</div>
+</div>
+</sc-if>
+</div>
+<div style="position: relative; height: 18px">
+<sc-for list="{{xLabels}}" as="l" hint-placeholder-count="7">
+<span style="position: absolute; transform: translateX(-50%); font-size: 12px; color: #56635A; white-space: nowrap; left: {{l.left}}">{{l.label}}</span>
+</sc-for>
+</div>
+</div>
+</div>
+</section>
 
 <div style="display: flex; flex-wrap: wrap; gap: 16px; align-items: stretch">
-<section style="flex: 999 1 560px; min-width: 0; background: #FFFFFF; border-radius: 20px; padding: 20px; display: flex; flex-direction: column; gap: 16px">
-<div style="display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 8px">
-<h2 style="margin: 0; font-size: 17px; font-weight: 700">Tính năng được quan tâm nhất</h2>
-<div style="display: flex; gap: 14px; font-size: 12px; color: #3F4B43">
-<span style="display: flex; align-items: center; gap: 6px"><svg width="10" height="10" viewBox="0 0 10 10" aria-hidden="true"><rect width="10" height="10" rx="2" fill="#2F6B45"></rect></svg>Tab 1 · Thiết lập</span>
-<span style="display: flex; align-items: center; gap: 6px"><svg width="10" height="10" viewBox="0 0 10 10" aria-hidden="true"><rect width="10" height="10" rx="2" fill="#7FB0D9"></rect></svg>Tab 2 · Sự cố</span>
-</div>
-</div>
-<div style="display: flex; flex-direction: column; gap: 12px">
-<sc-for list="{{features}}" as="f" hint-placeholder-count="8">
-<div style="display: flex; align-items: center; gap: 12px">
-<span style="width: 150px; flex: none; font-size: 13px; font-family: ui-monospace, Menlo, monospace; color: #1E2B22">{{f.name}}</span>
-<div style="flex: 1; min-width: 0; height: 22px; background: #F0F3EC; border-radius: 6px; overflow: hidden"><div style="height: 22px; border-radius: 6px; width: {{f.w}}; background: {{f.color}}"></div></div>
-<span style="width: 40px; flex: none; text-align: right; font-size: 13px; font-weight: 600; font-variant-numeric: tabular-nums">{{f.n}}</span>
-</div>
-</sc-for>
-</div>
-</section>
 
-<section style="flex: 1 1 320px; min-width: 0; background: #FFFFFF; border-radius: 20px; padding: 20px; display: flex; flex-direction: column; gap: 16px">
-<h2 style="margin: 0; font-size: 17px; font-weight: 700">Theo loại sự kiện</h2>
-<div style="display: flex; flex-direction: column; gap: 12px">
-<sc-for list="{{types}}" as="t" hint-placeholder-count="4">
-<div style="display: flex; flex-direction: column; gap: 6px">
-<div style="display: flex; justify-content: space-between; font-size: 13px"><span style="font-family: ui-monospace, Menlo, monospace">{{t.name}}</span><span style="font-weight: 600; font-variant-numeric: tabular-nums">{{t.n}}</span></div>
-<div style="height: 8px; background: #F0F3EC; border-radius: 4px; overflow: hidden"><div style="height: 8px; border-radius: 4px; background: #E07A2E; width: {{t.w}}"></div></div>
+<section aria-label="Trang được xem" style="flex: 999 1 560px; min-width: 0; background: #FFFFFF; border-radius: 20px; padding: 20px; display: flex; flex-direction: column; gap: 12px">
+<div style="display: flex; flex-wrap: wrap; justify-content: space-between; align-items: baseline; gap: 8px">
+<h2 style="margin: 0; font-size: 18px; font-weight: 700">Trang được xem</h2>
+<span style="font-size: 13px; color: #56635A">{{totalViewsText}} lượt xem · {{ppvText}} trang mỗi lượt · không tính trang đăng nhập</span>
 </div>
-</sc-for>
-</div>
-<h2 style="margin: 8px 0 0; font-size: 17px; font-weight: 700">Thiết bị</h2>
-<div style="display: flex; height: 28px; border-radius: 8px; overflow: hidden">
-<div style="width: 81%; background: #2F6B45; color: #FFFFFF; font-size: 12px; font-weight: 600; display: flex; align-items: center; padding-left: 10px">Mobile 81%</div>
-<div style="flex: 1; background: #D3DCCB; color: #1E2B22; font-size: 12px; font-weight: 600; display: flex; align-items: center; justify-content: center">19%</div>
-</div>
-</section>
-</div>
-
-<section style="background: #FFFFFF; border-radius: 20px; padding: 20px; display: flex; flex-direction: column; gap: 14px">
-<div style="display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 8px">
-<h2 style="margin: 0; font-size: 17px; font-weight: 700">Nhật ký gần nhất</h2>
-<label style="display: flex; align-items: center; gap: 8px; font-size: 13px; color: #56635A">Lọc Feature_Target
-<input type="search" placeholder="vd. FAQ_1_Smell" style="min-height: 40px; border-radius: 10px; border: 1px solid #C9D2C1; padding: 0 12px; font-family: inherit; font-size: 13px; width: 200px; box-sizing: border-box"></label>
-</div>
-<div style="overflow-x: auto; border: 1px solid #E1E6DC; border-radius: 12px">
-<table style="width: 100%; border-collapse: collapse; font-size: 13px; min-width: 720px">
-<thead><tr style="background: #F3F6EF; text-align: left">
-<th style="padding: 10px 14px; font-weight: 600">Timestamp</th><th style="padding: 10px 14px; font-weight: 600">Session_ID</th><th style="padding: 10px 14px; font-weight: 600">Event_Type</th><th style="padding: 10px 14px; font-weight: 600">Feature_Target</th><th style="padding: 10px 14px; font-weight: 600">Device_Info</th>
+<div style="overflow-x: auto">
+<table style="width: 100%; min-width: 520px; border-collapse: collapse; font-size: 14px">
+<thead><tr style="text-align: left; color: #56635A; font-size: 12px">
+<th scope="col" style="padding: 8px 8px 8px 0; font-weight: 600">Trang</th>
+<th scope="col" style="padding: 8px; font-weight: 600; width: 38%">Tỉ lệ lượt xem</th>
+<th scope="col" style="padding: 8px; font-weight: 600; text-align: right">Lượt xem</th>
+<th scope="col" style="padding: 8px 0 8px 8px; font-weight: 600; text-align: right">Người xem</th>
 </tr></thead>
 <tbody>
-<sc-for list="{{logs}}" as="r" hint-placeholder-count="10">
-<tr style="border-top: 1px solid #E1E6DC">
-<td style="padding: 10px 14px; font-variant-numeric: tabular-nums; color: #3F4B43">{{r.ts}}</td>
-<td style="padding: 10px 14px; font-family: ui-monospace, Menlo, monospace">{{r.sid}}</td>
-<td style="padding: 10px 14px; font-family: ui-monospace, Menlo, monospace">{{r.type}}</td>
-<td style="padding: 10px 14px; font-family: ui-monospace, Menlo, monospace">{{r.target}}</td>
-<td style="padding: 10px 14px">{{r.device}}</td>
+<sc-for list="{{pages}}" as="pg" hint-placeholder-count="10">
+<tr style="border-top: 1px solid #EEF1EA">
+<td style="padding: 10px 8px 10px 0"><span style="display: flex; align-items: center; gap: 8px"><span style="font-size: 11px; font-weight: 700; border-radius: 6px; padding: 2px 6px; white-space: nowrap; {{pg.tagStyle}}">{{pg.tag}}</span><span style="font-weight: 600">{{pg.name}}</span></span></td>
+<td style="padding: 10px 8px"><span style="display: flex; align-items: center; gap: 8px"><span style="flex: 1; height: 8px; background: #EEF1EA; border-radius: 4px; overflow: hidden"><span style="display: block; height: 8px; border-radius: 4px; background: {{pg.color}}; width: {{pg.bar}}"></span></span><span style="width: 34px; text-align: right; font-size: 12px; color: #3F4B43; font-variant-numeric: tabular-nums">{{pg.pct}}</span></span></td>
+<td style="padding: 10px 8px; text-align: right; font-weight: 600; font-variant-numeric: tabular-nums">{{pg.views}}</td>
+<td style="padding: 10px 0 10px 8px; text-align: right; color: #3F4B43; font-variant-numeric: tabular-nums">{{pg.viewers}}</td>
 </tr>
 </sc-for>
 </tbody>
@@ -129,54 +155,244 @@ a{color:#2F6B45}a:hover{color:#1F4D31}
 </div>
 </section>
 
-<section style="display: flex; flex-wrap: wrap; gap: 16px">
-<div style="flex: 1 1 420px; min-width: 0; background: #FFFFFF; border-radius: 20px; padding: 20px; display: flex; flex-direction: column; gap: 12px">
-<h2 style="margin: 0; font-size: 17px; font-weight: 700">Khi nào sự kiện được ghi</h2>
-<dl style="margin: 0; display: grid; grid-template-columns: minmax(0, 140px) minmax(0, 1fr); gap: 10px 16px; font-size: 13px; line-height: 19px">
-<dt style="font-family: ui-monospace, Menlo, monospace; font-weight: 600">page_view</dt><dd style="margin: 0; color: #3F4B43">Mở app sau khi đăng nhập</dd>
-<dt style="font-family: ui-monospace, Menlo, monospace; font-weight: 600">switch_tab</dt><dd style="margin: 0; color: #3F4B43">Chuyển giữa Tab 1 và Tab 2</dd>
-<dt style="font-family: ui-monospace, Menlo, monospace; font-weight: 600">view_3d_step</dt><dd style="margin: 0; color: #3F4B43">Chọn Bước 1 / 2 / 3 → 3D_Setup_Layer1–3</dd>
-<dt style="font-family: ui-monospace, Menlo, monospace; font-weight: 600">click_faq_3d</dt><dd style="margin: 0; color: #3F4B43">Mở một sự cố → FAQ_1_Smell … FAQ_5_Disposal</dd>
-</dl>
+<section aria-label="Người dùng" style="flex: 1 1 340px; min-width: 0; background: #FFFFFF; border-radius: 20px; padding: 20px; display: flex; flex-direction: column; gap: 18px">
+<div style="display: flex; justify-content: space-between; align-items: baseline; gap: 8px">
+<h2 style="margin: 0; font-size: 18px; font-weight: 700">Người dùng</h2>
+<span style="font-size: 13px; color: #56635A">{{usersText}} người</span>
 </div>
-<div style="flex: 1 1 320px; min-width: 0; background: #1F4D31; color: #FFFFFF; border-radius: 20px; padding: 20px; display: flex; flex-direction: column; gap: 10px">
-<h2 style="margin: 0; font-size: 17px; font-weight: 700">Nơi lưu dữ liệu</h2>
-<p style="margin: 0; font-size: 13px; line-height: 19px; color: #E3EEDF">Chọn một: Google Sheets, Supabase hoặc Firebase. Mỗi sự kiện được ghi kèm timestamp ngay khi xảy ra.</p>
-<div style="display: flex; flex-wrap: wrap; gap: 8px">
-<span style="font-size: 12px; font-weight: 600; background: #FFFFFF; color: #1F4D31; border-radius: 999px; padding: 5px 12px">Supabase</span>
-<span style="font-size: 12px; font-weight: 600; border: 1px solid #8FB89A; border-radius: 999px; padding: 4px 12px">Google Sheets</span>
-<span style="font-size: 12px; font-weight: 600; border: 1px solid #8FB89A; border-radius: 999px; padding: 4px 12px">Firebase</span>
+<div style="display: flex; flex-direction: column; gap: 8px">
+<span style="font-size: 13px; font-weight: 600">Mới và quay lại</span>
+<div style="display: flex; height: 30px; border-radius: 8px; overflow: hidden">
+<div style="width: 64%; background: #2F6B45; color: #FFFFFF; font-size: 12px; font-weight: 600; display: flex; align-items: center; padding-left: 10px; white-space: nowrap">Mới · {{newText}}</div>
+<div style="flex: 1; background: #A9C7A6; color: #1E2B22; font-size: 12px; font-weight: 600; display: flex; align-items: center; padding-left: 10px; white-space: nowrap">Quay lại · {{retText}}</div>
 </div>
 </div>
+<div style="display: flex; flex-direction: column; gap: 8px">
+<span style="font-size: 13px; font-weight: 600">Thiết bị</span>
+<div style="display: flex; height: 30px; border-radius: 8px; overflow: hidden; background: #EEF1EA">
+<div style="background: #1F5C94; color: #FFFFFF; font-size: 12px; font-weight: 600; display: flex; align-items: center; padding-left: 10px; white-space: nowrap; width: {{mobileW}}">{{mobileText}}</div>
+<div style="flex: 1; color: #1E2B22; font-size: 12px; font-weight: 600; display: flex; align-items: center; justify-content: flex-end; padding-right: 10px; white-space: nowrap">{{desktopText}}</div>
+</div>
+</div>
+<div style="display: flex; flex-direction: column; gap: 8px">
+<div style="display: flex; justify-content: space-between; align-items: baseline; gap: 8px"><span style="font-size: 13px; font-weight: 600">Giờ cao điểm</span><span style="font-size: 12px; color: #56635A">Đông nhất 19–22h</span></div>
+<div style="display: flex; align-items: flex-end; gap: 3px; height: 70px" role="img" aria-label="Lượt truy cập theo giờ trong ngày, đông nhất từ 19 đến 22 giờ">
+<sc-for list="{{hours}}" as="hr" hint-placeholder-count="24">
+<div style="flex: 1; border-radius: 3px 3px 0 0; height: {{hr.h}}; background: {{hr.color}}"></div>
+</sc-for>
+</div>
+<div style="display: flex; justify-content: space-between; font-size: 11px; color: #56635A"><span>0h</span><span>6h</span><span>12h</span><span>18h</span><span>23h</span></div>
+</div>
+</section>
+</div>
+
+<section aria-label="Hành trình người dùng" style="background: #FFFFFF; border-radius: 20px; padding: 20px; display: flex; flex-direction: column; gap: 14px">
+<div style="display: flex; flex-wrap: wrap; justify-content: space-between; align-items: baseline; gap: 8px">
+<h2 style="margin: 0; font-size: 18px; font-weight: 700">Hành trình người dùng</h2>
+<span style="font-size: 13px; color: #56635A">Tính từ lúc đăng nhập xong, bao nhiêu người đi tiếp tới từng bước</span>
+</div>
+<ol style="list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(auto-fit, minmax(170px, 1fr)); gap: 12px">
+<sc-for list="{{funnel}}" as="f" hint-placeholder-count="5">
+<li style="display: flex; flex-direction: column; gap: 8px">
+<div style="height: 110px; background: #F3F5EF; border-radius: 12px; display: flex; align-items: flex-end; overflow: hidden"><div style="width: 100%; background: #2F6B45; border-radius: 12px 12px 0 0; height: {{f.h}}"></div></div>
+<div style="display: flex; justify-content: space-between; align-items: baseline; gap: 6px"><span style="font-size: 22px; font-weight: 700; font-variant-numeric: tabular-nums">{{f.pct}}</span><span style="font-size: 12px; font-weight: 600; color: #B4531B">{{f.drop}}</span></div>
+<span style="font-size: 13px; font-weight: 600; line-height: 18px">{{f.label}}</span>
+<span style="font-size: 12px; color: #56635A">{{f.count}} người</span>
+</li>
+</sc-for>
+</ol>
+</section>
+
+<section aria-label="Người dùng gần đây" style="background: #FFFFFF; border-radius: 20px; padding: 20px; display: flex; flex-direction: column; gap: 12px">
+<div style="display: flex; flex-wrap: wrap; justify-content: space-between; align-items: baseline; gap: 8px">
+<h2 style="margin: 0; font-size: 18px; font-weight: 700">Người dùng gần đây</h2>
+<span style="font-size: 13px; color: #56635A">ID đã băm từ tài khoản Google · không hiển thị tên, email</span>
+</div>
+<div style="overflow-x: auto">
+<table style="width: 100%; min-width: 680px; border-collapse: collapse; font-size: 14px">
+<thead><tr style="text-align: left; color: #56635A; font-size: 12px">
+<th scope="col" style="padding: 8px 8px 8px 0; font-weight: 600">Người dùng</th>
+<th scope="col" style="padding: 8px; font-weight: 600">Lần đầu</th>
+<th scope="col" style="padding: 8px; font-weight: 600">Lần gần nhất</th>
+<th scope="col" style="padding: 8px; font-weight: 600; text-align: right">Lượt truy cập</th>
+<th scope="col" style="padding: 8px; font-weight: 600; text-align: right">Trang đã xem</th>
+<th scope="col" style="padding: 8px 0 8px 8px; font-weight: 600">Thiết bị</th>
+</tr></thead>
+<tbody>
+<sc-for list="{{recent}}" as="u" hint-placeholder-count="6">
+<tr style="border-top: 1px solid #EEF1EA">
+<td style="padding: 10px 8px 10px 0"><span style="display: flex; align-items: center; gap: 10px"><span style="width: 30px; height: 30px; border-radius: 15px; display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 700; background: {{u.bg}}; color: {{u.fg}}">{{u.initial}}</span><span style="font-family: ui-monospace, Menlo, monospace; font-size: 13px">{{u.id}}</span></span></td>
+<td style="padding: 10px 8px; color: #3F4B43">{{u.first}}</td>
+<td style="padding: 10px 8px; color: #3F4B43">{{u.last}}</td>
+<td style="padding: 10px 8px; text-align: right; font-variant-numeric: tabular-nums">{{u.sessions}}</td>
+<td style="padding: 10px 8px; text-align: right; font-variant-numeric: tabular-nums">{{u.pages}}</td>
+<td style="padding: 10px 0 10px 8px">{{u.device}}</td>
+</tr>
+</sc-for>
+</tbody>
+</table>
+</div>
+</section>
+
+<section aria-label="Cách tính số liệu" style="background: #E8EFE2; border-radius: 20px; padding: 18px 20px; display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 14px 24px; font-size: 13px; line-height: 19px">
+<div><b>Chỉ người đã đăng nhập</b><br>Mọi số liệu bắt đầu tính sau khi đăng nhập Google thành công. Khách chưa đăng nhập không được tính.</div>
+<div><b>Lượt truy cập</b><br>Mỗi phiên của một người đã đăng nhập; hết 30 phút không thao tác thì tính phiên mới.</div>
+<div><b>Người dùng</b><br>Đếm theo User_ID duy nhất, băm từ tài khoản Google.</div>
+<div><b>Lượt xem trang</b><br>Mỗi lần mở một màn hình trong app: từng bước của Tab 1, danh sách và từng sự cố ở Tab 2. Không tính trang đăng nhập.</div>
 </section>
 
 </main>
 </div>
 </x-dc>
-<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1280,"height":1760}}'>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1280,"height":2160}}'>
 class Component extends DCLogic {
 renderVals() {
-const raw = [
-['FAQ_1_Smell', 214, 2], ['3D_Setup_Layer1', 198, 1], ['3D_Setup_Layer2', 176, 1], ['FAQ_3_Liquid', 151, 2],
-['3D_Setup_Layer3', 149, 1], ['FAQ_4_Mold', 132, 2], ['FAQ_2_Maggots', 118, 2], ['FAQ_5_Disposal', 97, 2]
+const st = this.state || {};
+const range = st.range || '7d';
+const device = st.device || 'all';
+const metric = st.metric || 'sessions';
+const dev = device === 'mobile' ? 0.81 : device === 'desktop' ? 0.19 : 1;
+const fmt = (n) => Math.round(n).toLocaleString('vi-VN');
+const sum = (a) => a.reduce((x, y) => x + y, 0);
+
+let base, labels;
+if (range === 'today') {
+  base = [2, 1, 1, 0, 0, 1, 3, 6, 8, 9, 11, 14, 18, 13, 10, 9, 11, 13, 16, 21, 26, 24, 15, 6];
+  labels = base.map((_, h) => h + 'h');
+} else if (range === '7d') {
+  base = [38, 45, 52, 61, 47, 73, 96];
+  labels = ['T6 13/11', 'T7 14/11', 'CN 15/11', 'T2 16/11', 'T3 17/11', 'T4 18/11', 'T5 19/11'];
+} else {
+  base = []; labels = [];
+  const start = new Date(2026, 9, 21);
+  for (let i = 0; i < 30; i++) {
+    const d = new Date(start.getTime() + i * 86400000);
+    labels.push(d.getDate() + '/' + (d.getMonth() + 1));
+    base.push(Math.round(14 + i * 2.1 + 9 * Math.sin(i / 2.2) + ((i % 7 === 1 || i % 7 === 2) ? 8 : 0)));
+  }
+}
+const sessions = base.map((v) => Math.round(v * dev));
+const users = sessions.map((v) => Math.round(v * 0.78));
+const views = sessions.map((v) => Math.round(v * 3.8));
+const byMetric = { sessions, users, views };
+const metricName = { sessions: 'lượt truy cập', users: 'người dùng', views: 'lượt xem trang' };
+const series = byMetric[metric];
+const prev = series.map((v, i) => Math.max(0, Math.round(v * 0.84 + ((i * 7) % 5) - 2)));
+
+const totalSessions = sum(sessions);
+const uniqueUsers = Math.round(sum(users) * ({ today: 0.92, '7d': 0.7, '30d': 0.48 })[range]);
+const newUsers = Math.round(uniqueUsers * 0.64);
+const totalViews = sum(views);
+const ppv = (totalViews / Math.max(1, totalSessions)).toFixed(1).replace('.', ',');
+const deltas = { today: ['+12%', '+9%', '+15%'], '7d': ['+18%', '+14%', '+22%'], '30d': ['+41%', '+33%', '+47%'] }[range];
+
+const spark = (arr) => {
+  const mx = Math.max(...arr, 1); const n = arr.length;
+  return arr.map((v, i) => (i ? 'L' : 'M') + (n === 1 ? 50 : i * 100 / (n - 1)).toFixed(1) + ' ' + (26 - v / mx * 24).toFixed(1)).join(' ');
+};
+const kpis = [
+  { label: 'Lượt truy cập', value: fmt(totalSessions), delta: deltas[0], sub: 'so với kỳ trước', spark: spark(sessions), color: '#2F6B45' },
+  { label: 'Người dùng', value: fmt(uniqueUsers), delta: deltas[1], sub: fmt(newUsers) + ' người mới', spark: spark(users), color: '#1F5C94' },
+  { label: 'Lượt xem trang', value: fmt(totalViews), delta: deltas[2], sub: ppv + ' trang mỗi lượt truy cập', spark: spark(views), color: '#B4531B' }
 ];
-const max = 214;
-const features = raw.map(([name, n, tab]) => ({ name, n, w: Math.round(n / max * 100) + '%', color: tab === 1 ? '#2F6B45' : '#7FB0D9' }));
-const traw = [['click_faq_3d', 712], ['view_3d_step', 523], ['page_view', 356], ['switch_tab', 241]];
-const types = traw.map(([name, n]) => ({ name, n, w: Math.round(n / 712 * 100) + '%' }));
-const logs = [
-['2026-11-15 20:41:07', 's_7f3a9c', 'click_faq_3d', 'FAQ_1_Smell', 'Mobile'],
-['2026-11-15 20:40:52', 's_7f3a9c', 'switch_tab', 'Tab_2_FAQ', 'Mobile'],
-['2026-11-15 20:40:31', 's_7f3a9c', 'view_3d_step', '3D_Setup_Layer2', 'Mobile'],
-['2026-11-15 20:39:58', 's_7f3a9c', 'page_view', 'App', 'Mobile'],
-['2026-11-15 20:37:14', 's_c21e04', 'click_faq_3d', 'FAQ_4_Mold', 'Desktop'],
-['2026-11-15 20:36:49', 's_c21e04', 'click_faq_3d', 'FAQ_3_Liquid', 'Desktop'],
-['2026-11-15 20:35:20', 's_c21e04', 'switch_tab', 'Tab_2_FAQ', 'Desktop'],
-['2026-11-15 20:34:02', 's_9b80d1', 'view_3d_step', '3D_Setup_Layer3', 'Mobile'],
-['2026-11-15 20:33:45', 's_9b80d1', 'view_3d_step', '3D_Setup_Layer1', 'Mobile'],
-['2026-11-15 20:33:10', 's_9b80d1', 'page_view', 'App', 'Mobile']
-].map(([ts, sid, type, target, device]) => ({ ts, sid, type, target, device }));
-return { features, types, logs };
+
+const n = series.length;
+const maxV = Math.max(...series, ...prev, 1);
+const rawStep = maxV * 1.08 / 4;
+const mag = Math.pow(10, Math.floor(Math.log10(rawStep)));
+const stepN = [1, 1.5, 2, 2.5, 3, 4, 5, 6, 8, 10].find((m) => m * mag >= rawStep) * mag;
+const yMax = stepN * 4;
+const X = (i) => (n === 1 ? 500 : i * 1000 / (n - 1));
+const Y = (v) => 260 - v / yMax * 248;
+const toPath = (arr) => arr.map((v, i) => (i ? 'L' : 'M') + X(i).toFixed(1) + ' ' + Y(v).toFixed(1)).join(' ');
+const linePath = toPath(series);
+const areaPath = linePath + ' L1000 260 L0 260 Z';
+const prevPath = toPath(prev);
+const gridPath = [0, 1, 2, 3, 4].map((k) => 'M0 ' + Y(stepN * k).toFixed(1) + ' L1000 ' + Y(stepN * k).toFixed(1)).join(' ');
+const yTicks = [0, 1, 2, 3, 4].map((k) => ({ label: fmt(stepN * k), top: (Y(stepN * k) / 260 * 100).toFixed(2) + '%' }));
+const dots = series.map((v, i) => ({ left: (X(i) / 10).toFixed(2) + '%', top: (Y(v) / 260 * 100).toFixed(2) + '%' }));
+const slot = 100 / n;
+const hits = series.map((v, i) => ({
+  left: Math.max(0, X(i) / 10 - slot / 2).toFixed(2) + '%',
+  width: slot.toFixed(2) + '%',
+  aria: labels[i] + ': ' + fmt(v) + ' ' + metricName[metric],
+  show: () => this.setState({ hover: i })
+}));
+const every = Math.ceil(n / 8);
+const xLabels = labels.map((l, i) => ({ label: l, left: (X(i) / 10).toFixed(2) + '%', keep: i % every === 0 || i === n - 1 }))
+  .filter((l, i, all) => l.keep && !(i !== n - 1 && n - 1 - i < every / 2));
+const h = st.hover;
+const tipOn = h !== undefined && h !== null && h < n;
+const tip = tipOn ? {
+  x: (X(h) / 10).toFixed(2) + '%',
+  left: Math.min(90, Math.max(10, X(h) / 10)).toFixed(2) + '%',
+  title: labels[h],
+  value: fmt(series[h]) + ' ' + metricName[metric],
+  prev: 'Kỳ trước: ' + fmt(prev[h])
+} : { x: '0%', left: '0%', title: '', value: '', prev: '' };
+
+const seg = (on) => on ? 'background: #2F6B45; color: #FFFFFF;' : 'background: transparent; color: #1E2B22;';
+const ranges = [['today', 'Hôm nay'], ['7d', '7 ngày'], ['30d', '30 ngày']].map(([id, label]) => ({ label, pressed: range === id ? 'true' : 'false', style: seg(range === id), pick: () => this.setState({ range: id, hover: null }) }));
+const devices = [['all', 'Tất cả'], ['mobile', 'Điện thoại'], ['desktop', 'Máy tính']].map(([id, label]) => ({ label, pressed: device === id ? 'true' : 'false', style: seg(device === id), pick: () => this.setState({ device: id, hover: null }) }));
+const metrics = [['sessions', 'Lượt truy cập'], ['users', 'Người dùng'], ['views', 'Lượt xem trang']].map(([id, label]) => ({ label, pressed: metric === id ? 'true' : 'false', style: metric === id ? 'background: #FFFFFF; color: #1F4D31; box-shadow: 0 1px 2px rgba(0,0,0,.08);' : 'background: transparent; color: #3F4B43;', pick: () => this.setState({ metric: id, hover: null }) }));
+
+const rangeText = { today: 'Hôm nay, 19/11/2026', '7d': '7 ngày qua (13/11 – 19/11)', '30d': '30 ngày qua (21/10 – 19/11)' }[range];
+const rangeShort = { today: 'Hôm nay', '7d': '7 ngày qua', '30d': '30 ngày qua' }[range];
+const chartSub = (range === 'today' ? 'Theo giờ · ' : 'Theo ngày · ') + 'di chuột hoặc dùng Tab để xem số liệu';
+const peakIdx = series.indexOf(Math.max(...series));
+const chartAria = 'Biểu đồ ' + metricName[metric] + ', ' + rangeShort + ': tổng ' + fmt(sum(series)) + ', cao nhất ' + fmt(series[peakIdx]) + ' vào ' + labels[peakIdx];
+
+const tagStyles = { 'Chung': 'background: #EEF1EA; color: #3F4B43;', 'Tab 1': 'background: #E3EEDF; color: #1F4D31;', 'Tab 2': 'background: #DCEAF6; color: #1F5C94;' };
+const tagColors = { 'Chung': '#8C9A90', 'Tab 1': '#2F6B45', 'Tab 2': '#1F5C94' };
+const pageDefs = [
+  ['Bước 1 · Tầng đáy giả', 'Tab 1', 0.17], ['Sự cố 1 · Bốc mùi hôi', 'Tab 2', 0.14],
+  ['Bước 2 · Nạp cơ chất', 'Tab 1', 0.13], ['Danh sách sự cố', 'Tab 2', 0.12], ['Bước 3 · Khóa yếm khí', 'Tab 1', 0.11],
+  ['Sự cố 3 · Đọng dịch rỉ', 'Tab 2', 0.10], ['Sự cố 2 · Ruồi giấm, giòi', 'Tab 2', 0.08], ['Sự cố 4 · Nấm mốc', 'Tab 2', 0.09],
+  ['Sự cố 5 · Xử lý đầu ra', 'Tab 2', 0.06]
+];
+const pages = pageDefs.slice().sort((a, b) => b[2] - a[2]).map(([name, tag, share]) => ({
+  name, tag, tagStyle: tagStyles[tag], color: tagColors[tag],
+  views: fmt(totalViews * share),
+  viewers: fmt(Math.min(uniqueUsers, uniqueUsers * share * 3.6)),
+  pct: Math.round(share * 100) + '%',
+  bar: (share / 0.17 * 100).toFixed(1) + '%'
+}));
+
+const hourly = [2, 1, 1, 0, 0, 1, 3, 6, 8, 9, 11, 14, 18, 13, 10, 9, 11, 13, 16, 21, 26, 24, 15, 6];
+const hmax = Math.max(...hourly);
+const hours = hourly.map((v) => ({ h: Math.max(4, v / hmax * 100).toFixed(0) + '%', color: v >= hmax * 0.6 ? '#2F6B45' : '#C9D8C4' }));
+
+const fdefs = [['Đã đăng nhập vào app', 100], ['Xem Bước 1', 88], ['Xem đủ 3 bước', 52], ['Mở Cẩm nang sự cố', 47], ['Mở ít nhất 1 sự cố', 39]];
+const funnel = fdefs.map(([label, p], i) => ({
+  label, pct: p + '%', h: p + '%', count: fmt(uniqueUsers * p / 100),
+  drop: i === 0 ? '' : '−' + (fdefs[i - 1][1] - p) + '%'
+}));
+
+const avatars = [['#E3EEDF', '#1F4D31'], ['#DCEAF6', '#1F5C94'], ['#F6E6D2', '#7A3E10'], ['#E7E3F3', '#4F3F85']];
+const recentAll = [
+  ['u_7f3a9c', '19/11, 20:39', '19/11, 20:41', 1, 7, 'Điện thoại'],
+  ['u_c21e04', '12/11, 21:05', '19/11, 20:37', 4, 23, 'Máy tính'],
+  ['u_9b80d1', '19/11, 20:33', '19/11, 20:34', 1, 4, 'Điện thoại'],
+  ['u_4e7a12', '15/11, 19:12', '19/11, 19:58', 3, 15, 'Điện thoại'],
+  ['u_b3f950', '18/11, 12:20', '19/11, 12:31', 2, 9, 'Điện thoại'],
+  ['u_18d6ce', '08/11, 22:02', '19/11, 11:47', 6, 31, 'Máy tính']
+];
+const recent = recentAll
+  .filter((r) => device === 'all' || (device === 'mobile' ? r[5] === 'Điện thoại' : r[5] === 'Máy tính'))
+  .map((r, i) => ({ id: r[0], first: r[1], last: r[2], sessions: r[3], pages: r[4], device: r[5], initial: r[0].charAt(2).toUpperCase(), bg: avatars[i % 4][0], fg: avatars[i % 4][1] }));
+
+return {
+  online: fmt(12 * dev), rangeText, rangeShort, chartSub, chartAria,
+  ranges, devices, metrics, kpis,
+  linePath, areaPath, prevPath, gridPath, yTicks, dots, hits, xLabels, tipOn, tip,
+  hide: () => this.setState({ hover: null }),
+  pages, totalViewsText: fmt(totalViews), ppvText: ppv,
+  usersText: fmt(uniqueUsers), newText: fmt(newUsers), retText: fmt(uniqueUsers - newUsers),
+  mobileW: device === 'desktop' ? '0%' : device === 'mobile' ? '100%' : '81%',
+  mobileText: device === 'desktop' ? '' : device === 'mobile' ? 'Điện thoại 100%' : 'Điện thoại 81%',
+  desktopText: device === 'mobile' ? '' : device === 'desktop' ? 'Máy tính 100%' : 'Máy tính 19%',
+  hours, funnel, recent
+};
 }
 }
 </script>

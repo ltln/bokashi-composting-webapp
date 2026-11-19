@@ -50,7 +50,7 @@ func get(h http.Handler, target string, u *auth.User) *httptest.ResponseRecorder
 	return rec
 }
 
-var routes = []string{"summary", "features", "event-types", "devices", "logs", "export.csv"}
+var routes = []string{"overview", "summary", "features", "event-types", "devices", "logs", "export.csv"}
 
 func TestRequireAdmin(t *testing.T) {
 	h := router(newHandler(nil)) // nil store: auth must reject before it matters
@@ -72,6 +72,7 @@ func TestBadParams(t *testing.T) {
 	for _, q := range []string{
 		"summary?range=year", "summary?device=tablet", "features?tab=x",
 		"logs?limit=0", "logs?limit=abc", "logs?cursor=!!!", "logs?cursor=" + "bm9wZQ",
+		"overview?range=all", "overview?range=year", "overview?device=tablet",
 	} {
 		if rec := get(h, "/api/admin/"+q, admin); rec.Code != http.StatusBadRequest {
 			t.Errorf("%s = %d, want 400", q, rec.Code)
