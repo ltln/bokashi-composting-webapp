@@ -10,17 +10,17 @@
 "Faq3.dc.html":{"x":1410,"y":1264,"w":390,"h":844,"title":"FAQ 3 · Đọng dịch rỉ","is_interactive":true,"radius":32},
 "Faq4.dc.html":{"x":1880,"y":1264,"w":390,"h":844,"title":"FAQ 4 · Mốc trắng vs xanh/đen","is_interactive":true,"radius":32},
 "Faq5.dc.html":{"x":2350,"y":1264,"w":390,"h":844,"title":"FAQ 5 · Xử lý sau khi ủ xong","is_interactive":true,"radius":32},
-"Tracking.dc.html":{"x":0,"y":2528,"w":1280,"h":1760,"title":"Admin · Theo dõi Web_Access_Logs","expand":"fill"},
-"DeskLogin.dc.html":{"x":0,"y":4708,"w":1440,"h":900,"title":"Desktop · Đăng nhập","expand":"fill","is_interactive":true},
-"DeskSetup.dc.html":{"x":1520,"y":4708,"w":1440,"h":900,"title":"Desktop · Tab 1 – Thiết lập thùng (bấm từng bước)","expand":"fill","is_interactive":true},
-"DeskFaq.dc.html":{"x":3040,"y":4708,"w":1440,"h":900,"title":"Desktop · Tab 2 – Cẩm nang sự cố (bấm từng sự cố)","expand":"fill","is_interactive":true}
+"Tracking.dc.html":{"x":0,"y":2528,"w":1280,"h":2160,"title":"Admin · Tổng quan truy cập","expand":"fill","is_interactive":true},
+"DeskLogin.dc.html":{"x":0,"y":5108,"w":1440,"h":900,"title":"Desktop · Đăng nhập","expand":"fill","is_interactive":true},
+"DeskSetup.dc.html":{"x":1520,"y":5108,"w":1440,"h":900,"title":"Desktop · Tab 1 – Thiết lập thùng (bấm từng bước)","expand":"fill","is_interactive":true},
+"DeskFaq.dc.html":{"x":3040,"y":5108,"w":1440,"h":900,"title":"Desktop · Tab 2 – Cẩm nang sự cố (bấm từng sự cố)","expand":"fill","is_interactive":true}
 },
 "order":["Login.dc.html","Main.dc.html","Step2.dc.html","Step3.dc.html","FaqList.dc.html","Faq1.dc.html","Faq2.dc.html","Faq3.dc.html","Faq4.dc.html","Faq5.dc.html","Tracking.dc.html","DeskLogin.dc.html","DeskSetup.dc.html","DeskFaq.dc.html"],
 "notes":{
 "t1":{"x":-470,"y":-300,"text":"Đăng nhập & Tab 1 · Thiết lập thùng ủ DIY","kind":"title1","maxW":1800},
 "t2":{"x":0,"y":964,"text":"Tab 2 · Cẩm nang sự cố – 5 FAQ","kind":"title1","maxW":2740},
-"t3":{"x":0,"y":2228,"text":"Tracking · Web_Access_Logs","kind":"title1","maxW":1280},
-"t4":{"x":0,"y":4408,"text":"Desktop · Đăng nhập, Tab 1, Tab 2","kind":"title1","maxW":4480},
+"t3":{"x":0,"y":2228,"text":"Admin · Lưu lượng, người dùng, trang được xem","kind":"title1","maxW":1280},
+"t4":{"x":0,"y":4808,"text":"Desktop · Đăng nhập, Tab 1, Tab 2","kind":"title1","maxW":4480},
 "s1":{"x":1410,"y":0,"w":330,"fill":"green","text":"Hoạt ảnh: SVG 2D mặt cắt + CSS (chỉ transform/opacity), không thư viện 3D → nhẹ, mượt trên máy yếu; tự tắt khi bật Giảm chuyển động.\n\nTracking Tab 1:\n• page_view khi mở app\n• switch_tab → Tab_1_Setup\n• view_3d_step → 3D_Setup_Layer1 / Layer2 / Layer3 khi chọn bước"},
 "s2":{"x":2820,"y":1264,"w":330,"fill":"blue","text":"Tracking Tab 2:\n• switch_tab → Tab_2_FAQ\n• click_faq_3d → FAQ_1_Smell, FAQ_2_Maggots, FAQ_3_Liquid, FAQ_4_Mold, FAQ_5_Disposal\n\nMỗi sự kiện ghi: Timestamp, Session_ID (ẩn danh), Event_Type, Feature_Target, Device_Info."},
 "s4":{"x":-860,"y":0,"w":330,"fill":"purple","text":"Đăng nhập: chỉ Google OAuth. Gợi ý: Session_ID vẫn là mã ẩn danh; nếu cần đếm người dùng thực, lưu User_ID dạng băm (không lưu email/tên trong Web_Access_Logs)."},

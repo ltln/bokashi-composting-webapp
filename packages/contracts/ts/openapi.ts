@@ -263,6 +263,59 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/admin/overview": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * The whole admin overview (KPIs vs the previous period, traffic series, pages, users, funnel)
+         * @description Only logged-in activity is ever logged, so every count is of logged-in users. user_hash never leaves the database; only counts derived from it. range=all is rejected (there is no previous period to compare with).
+         */
+        get: {
+            parameters: {
+                query?: {
+                    range?: components["parameters"]["Range"];
+                    device?: components["parameters"]["Device"];
+                };
+                header?: never;
+                path?: never;
+                cookie?: never;
+            };
+            requestBody?: never;
+            responses: {
+                /** @description OK */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["Overview"];
+                    };
+                };
+                /** @description Bad range or device (including range=all). */
+                400: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["Error"];
+                    };
+                };
+                401: components["responses"]["Unauthorized"];
+                403: components["responses"]["Forbidden"];
+            };
+        };
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/admin/summary": {
         parameters: {
             query?: never;
@@ -510,6 +563,65 @@ export interface components {
         CountRow: {
             key: string;
             count: number;
+        };
+        OverviewTotals: {
+            /** @description Visits: one visitor's events on one device type with no gap over 30 minutes. */
+            visits: number;
+            /** @description Distinct visitors (by user_hash). */
+            users: number;
+            /** @description Visitors whose first event ever falls in the period. */
+            newUsers: number;
+            /** @description Screen views: view_3d_step, click_faq_3d and switch_tab -> Tab_2_FAQ. */
+            views: number;
+        };
+        OverviewPoint: {
+            /** @description Local (Asia/Ho_Chi_Minh) bucket start, YYYY-MM-DDTHH:mm. */
+            start: string;
+            /** @description null for buckets in the future. */
+            visits: number | null;
+            users: number | null;
+            views: number | null;
+            /** @description The same bucket one period earlier. */
+            prevVisits: number;
+            prevUsers: number;
+            prevViews: number;
+        };
+        Overview: {
+            /** @enum {string} */
+            range: "today" | "7d" | "30d";
+            /** @enum {string} */
+            unit: "hour" | "day";
+            /** Format: date */
+            from: string;
+            /** Format: date */
+            to: string;
+            /** @description Visitors with an event in the last 5 minutes. */
+            online: number;
+            totals: components["schemas"]["OverviewTotals"];
+            /** @description The same elapsed time, one period earlier. */
+            previous: components["schemas"]["OverviewTotals"];
+            series: components["schemas"]["OverviewPoint"][];
+            /** @description Screens with at least one view, most viewed first. */
+            pages: {
+                target: components["schemas"]["FeatureTarget"];
+                views: number;
+                viewers: number;
+            }[];
+            /** @description Visits per device type. */
+            devices: {
+                mobile: number;
+                desktop: number;
+                tablet: number;
+            };
+            /** @description Visits started per local hour of day (24 entries). */
+            hours: number[];
+            funnel: {
+                users: number;
+                step1: number;
+                allSteps: number;
+                faqTab: number;
+                faqDetail: number;
+            };
         };
         LogRow: {
             id?: number;

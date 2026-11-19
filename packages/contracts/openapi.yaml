@@ -109,6 +109,74 @@ components:
       properties:
         key: { type: string }
         count: { type: integer }
+    OverviewTotals:
+      type: object
+      required: [visits, users, newUsers, views]
+      properties:
+        visits: { type: integer, description: "Visits: one visitor's events on one device type with no gap over 30 minutes." }
+        users: { type: integer, description: Distinct visitors (by user_hash). }
+        newUsers: { type: integer, description: Visitors whose first event ever falls in the period. }
+        views: { type: integer, description: "Screen views: view_3d_step, click_faq_3d and switch_tab -> Tab_2_FAQ." }
+    OverviewPoint:
+      type: object
+      required: [start, visits, users, views, prevVisits, prevUsers, prevViews]
+      properties:
+        start: { type: string, description: "Local (Asia/Ho_Chi_Minh) bucket start, YYYY-MM-DDTHH:mm." }
+        visits: { type: [integer, "null"], description: null for buckets in the future. }
+        users: { type: [integer, "null"] }
+        views: { type: [integer, "null"] }
+        prevVisits: { type: integer, description: The same bucket one period earlier. }
+        prevUsers: { type: integer }
+        prevViews: { type: integer }
+    Overview:
+      type: object
+      required: [range, unit, from, to, online, totals, previous, series, pages, devices, hours, funnel]
+      properties:
+        range: { type: string, enum: [today, 7d, 30d] }
+        unit: { type: string, enum: [hour, day] }
+        from: { type: string, format: date }
+        to: { type: string, format: date }
+        online: { type: integer, description: Visitors with an event in the last 5 minutes. }
+        totals: { $ref: "#/components/schemas/OverviewTotals" }
+        previous:
+          allOf: [{ $ref: "#/components/schemas/OverviewTotals" }]
+          description: The same elapsed time, one period earlier.
+        series:
+          type: array
+          items: { $ref: "#/components/schemas/OverviewPoint" }
+        pages:
+          type: array
+          description: Screens with at least one view, most viewed first.
+          items:
+            type: object
+            required: [target, views, viewers]
+            properties:
+              target: { $ref: "#/components/schemas/FeatureTarget" }
+              views: { type: integer }
+              viewers: { type: integer }
+        devices:
+          type: object
+          description: Visits per device type.
+          required: [mobile, desktop, tablet]
+          properties:
+            mobile: { type: integer }
+            desktop: { type: integer }
+            tablet: { type: integer }
+        hours:
+          type: array
+          description: Visits started per local hour of day (24 entries).
+          minItems: 24
+          maxItems: 24
+          items: { type: integer }
+        funnel:
+          type: object
+          required: [users, step1, allSteps, faqTab, faqDetail]
+          properties:
+            users: { type: integer }
+            step1: { type: integer }
+            allSteps: { type: integer }
+            faqTab: { type: integer }
+            faqDetail: { type: integer }
     LogRow:
       type: object
       properties:
@@ -219,6 +287,32 @@ paths:
           content:
             application/json:
               schema: { $ref: "#/components/schemas/Error" }
+
+  /api/admin/overview:
+    get:
+      tags: [admin]
+      summary: The whole admin overview (KPIs vs the previous period, traffic series, pages, users, funnel)
+      description: >
+        Only logged-in activity is ever logged, so every count is of logged-in
+        users. user_hash never leaves the database; only counts derived from it.
+        range=all is rejected (there is no previous period to compare with).
+      security: [{ session: [] }]
+      parameters:
+        - $ref: "#/components/parameters/Range"
+        - $ref: "#/components/parameters/Device"
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/Overview" }
+        "400":
+          description: Bad range or device (including range=all).
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/Error" }
+        "401": { $ref: "#/components/responses/Unauthorized" }
+        "403": { $ref: "#/components/responses/Forbidden" }
 
   /api/admin/summary:
     get:

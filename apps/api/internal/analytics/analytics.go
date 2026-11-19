@@ -1,5 +1,6 @@
 // Package analytics owns the admin dashboard endpoints under /api/admin:
-// summary, features, event-types, devices, logs and export.csv (milestone M6).
+// overview (the dashboard), plus summary, features, event-types, devices, logs
+// and export.csv (milestone M6).
 //
 // Every route sits behind auth.RequireAdmin (401 anonymous, 403 non-admin) and
 // accepts the shared filters range=today|7d|30d|all and device=all|mobile|desktop.
@@ -42,6 +43,12 @@ type Querier interface {
 	AnalyticsEventTypes(ctx context.Context, arg store.AnalyticsEventTypesParams) ([]store.AnalyticsEventTypesRow, error)
 	AnalyticsDevices(ctx context.Context, arg store.AnalyticsDevicesParams) ([]store.AnalyticsDevicesRow, error)
 	AnalyticsLogs(ctx context.Context, arg store.AnalyticsLogsParams) ([]store.AnalyticsLogsRow, error)
+	OverviewTotals(ctx context.Context, arg store.OverviewTotalsParams) (store.OverviewTotalsRow, error)
+	OverviewSeries(ctx context.Context, arg store.OverviewSeriesParams) ([]store.OverviewSeriesRow, error)
+	OverviewPages(ctx context.Context, arg store.OverviewPagesParams) ([]store.OverviewPagesRow, error)
+	OverviewHours(ctx context.Context, arg store.OverviewHoursParams) ([]store.OverviewHoursRow, error)
+	OverviewFunnel(ctx context.Context, arg store.OverviewFunnelParams) (store.OverviewFunnelRow, error)
+	OverviewOnline(ctx context.Context, arg store.OverviewOnlineParams) (int64, error)
 }
 
 // Handler serves the /api/admin routes.
@@ -63,6 +70,7 @@ func Register(r chi.Router, d *app.Deps) {
 // Routes mounts the handlers (behind RequireAdmin) on r.
 func (h *Handler) Routes(r chi.Router) {
 	r.Use(auth.RequireAdmin)
+	r.Get("/overview", h.overview)
 	r.Get("/summary", h.summary)
 	r.Get("/features", h.features)
 	r.Get("/event-types", h.eventTypes)
