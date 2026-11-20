@@ -1,10 +1,16 @@
-import { loginCopy, type LoginErrorCode } from "@/content/auth";
+"use client";
+
+import { getLoginCopy, type LoginErrorCode } from "@/content/auth";
+import { useLocale } from "@/lib/i18n";
 
 export function LoginError({ code }: { code?: string }) {
-  if (!code || !(code in loginCopy.errors)) return null;
+  const { locale } = useLocale();
+  const errors = getLoginCopy(locale).errors;
+  if (!code || !(code in errors)) return null;
+
   return (
     <p role="alert" className="m-0 rounded-bk-sm bg-bk-accent-tint px-4 py-3 text-sm text-bk-accent-dark">
-      {loginCopy.errors[code as LoginErrorCode]}
+      {errors[code as LoginErrorCode]}
     </p>
   );
 }

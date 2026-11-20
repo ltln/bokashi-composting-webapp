@@ -1,6 +1,7 @@
 import type { Metadata, Viewport } from "next";
 import { Be_Vietnam_Pro } from "next/font/google";
 import { site } from "@/content/site";
+import { LanguageProvider } from "@/lib/i18n";
 import "./globals.css";
 
 const beVietnamPro = Be_Vietnam_Pro({
@@ -23,7 +24,9 @@ export const viewport: Viewport = {
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="vi" className={beVietnamPro.variable}>
-      <body className="bg-motif min-h-dvh bg-bk-ground font-sans text-bk-ink antialiased">{children}</body>
+      <body className="bg-motif min-h-dvh bg-bk-ground font-sans text-bk-ink antialiased">
+        <LanguageProvider>{children}</LanguageProvider>
+      </body>
     </html>
   );
 }

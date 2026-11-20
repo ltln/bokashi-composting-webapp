@@ -53,14 +53,20 @@ export interface AnimationStageProps {
   posterSrc?: string;
   /** Accessible label for the rendered illustration wrapper (`role="img"`). */
   illustrationLabel?: string;
-  /** 0-based active sub-step driving video seek targets (`active * substepSeconds`). */
+  /** 0-based active sub-step driving video seek targets. */
   active?: number;
   /** Incremented on replay/goTo to force immediate video seek. */
   epoch?: number;
   /** When true and paused, keeps poster visible on mount and seeks to sub-step end on manual select. */
   reducedMotion?: boolean;
-  /** Sub-step length in seconds (default 4.5 matching SUBSTEP_MS = 4500). */
+  /** Fallback sub-step length in seconds when `substepDurationsMs` is not supplied. */
   substepSeconds?: number;
+  /** Per-sub-step durations in ms; drives cumulative seek boundaries for VO-aligned clips. */
+  substepDurationsMs?: readonly number[];
+  /** Controls `<video>` mute state (default true). */
+  muted?: boolean;
+  /** Called if browser autoplay policy blocks unmuted playback and falls back to muted. */
+  onAutoplayMuted?: () => void;
   /**
    * Usually <PlayerControls>. Rendered under the canvas on mobile and inside
    * the tinted panel on desktop, as in the boards.
@@ -69,6 +75,29 @@ export interface AnimationStageProps {
   /** Layout preset. Default "setup". */
   size?: AnimationStageSize;
   className?: string;
+}
+
+function getSubstepBoundsSec(
+  active: number,
+  substepSeconds: number,
+  substepDurationsMs?: readonly number[],
+): { startSec: number; endSec: number } {
+  if (!substepDurationsMs || substepDurationsMs.length === 0) {
+    return {
+      startSec: active * substepSeconds,
+      endSec: (active + 1) * substepSeconds,
+    };
+  }
+  const clamped = Math.max(0, Math.min(active, substepDurationsMs.length - 1));
+  let startMs = 0;
+  for (let i = 0; i < clamped; i++) {
+    startMs += substepDurationsMs[i] ?? 0;
+  }
+  const durMs = substepDurationsMs[clamped] ?? substepSeconds * 1000;
+  return {
+    startSec: startMs / 1000,
+    endSec: (startMs + durMs) / 1000,
+  };
 }
 
 /**
@@ -90,6 +119,9 @@ export function AnimationStage({
   epoch = 0,
   reducedMotion = false,
   substepSeconds = 4.5,
+  substepDurationsMs,
+  muted = true,
+  onAutoplayMuted,
   controls,
   size = "setup",
   className,
@@ -97,11 +129,19 @@ export function AnimationStage({
   const preset = SIZE[size];
   const videoRef = useRef<HTMLVideoElement | null>(null);
   const prevEpochRef = useRef(epoch);
+  const prevActiveRef = useRef(active);
+  const prevVideoSrcRef = useRef(videoSrc);
+  const onAutoplayMutedRef = useRef(onAutoplayMuted);
 
-  // Sync play/pause state with player controls and prefers-reduced-motion.
+  useEffect(() => {
+    onAutoplayMutedRef.current = onAutoplayMuted;
+  }, [onAutoplayMuted]);
+
+  // Sync play/pause and mute state with player controls and browser autoplay policy.
   useEffect(() => {
     const video = videoRef.current;
     if (!video || !videoSrc) return;
+    video.muted = muted;
     if (paused) {
       try {
         video.pause();
@@ -113,23 +153,44 @@ export function AnimationStage({
     try {
       const p = video.play();
       if (p && typeof p.catch === "function") {
-        p.catch(() => {});
+        p.catch((err: unknown) => {
+          const name = (err as { name?: string } | null)?.name;
+          if (!video.muted && name === "NotAllowedError") {
+            video.muted = true;
+            onAutoplayMutedRef.current?.();
+            try {
+              const retry = video.play();
+              if (retry && typeof retry.catch === "function") retry.catch(() => {});
+            } catch {
+              // ignore
+            }
+          }
+        });
       }
     } catch {
       // jsdom does not implement HTMLMediaElement.play
     }
-  }, [paused, videoSrc]);
+  }, [paused, videoSrc, muted]);
 
   // Sync active sub-step and manual replay/goTo jumps (`epoch`) with video timeline.
+  // Never seeks on a plain pause/resume toggle so mid-substep pauses keep position.
   useEffect(() => {
     const video = videoRef.current;
     if (!video || !videoSrc) return;
     const epochChanged = prevEpochRef.current !== epoch;
+    const activeChanged = prevActiveRef.current !== active;
+    const srcChanged = prevVideoSrcRef.current !== videoSrc;
     prevEpochRef.current = epoch;
+    prevActiveRef.current = active;
+    prevVideoSrcRef.current = videoSrc;
+
+    if (!epochChanged && !activeChanged && !srcChanged) return;
+
+    const { startSec, endSec } = getSubstepBoundsSec(active, substepSeconds, substepDurationsMs);
 
     if (reducedMotion && paused) {
-      if (!epochChanged) return;
-      const settledTime = Math.max(0, (active + 1) * substepSeconds - 0.08);
+      if (!epochChanged && !srcChanged) return;
+      const settledTime = Math.max(0, endSec - 0.08);
       try {
         video.currentTime = settledTime;
       } catch {
@@ -138,15 +199,14 @@ export function AnimationStage({
       return;
     }
 
-    const targetTime = active * substepSeconds;
-    if (epochChanged || Math.abs((video.currentTime || 0) - targetTime) > 0.35) {
+    if (epochChanged || srcChanged || Math.abs((video.currentTime || 0) - startSec) > 0.35) {
       try {
-        video.currentTime = targetTime;
+        video.currentTime = startSec;
       } catch {
         // Ignore unseekable media state in headless test DOMs
       }
     }
-  }, [active, epoch, paused, reducedMotion, substepSeconds, videoSrc]);
+  }, [active, epoch, paused, reducedMotion, substepSeconds, substepDurationsMs, videoSrc]);
 
   return (
     <section
@@ -183,7 +243,7 @@ export function AnimationStage({
                 ref={videoRef}
                 src={videoSrc}
                 poster={posterSrc}
-                muted
+                muted={muted}
                 playsInline
                 preload="auto"
                 aria-hidden="true"

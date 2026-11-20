@@ -1,8 +1,11 @@
+"use client";
+
 import Link from "next/link";
-import { LockIcon } from "./SetupChecklist";
-import { cn } from "@/lib/cn";
-import { setupPageCopy } from "@/content/setupSteps";
+import { getSetupPageCopy } from "@/content/setupSteps";
 import type { SetupStep } from "@/content/types";
+import { cn } from "@/lib/cn";
+import { useLocale } from "@/lib/i18n";
+import { LockIcon } from "./SetupChecklist";
 
 const chevron = (d: string) => (
   <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
@@ -18,7 +21,8 @@ const BTN =
  * the "3 ngày cuối" tip.
  */
 export function DeskStepList({ steps, step, active }: { steps: readonly SetupStep[]; step: SetupStep; active: number }) {
-  const d = setupPageCopy.desk;
+  const { locale } = useLocale();
+  const d = getSetupPageCopy(locale).desk;
   const isFirst = step.number === 1;
   const isLast = step.number === steps.length;
   return (

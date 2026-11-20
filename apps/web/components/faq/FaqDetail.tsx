@@ -4,40 +4,53 @@ import Link from "next/link";
 import { useEffect } from "react";
 import { AnimationStage, PlayerControls, useAnimationPlayer } from "@/components/player";
 import type { AnimationPlayer } from "@/components/player";
+import { VoiceMuteButton } from "@/components/player/PlayerControls";
 import { IconButton, Pill } from "@/components/ui";
-import { cn } from "@/lib/cn";
-import { track } from "@/lib/tracking";
-import { faqPageCopy, faqs, getFaqNeighbours } from "@/content/faqs";
-import { playerCopy } from "@/content/setupSteps";
+import { getFaq, getFaqNeighbours, getFaqPageCopy, getFaqs } from "@/content/faqs";
+import { getFaqMedia } from "@/content/media";
+import { getPlayerCopy, type PlayerCopy } from "@/content/setupSteps";
 import type { Faq, FaqSlug } from "@/content/types";
+import { cn } from "@/lib/cn";
+import { useLocale, type Locale } from "@/lib/i18n";
+import { track } from "@/lib/tracking";
+import { useVoiceMuted } from "@/lib/voice";
 import { FaqChecklist } from "./FaqChecklist";
 import { ArrowRight, ChevronLeft } from "./icons";
 import { FAQ_TINT } from "./tints";
 
-const FAQ_VIDEOS: Record<FaqSlug, { src: string; poster: string }> = {
-  smell: { src: "/animations/faq-1.mp4", poster: "/animations/faq-1-poster.png" },
-  maggots: { src: "/animations/faq-2.mp4", poster: "/animations/faq-2-poster.png" },
-  liquid: { src: "/animations/faq-3.mp4", poster: "/animations/faq-3-poster.png" },
-  mold: { src: "/animations/faq-4.mp4", poster: "/animations/faq-4-poster.png" },
-  disposal: { src: "/animations/faq-5.mp4", poster: "/animations/faq-5-poster.png" },
-};
-
-/** Tab 2 detail for one FAQ. Render with `key={faq.slug}` so the player restarts. */
+/**
+ * Tab 2 detail for one FAQ. Tracks `click_faq_3d` once per FAQ slug, and keys
+ * the inner player by `locale` so language switching restarts video & VO cleanly
+ * without re-firing analytics.
+ */
 export function FaqDetail({ faq }: { faq: Faq }) {
-  const player = useAnimationPlayer(faq.substeps.map((s) => s.durationMs));
-  const { prev, next } = getFaqNeighbours(faq.slug);
-  const tint = FAQ_TINT[faq.tint];
-  const d = faqPageCopy.detail;
-  const total = faqs.length;
-  const compare = faq.options !== undefined;
-  const media = FAQ_VIDEOS[faq.slug];
+  const { locale } = useLocale();
 
   useEffect(() => {
     track("click_faq_3d", faq.featureTarget);
   }, [faq.featureTarget]);
 
+  return <FaqDetailPlayer key={locale} slug={faq.slug} locale={locale} />;
+}
+
+function FaqDetailPlayer({ slug, locale }: { slug: FaqSlug; locale: Locale }) {
+  const localizedFaq = getFaq(slug, locale);
+  const { prev, next } = getFaqNeighbours(slug, locale);
+  const pageCopy = getFaqPageCopy(locale);
+  const pCopy = getPlayerCopy(locale);
+  const media = getFaqMedia(slug, locale);
+  const { muted: voiceMuted, setVoiceMuted, toggleVoiceMuted } = useVoiceMuted();
+
+  const durationsMs = localizedFaq.substeps.map((s) => s.durationMs);
+  const player = useAnimationPlayer(durationsMs);
+  const tint = FAQ_TINT[localizedFaq.tint];
+  const d = pageCopy.detail;
+  const total = getFaqs(locale).length;
+  const compare = localizedFaq.options !== undefined;
+  const effectiveMuted = !media.hasAudio || voiceMuted;
+
   const categoryPill = (
-    <span className={cn("rounded-full px-2.5 py-1 text-xs font-semibold", tint.bg, tint.fg)}>{faq.category}</span>
+    <span className={cn("rounded-full px-2.5 py-1 text-xs font-semibold", tint.bg, tint.fg)}>{localizedFaq.category}</span>
   );
 
   return (
@@ -51,51 +64,63 @@ export function FaqDetail({ faq }: { faq: Faq }) {
         >
           <ChevronLeft size={22} />
         </Link>
-        <span className="flex-1 text-[15px] font-semibold">{d.counter(faq.number, total)}</span>
+        <span className="flex-1 text-[15px] font-semibold">{d.counter(localizedFaq.number, total)}</span>
         {categoryPill}
       </div>
 
       <div className="flex flex-col gap-2 px-4 lg:px-0">
         {/* Desktop counter row (DeskFaq) */}
         <div className="hidden items-center gap-2 lg:flex">
-          <span className="text-[13px] font-semibold text-bk-illo-label">{d.counter(faq.number, total)}</span>
+          <span className="text-[13px] font-semibold text-bk-illo-label">{d.counter(localizedFaq.number, total)}</span>
           {categoryPill}
         </div>
-        <h1 className="m-0 text-[19px] font-bold leading-[25px] lg:text-2xl lg:leading-[31px]">{faq.question}</h1>
+        <h1 className="m-0 text-[19px] font-bold leading-[25px] lg:text-2xl lg:leading-[31px]">{localizedFaq.question}</h1>
       </div>
 
       <AnimationStage
         size={compare ? "faqCompare" : "faq"}
-        label={faq.stageLabel}
-        caption={faq.substeps[player.active]?.caption ?? ""}
+        label={localizedFaq.stageLabel}
+        caption={localizedFaq.substeps[player.active]?.caption ?? ""}
         paused={!player.playing}
         videoSrc={media.src}
         posterSrc={media.poster}
-        illustrationLabel={faq.illustrationLabel}
+        illustrationLabel={localizedFaq.illustrationLabel}
         active={player.active}
         epoch={player.epoch}
         reducedMotion={player.reducedMotion}
-        badgeEnd={faq.stageBadge && <StageBadge from={faq.stageBadge.from} to={faq.stageBadge.to} />}
+        substepDurationsMs={durationsMs}
+        muted={effectiveMuted}
+        onAutoplayMuted={() => setVoiceMuted(true)}
+        badgeEnd={localizedFaq.stageBadge && <StageBadge from={localizedFaq.stageBadge.from} to={localizedFaq.stageBadge.to} />}
         controls={
-          compare && faq.options ? (
-            <CompareControls faq={faq} player={player} />
+          compare && localizedFaq.options ? (
+            <CompareControls
+              faq={localizedFaq}
+              player={player}
+              playerCopy={pCopy}
+              toggleLabel={d.toggleLabel[localizedFaq.slug]}
+              muted={effectiveMuted}
+              onToggleMute={media.hasAudio ? toggleVoiceMuted : undefined}
+            />
           ) : (
             <PlayerControls
-              total={faq.substeps.length}
+              total={localizedFaq.substeps.length}
               active={player.active}
               progress={player.displayProgress}
               playing={player.playing}
               onTogglePlay={player.toggle}
               onReplay={player.replay}
+              muted={effectiveMuted}
+              onToggleMute={media.hasAudio ? toggleVoiceMuted : undefined}
               onSelect={player.reducedMotion ? player.goTo : undefined}
-              captions={faq.substeps.map((s) => s.caption)}
-              labels={playerCopy}
+              captions={localizedFaq.substeps.map((s) => s.caption)}
+              labels={pCopy}
             />
           )
         }
       />
 
-      <FaqChecklist faq={faq} active={player.active} prev={prev} next={next} />
+      <FaqChecklist faq={localizedFaq} active={player.active} prev={prev} next={next} />
     </main>
   );
 }
@@ -113,9 +138,24 @@ function StageBadge({ from, to }: { from: string; to: string }) {
 
 /**
  * Controls of the compare FAQs (4, 5): play/pause, a two-way toggle that
- * emphasises one state, and replay. The toggle replaces the segmented bar.
+ * emphasises one state, optional voice mute, and replay. The toggle replaces
+ * the segmented bar.
  */
-function CompareControls({ faq, player }: { faq: Faq; player: AnimationPlayer }) {
+function CompareControls({
+  faq,
+  player,
+  playerCopy,
+  toggleLabel,
+  muted,
+  onToggleMute,
+}: {
+  faq: Faq;
+  player: AnimationPlayer;
+  playerCopy: PlayerCopy;
+  toggleLabel?: string;
+  muted: boolean;
+  onToggleMute?: () => void;
+}) {
   return (
     <div className="flex h-[60px] items-center gap-3 px-4 py-2 lg:h-auto lg:gap-3.5 lg:p-0">
       <IconButton
@@ -137,14 +177,14 @@ function CompareControls({ faq, player }: { faq: Faq; player: AnimationPlayer })
       </IconButton>
       <div
         role="group"
-        aria-label={faqPageCopy.detail.toggleLabel[faq.slug]}
+        aria-label={toggleLabel}
         className="box-border flex flex-1 gap-[3px] rounded-bk-sm border border-bk-border bg-bk-surface p-[3px]"
       >
         {faq.options?.map((o, i) => {
           const pressed = i === player.active;
           return (
             <button
-              key={o.toggleLabel}
+              key={faq.substeps[i]?.id ?? i}
               type="button"
               aria-pressed={pressed}
               onClick={() => player.goTo(i)}
@@ -159,6 +199,14 @@ function CompareControls({ faq, player }: { faq: Faq; player: AnimationPlayer })
           );
         })}
       </div>
+      {onToggleMute && (
+        <VoiceMuteButton
+          muted={muted}
+          onToggle={onToggleMute}
+          muteLabel={playerCopy.mute}
+          unmuteLabel={playerCopy.unmute}
+        />
+      )}
       <IconButton variant="outline" aria-label={playerCopy.replay} onClick={player.replay} className="lg:size-12 lg:border-bk-input-border">
         <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
           <path d="M3 12a9 9 0 1 0 3-6.7L3 8" />

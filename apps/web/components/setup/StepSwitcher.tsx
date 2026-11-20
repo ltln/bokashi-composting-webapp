@@ -1,12 +1,18 @@
+"use client";
+
 import Link from "next/link";
-import { cn } from "@/lib/cn";
-import { setupPageCopy } from "@/content/setupSteps";
+import { getSetupPageCopy } from "@/content/setupSteps";
 import type { SetupStep } from "@/content/types";
+import { cn } from "@/lib/cn";
+import { useLocale } from "@/lib/i18n";
 
 /** Mobile step switcher: "1 · Đáy giả" / "2 · Nạp lớp" / "3 · Khóa khí". */
 export function StepSwitcher({ steps, current }: { steps: readonly SetupStep[]; current: number }) {
+  const { locale } = useLocale();
+  const pageCopy = getSetupPageCopy(locale);
+
   return (
-    <nav aria-label={setupPageCopy.switcherLabel} className="flex gap-2 px-4 lg:hidden">
+    <nav aria-label={pageCopy.switcherLabel} className="flex gap-2 px-4 lg:hidden">
       {steps.map((s) => {
         const isCurrent = s.number === current;
         return (
@@ -22,7 +28,7 @@ export function StepSwitcher({ steps, current }: { steps: readonly SetupStep[]; 
                 : "box-border border border-bk-border bg-bk-surface text-bk-ink hover:text-bk-ink",
             )}
           >
-            {setupPageCopy.switcherItem(s)}
+            {pageCopy.switcherItem(s)}
           </Link>
         );
       })}

@@ -1,7 +1,10 @@
+"use client";
+
 import Link from "next/link";
-import { cn } from "@/lib/cn";
-import { faqPageCopy } from "@/content/faqs";
+import { getFaq, getFaqPageCopy } from "@/content/faqs";
 import type { Faq } from "@/content/types";
+import { cn } from "@/lib/cn";
+import { useLocale } from "@/lib/i18n";
 import { BulbIcon, ChevronRight, FaqIcon } from "./icons";
 import { FAQ_TINT } from "./tints";
 
@@ -14,7 +17,10 @@ const FOCUS =
  * where the rail in the layout takes over.
  */
 export function FaqListView({ faqs }: { faqs: readonly Faq[] }) {
-  const c = faqPageCopy.list;
+  const { locale } = useLocale();
+  const c = getFaqPageCopy(locale).list;
+  const localizedFaqs = faqs.map((f) => getFaq(f.slug, locale));
+
   return (
     <div className="pb-4 lg:hidden">
       <div className="flex flex-col gap-1 px-4 pt-1">
@@ -22,7 +28,7 @@ export function FaqListView({ faqs }: { faqs: readonly Faq[] }) {
         <p className="m-0 text-sm leading-5 text-bk-muted">{c.intro}</p>
       </div>
       <ul aria-label={c.label} className="m-0 mt-4 flex list-none flex-col gap-2.5 px-4">
-        {faqs.map((f) => {
+        {localizedFaqs.map((f) => {
           const tint = FAQ_TINT[f.slug];
           return (
             <li key={f.slug}>
@@ -56,5 +62,16 @@ export function FaqListView({ faqs }: { faqs: readonly Faq[] }) {
         </div>
       </aside>
     </div>
+  );
+}
+
+/** Desktop empty state shown at /faq before any FAQ item is chosen. */
+export function FaqEmptyDetail() {
+  const { locale } = useLocale();
+  const c = getFaqPageCopy(locale).list;
+  return (
+    <p className="m-0 hidden rounded-[28px] bg-bk-surface-tint p-8 text-base text-bk-illo-label lg:block">
+      {c.emptyDetail}
+    </p>
   );
 }

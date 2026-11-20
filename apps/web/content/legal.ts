@@ -1,3 +1,5 @@
+import type { Locale } from "@/lib/i18n";
+
 /**
  * Copy for the static legal pages (/terms, /privacy).
  * DRAFT: not reviewed by a lawyer yet. Keep `draftNotice` visible until it is.
@@ -14,7 +16,15 @@ export interface LegalPageContent {
   sections: readonly LegalSection[];
 }
 
-const terms: LegalPageContent = {
+export interface LegalCopy {
+  draftNotice: string;
+  updatedLabel: string;
+  backHome: string;
+  terms: LegalPageContent;
+  privacy: LegalPageContent;
+}
+
+const termsVi: LegalPageContent = {
   title: "Điều khoản sử dụng",
   description: "Điều khoản sử dụng ứng dụng Bếp Gọn – Rác Đúng.",
   updated: "11/2026",
@@ -52,7 +62,7 @@ const terms: LegalPageContent = {
   ],
 };
 
-const privacy: LegalPageContent = {
+const privacyVi: LegalPageContent = {
   title: "Chính sách quyền riêng tư",
   description: "Cách Bếp Gọn – Rác Đúng xử lý dữ liệu khi bạn đăng nhập và sử dụng ứng dụng.",
   updated: "11/2026",
@@ -87,10 +97,98 @@ const privacy: LegalPageContent = {
   ],
 };
 
-export const legal = {
-  draftNotice: "Bản nháp: nội dung đang chờ rà soát pháp lý và có thể thay đổi.",
-  updatedLabel: "Cập nhật lần cuối:",
-  backHome: "Về trang chủ",
-  terms,
-  privacy,
-} as const;
+const termsEn: LegalPageContent = {
+  title: "Terms of Use",
+  description: "Terms of use for the Bếp Gọn – Rác Đúng web app.",
+  updated: "11/2026",
+  sections: [
+    {
+      heading: "1. Introduction",
+      paragraphs: [
+        "Bếp Gọn – Rác Đúng is a free web app teaching how to build and run a DIY Bokashi compost bin in small rooms. By using the app, you agree to the terms below.",
+      ],
+    },
+    {
+      heading: "2. Account",
+      paragraphs: [
+        "You sign in using your Google account. You are responsible for keeping your Google account secure and for any activity performed while signed in.",
+      ],
+    },
+    {
+      heading: "3. Guide Content",
+      paragraphs: [
+        "Content in this app is for informational purposes only. Follow safe, hygienic practices and comply with local waste sorting and collection rules. We are not liable for any damage resulting from improper application.",
+      ],
+    },
+    {
+      heading: "4. Acceptable Use",
+      paragraphs: [
+        "Do not use the app to disrupt the service, gain unauthorized access, or scrape data automatically.",
+      ],
+    },
+    {
+      heading: "5. Changes",
+      paragraphs: [
+        "We may update the app and these terms. Any new version takes effect when posted on this page.",
+      ],
+    },
+  ],
+};
+
+const privacyEn: LegalPageContent = {
+  title: "Privacy Policy",
+  description: "How Bếp Gọn – Rác Đúng handles data when you sign in and use the app.",
+  updated: "11/2026",
+  sections: [
+    {
+      heading: "1. Google Sign-In",
+      paragraphs: [
+        "The app supports Google sign-in only. Google verifies your identity and shares your name, email address, and profile photo with us. We use this solely to create your account and keep you signed in, never for advertising or third-party sharing.",
+        "We never receive or store your Google password.",
+      ],
+    },
+    {
+      heading: "2. Anonymous Usage Tracking",
+      paragraphs: [
+        "To improve the guide, the app records anonymous usage events such as opening the app, switching tabs, viewing a setup step, or opening a troubleshooting item.",
+        "Each log entry contains only an anonymous session ID, event type, target feature, device type, and timestamp.",
+        "Usage logs never include your name, email, or IP address. The login screen is not tracked.",
+      ],
+    },
+    {
+      heading: "3. Cookies",
+      paragraphs: [
+        "We use essential cookies only to maintain your login session and protect requests against forgery. No advertising cookies are used.",
+      ],
+    },
+    {
+      heading: "4. Your Rights",
+      paragraphs: [
+        "You can request deletion of your account and associated data by contacting the development team.",
+      ],
+    },
+  ],
+};
+
+export const legalByLocale: Record<Locale, LegalCopy> = {
+  vi: {
+    draftNotice: "Bản nháp: nội dung đang chờ rà soát pháp lý và có thể thay đổi.",
+    updatedLabel: "Cập nhật lần cuối:",
+    backHome: "Về trang chủ",
+    terms: termsVi,
+    privacy: privacyVi,
+  },
+  en: {
+    draftNotice: "Draft: content is awaiting legal review and may change.",
+    updatedLabel: "Last updated:",
+    backHome: "Back to home",
+    terms: termsEn,
+    privacy: privacyEn,
+  },
+};
+
+export function getLegal(locale: Locale = "vi"): LegalCopy {
+  return legalByLocale[locale];
+}
+
+export const legal = legalByLocale.vi;

@@ -3,10 +3,11 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { EventType } from "@bokashi/contracts/events";
-import { shell } from "@/content/shell";
+import { getShell } from "@/content/shell";
 import { cn } from "@/lib/cn";
+import { useLocale } from "@/lib/i18n";
 import { track } from "@/lib/tracking";
-import { APP_TABS, activeTabFor } from "./tabs";
+import { activeTabFor, getAppTabs } from "./tabs";
 
 export type NavTabsVariant = "bottom" | "top";
 
@@ -45,12 +46,15 @@ const LINK: Record<NavTabsVariant, { base: string; active: string; idle: string;
  * Switching to the other tab logs `switch_tab`; re-clicking the active tab does not.
  */
 export function NavTabs({ variant }: { variant: NavTabsVariant }) {
+  const { locale } = useLocale();
+  const shellCopy = getShell(locale);
+  const tabs = getAppTabs(locale);
   const active = activeTabFor(usePathname());
   const styles = LINK[variant];
 
   return (
-    <nav aria-label={shell.navLabel} className={NAV[variant]}>
-      {APP_TABS.map((tab) => {
+    <nav aria-label={shellCopy.navLabel} className={NAV[variant]}>
+      {tabs.map((tab) => {
         const isActive = tab.id === active;
         return (
           <Link

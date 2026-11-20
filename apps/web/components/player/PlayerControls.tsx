@@ -3,13 +3,16 @@
 import { IconButton, SegmentProgress } from "@/components/ui";
 import { cn } from "@/lib/cn";
 
-/** Vietnamese labels for the controls; pass `playerCopy` from content/setupSteps. */
+/** Vietnamese/English labels for the controls; pass `getPlayerCopy(locale)` from content/setupSteps. */
 export interface PlayerLabels {
   pause: string;
   play: string;
   replay: string;
   /** aria-label of the progress bar / segment group. */
   progress: string;
+  /** aria-label of the voiceover mute/unmute button. */
+  mute?: string;
+  unmute?: string;
   /** aria-label of segment button `i` (1-based) when segments are interactive. */
   segment: (i: number, total: number, caption: string) => string;
 }
@@ -26,6 +29,9 @@ export interface PlayerControlsProps {
   onTogglePlay: () => void;
   onReplay: () => void;
   labels: PlayerLabels;
+  /** Voiceover mute toggle; omit when the active clip has no audio track. */
+  muted?: boolean;
+  onToggleMute?: () => void;
   /**
    * When set, the segments render as buttons that jump to a sub-step
    * (reduced motion). Otherwise they are a passive progress bar.
@@ -36,9 +42,46 @@ export interface PlayerControlsProps {
   className?: string;
 }
 
+/** Shared speaker mute/unmute button (44 px on mobile, 48 px on desktop). */
+export function VoiceMuteButton({
+  muted,
+  onToggle,
+  muteLabel,
+  unmuteLabel,
+}: {
+  muted: boolean;
+  onToggle: () => void;
+  muteLabel: string;
+  unmuteLabel: string;
+}) {
+  return (
+    <IconButton
+      variant="outline"
+      aria-pressed={!muted}
+      aria-label={muted ? unmuteLabel : muteLabel}
+      onClick={onToggle}
+      className="lg:size-12 lg:border-bk-input-border"
+    >
+      {muted ? (
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+          <path d="M11 5L6 9H2v6h4l5 4V5z" />
+          <line x1="23" y1="9" x2="17" y2="15" />
+          <line x1="17" y1="9" x2="23" y2="15" />
+        </svg>
+      ) : (
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+          <path d="M11 5L6 9H2v6h4l5 4V5z" />
+          <path d="M15.54 8.46a5 5 0 0 1 0 7.07" />
+          <path d="M19.07 4.93a10 10 0 0 1 0 14.14" />
+        </svg>
+      )}
+    </IconButton>
+  );
+}
+
 /**
- * Pause/play, segmented progress, an `n/N` counter and replay, as in the
- * boards (44 px buttons on mobile, 48 px on desktop).
+ * Pause/play, segmented progress, an `n/N` counter, optional voice mute, and replay,
+ * as in the boards (44 px buttons on mobile, 48 px on desktop).
  */
 export function PlayerControls({
   total,
@@ -48,6 +91,8 @@ export function PlayerControls({
   onTogglePlay,
   onReplay,
   labels,
+  muted = true,
+  onToggleMute,
   onSelect,
   captions,
   className,
@@ -112,6 +157,15 @@ export function PlayerControls({
       <span className="text-xs tabular-nums text-bk-muted lg:text-[13px] lg:text-bk-illo-label">
         {Math.min(total, active + 1)}/{total}
       </span>
+
+      {onToggleMute && labels.mute && labels.unmute && (
+        <VoiceMuteButton
+          muted={muted}
+          onToggle={onToggleMute}
+          muteLabel={labels.mute}
+          unmuteLabel={labels.unmute}
+        />
+      )}
 
       <IconButton
         variant="outline"

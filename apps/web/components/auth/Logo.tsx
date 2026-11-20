@@ -1,6 +1,12 @@
-import { site } from "@/content/site";
+"use client";
+
+import { getSite } from "@/content/site";
+import { useLocale } from "@/lib/i18n";
 
 export function Logo({ size, textClass }: { size: number; textClass: string }) {
+  const { locale } = useLocale();
+  const siteCopy = getSite(locale);
+
   return (
     <div className="flex items-center gap-2">
       <svg width={size} height={size} viewBox="0 0 32 32" aria-hidden="true">
@@ -14,7 +20,7 @@ export function Logo({ size, textClass }: { size: number; textClass: string }) {
         />
         <path d="M16 13c0-4 2.5-6.5 6-6.5 0 3.6-2.4 6.5-6 6.5z" className="fill-bk-leaf" />
       </svg>
-      <span className={`font-bold text-bk-primary-dark ${textClass}`}>{site.name}</span>
+      <span className={`font-bold text-bk-primary-dark ${textClass}`}>{siteCopy.name}</span>
     </div>
   );
 }
