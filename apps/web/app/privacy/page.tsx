@@ -5,5 +5,5 @@ import { legal } from "@/content/legal";
 export const metadata: Metadata = { title: legal.privacy.title, description: legal.privacy.description };
 
 export default function PrivacyPage() {
-  return <LegalPage content={legal.privacy} />;
+  return <LegalPage page="privacy" />;
 }

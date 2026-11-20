@@ -1,8 +1,13 @@
+"use client";
+
 import Link from "next/link";
-import { loginCopy } from "@/content/auth";
+import { getLoginCopy } from "@/content/auth";
+import { useLocale } from "@/lib/i18n";
 
 export function LegalLine({ className }: { className: string }) {
-  const l = loginCopy.legal;
+  const { locale } = useLocale();
+  const l = getLoginCopy(locale).legal;
+
   return (
     <p className={`m-0 text-bk-muted ${className}`}>
       {l.before}

@@ -2,9 +2,10 @@
 
 import Link from "next/link";
 import { useSelectedLayoutSegment } from "next/navigation";
-import { cn } from "@/lib/cn";
-import { faqPageCopy } from "@/content/faqs";
+import { getFaq, getFaqPageCopy } from "@/content/faqs";
 import type { Faq } from "@/content/types";
+import { cn } from "@/lib/cn";
+import { useLocale } from "@/lib/i18n";
 import { BulbIcon } from "./icons";
 import { FAQ_TINT } from "./tints";
 
@@ -14,8 +15,11 @@ import { FAQ_TINT } from "./tints";
  * faq layout so it stays put while the detail on the right changes.
  */
 export function FaqRail({ faqs }: { faqs: readonly Faq[] }) {
+  const { locale } = useLocale();
   const current = useSelectedLayoutSegment();
-  const c = faqPageCopy.list;
+  const c = getFaqPageCopy(locale).list;
+  const localizedFaqs = faqs.map((f) => getFaq(f.slug, locale));
+
   return (
     <aside className="hidden min-w-0 flex-[1_1_340px] flex-col gap-3.5 lg:flex">
       <div className="flex flex-col gap-1.5">
@@ -23,7 +27,7 @@ export function FaqRail({ faqs }: { faqs: readonly Faq[] }) {
         <p className="m-0 text-sm leading-5 text-bk-muted">{c.deskIntro}</p>
       </div>
       <ul aria-label={c.label} className="m-0 flex list-none flex-col gap-2 p-0">
-        {faqs.map((f) => {
+        {localizedFaqs.map((f) => {
           const tint = FAQ_TINT[f.slug];
           const isCurrent = f.slug === current;
           return (

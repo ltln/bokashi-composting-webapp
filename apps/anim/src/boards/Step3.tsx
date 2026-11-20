@@ -1,9 +1,11 @@
 import { useCurrentFrame } from "remotion";
 import { BinRig, OrganicPatternDef, StageCanvas } from "../components/BinRig";
+import { VoAudioTrack } from "../components/VoAudioTrack";
 import { BagCollar, Bracket, Lid, MotionArrow, RubbishBody, SmoothHand } from "../components/props";
 import { EASE, clampInterp, segProgress } from "../physics";
 import { STEP3_TL, localFrame } from "../timeline";
 import { TOKENS } from "../tokens";
+import { mapBoardFrame, type BoardLocale } from "../voAlignment";
 
 /** Trapped air bubbles squeezed outward symmetrically by hand smoothing. */
 const AIR_BUBBLES = [
@@ -15,8 +17,9 @@ const AIR_BUBBLES = [
   { x0: 208, xExit: 238, cy: 87.8, rx: 3.6, ry: 2.2, dir: 1, stagger: 38 },
 ] as const;
 
-export function Step3() {
-  const frame = useCurrentFrame();
+export function Step3({ locale = "vi", voiced = false }: { locale?: BoardLocale; voiced?: boolean }) {
+  const rawFrame = useCurrentFrame();
+  const frame = mapBoardFrame(rawFrame, "Step3", locale, voiced);
   const f0 = localFrame(frame, 0);
   const f1 = localFrame(frame, 1);
   const f2 = localFrame(frame, 2);
@@ -95,7 +98,9 @@ export function Step3() {
       : 1;
 
   return (
-    <StageCanvas>
+    <>
+      <VoAudioTrack boardId="Step3" locale={locale} voiced={voiced} />
+      <StageCanvas>
       <BinRig
         idPrefix="step3"
         newspaperOpacity={1}
@@ -177,5 +182,6 @@ export function Step3() {
         })}
       </BinRig>
     </StageCanvas>
+    </>
   );
 }

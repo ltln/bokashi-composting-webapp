@@ -1,8 +1,11 @@
+"use client";
+
 import Link from "next/link";
 import { Card, NumberBadge } from "@/components/ui";
-import { cn } from "@/lib/cn";
-import { faqPageCopy } from "@/content/faqs";
+import { getFaqPageCopy } from "@/content/faqs";
 import type { Faq, FaqOption } from "@/content/types";
+import { cn } from "@/lib/cn";
+import { useLocale } from "@/lib/i18n";
 import { CheckIcon, ChevronLeft, ChevronRight, CrossIcon } from "./icons";
 
 const LINK =
@@ -41,13 +44,14 @@ export function FaqChecklist({
   prev: Faq | null;
   next: Faq | null;
 }) {
-  const d = faqPageCopy.detail;
+  const { locale } = useLocale();
+  const d = getFaqPageCopy(locale).detail;
   return (
     <Card as="article" className="mx-4 flex flex-col gap-2 py-3.5 lg:mx-0 lg:gap-2.5 lg:rounded-[20px] lg:px-5 lg:py-[18px]">
       {faq.options ? (
         <ul className="m-0 flex list-none flex-col gap-2.5 p-0">
           {faq.options.map((o, i) => (
-            <li key={i} className="flex items-start gap-2.5">
+            <li key={faq.substeps[i]?.id ?? i} className="flex items-start gap-2.5">
               <Marker marker={o.marker} />
               <p className="m-0 text-sm leading-5 lg:text-[15px] lg:leading-[21px]">
                 {o.note.before}

@@ -1,8 +1,14 @@
-import { loginCopy } from "@/content/auth";
+"use client";
+
+import { getLoginCopy } from "@/content/auth";
+import { useLocale } from "@/lib/i18n";
 
 /** Hero bin illustration (Login / DeskLogin boards). Floats only when motion is OK. */
 export function LoginHero({ size, idPrefix }: { size: number; idPrefix: string }) {
+  const { locale } = useLocale();
+  const copy = getLoginCopy(locale);
   const clip = `${idPrefix}-in`;
+
   return (
     <svg
       className="motion-safe:animate-float"
@@ -10,7 +16,7 @@ export function LoginHero({ size, idPrefix }: { size: number; idPrefix: string }
       width={size}
       height={size}
       role="img"
-      aria-label={loginCopy.illustrationLabel}
+      aria-label={copy.illustrationLabel}
       style={{ maxWidth: "100%" }}
     >
       <defs>

@@ -1,5 +1,6 @@
 import { useCurrentFrame } from "remotion";
 import { BinRig, OrganicPatternDef, StageCanvas } from "../components/BinRig";
+import { VoAudioTrack } from "../components/VoAudioTrack";
 import {
   BagCollar,
   FruitFly,
@@ -14,6 +15,7 @@ import {
 import { EASE, clampInterp, createSeededParticles, segProgress } from "../physics";
 import { FAQ2_TL, S1, S2, localFrame } from "../timeline";
 import { TOKENS } from "../tokens";
+import { mapBoardFrame, type BoardLocale } from "../voAlignment";
 
 const MAGGOTS = [
   { x: 205, y: 76.8, w: 9, phase: 0 },
@@ -30,8 +32,9 @@ const FLIES = [
 
 const EM_GRAINS = createSeededParticles("faq2-em", 22);
 
-export function Faq2() {
-  const frame = useCurrentFrame();
+export function Faq2({ locale = "vi", voiced = false }: { locale?: BoardLocale; voiced?: boolean }) {
+  const rawFrame = useCurrentFrame();
+  const frame = mapBoardFrame(rawFrame, "Faq2", locale, voiced);
   const f0 = localFrame(frame, 0);
   const f1 = localFrame(frame, 1);
   const f2 = localFrame(frame, 2);
@@ -108,7 +111,9 @@ export function Faq2() {
       : 0;
 
   return (
-    <StageCanvas>
+    <>
+      <VoAudioTrack boardId="Faq2" locale={locale} voiced={voiced} />
+      <StageCanvas>
       <BinRig
         idPrefix="faq2"
         newspaperOpacity={1}
@@ -131,7 +136,7 @@ export function Faq2() {
           <>
             <Lid hingeDeg={lidHinge} squashY={lidSquashY} />
             {gapLabelOp > 0.01 && (
-              <LeaderLabel from={[240, 81]} to={[258, 104]} lines={["vùng hở"]} opacity={gapLabelOp} />
+              <LeaderLabel from={[240, 81]} to={[258, 104]} lines={locale === "en" ? ["open gap"] : ["vùng hở"]} opacity={gapLabelOp} />
             )}
             {/* Fruit flies buzzing around rim gap -> fleeing when lid locks shut */}
             {FLIES.map((fly, i) => {
@@ -227,5 +232,6 @@ export function Faq2() {
         )}
       </BinRig>
     </StageCanvas>
+    </>
   );
 }
