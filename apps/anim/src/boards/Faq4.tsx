@@ -1,8 +1,10 @@
 import { useCurrentFrame } from "remotion";
 import { StageCanvas } from "../components/BinRig";
+import { VoAudioTrack } from "../components/VoAudioTrack";
 import { EASE, clampInterp, lerpNumbers, segProgress } from "../physics";
 import { FAQ4_TL, S1, localFrame } from "../timeline";
 import { FONT_FAMILY, TOKENS } from "../tokens";
+import { mapBoardFrame, type BoardLocale } from "../voAlignment";
 
 const WHITE_COLONIES = [
   { cx: 34, cy: 66, rx: 10, ry: 3.6, delay: 0 },
@@ -56,8 +58,9 @@ function BinWalls() {
   );
 }
 
-export function Faq4() {
-  const frame = useCurrentFrame();
+export function Faq4({ locale = "vi", voiced = false }: { locale?: BoardLocale; voiced?: boolean }) {
+  const rawFrame = useCurrentFrame();
+  const frame = mapBoardFrame(rawFrame, "Faq4", locale, voiced);
   const f0 = localFrame(frame, 0);
   const f1 = localFrame(frame, 1);
 
@@ -90,7 +93,9 @@ export function Faq4() {
   const figScale = 3.2; // 150*3.2 = 480w × 448h
 
   return (
-    <StageCanvas rawCoords>
+    <>
+      <VoAudioTrack boardId="Faq4" locale={locale} voiced={voiced} />
+      <StageCanvas rawCoords>
       {/* Left Card: Mốc trắng mỏng (Đạt chuẩn) */}
       <g
         opacity={leftOp}
@@ -114,7 +119,7 @@ export function Faq4() {
           fontFamily={FONT_FAMILY}
           fill={TOKENS.ink}
         >
-          Mốc trắng mỏng
+          {locale === "en" ? "Thin white mold" : "Mốc trắng mỏng"}
         </text>
         <g transform={`translate(${leftX + 44}, ${cardY + 114}) scale(${figScale})`}>
           <ScrapsBase />
@@ -160,7 +165,7 @@ export function Faq4() {
             fontFamily={FONT_FAMILY}
             fill={TOKENS.surface}
           >
-            Đạt chuẩn
+            {locale === "en" ? "On track" : "Đạt chuẩn"}
           </text>
         </g>
       </g>
@@ -188,7 +193,7 @@ export function Faq4() {
           fontFamily={FONT_FAMILY}
           fill={TOKENS.ink}
         >
-          Mốc xanh / đen
+          {locale === "en" ? "Green / black mold" : "Mốc xanh / đen"}
         </text>
         <g transform={`translate(${rightX + 44}, ${cardY + 114}) scale(${figScale})`}>
           <ScrapsBase />
@@ -264,10 +269,11 @@ export function Faq4() {
             fontFamily={FONT_FAMILY}
             fill={TOKENS.surface}
           >
-            Lọt khí
+            {locale === "en" ? "Air leak" : "Lọt khí"}
           </text>
         </g>
       </g>
     </StageCanvas>
+    </>
   );
 }

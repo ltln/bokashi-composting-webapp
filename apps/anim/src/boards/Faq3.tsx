@@ -1,5 +1,6 @@
 import { useCurrentFrame } from "remotion";
 import { BIN_PIVOT, BinRig, OrganicPatternDef, StageCanvas } from "../components/BinRig";
+import { VoAudioTrack } from "../components/VoAudioTrack";
 import {
   BagCollar,
   Bucket,
@@ -20,6 +21,7 @@ import {
 } from "../physics";
 import { FAQ3_TL, S1, S2, localFrame } from "../timeline";
 import { TOKENS } from "../tokens";
+import { mapBoardFrame, type BoardLocale } from "../voAlignment";
 
 const SEEP_DROPS = [
   { x: 118, y0: 128, phase: 0 },
@@ -40,8 +42,9 @@ const BUCKET_SPLASH = createSeededParticles("faq3-splash", 10);
 const WATER_DROPS = createSeededParticles("faq3-water-can", 14);
 const POT_SPLASH = createSeededParticles("faq3-pot-splash", 6);
 
-export function Faq3() {
-  const frame = useCurrentFrame();
+export function Faq3({ locale = "vi", voiced = false }: { locale?: BoardLocale; voiced?: boolean }) {
+  const rawFrame = useCurrentFrame();
+  const frame = mapBoardFrame(rawFrame, "Faq3", locale, voiced);
   const f0 = localFrame(frame, 0);
   const f1 = localFrame(frame, 1);
   const f2 = localFrame(frame, 2);
@@ -137,7 +140,9 @@ export function Faq3() {
   const sproutSway = frame >= S2 && f2 >= FAQ3_TL.waterPourStart ? Math.sin((f2 - FAQ3_TL.waterPourStart) * 0.14) * 2.5 * swayFade : 0;
 
   return (
-    <StageCanvas camX={camX}>
+    <>
+      <VoAudioTrack boardId="Faq3" locale={locale} voiced={voiced} />
+      <StageCanvas camX={camX}>
       {/* Bin rig (no scaling down when tilting!) */}
       <BinRig
         idPrefix="faq3"
@@ -209,7 +214,11 @@ export function Faq3() {
                   strokeWidth="1.6"
                   strokeDasharray="5 3"
                 />
-                <LeaderLabel from={[232, 240]} to={[256, 224]} lines={["Dịch dềnh", "quá mặt lon"]} />
+                <LeaderLabel
+                  from={[232, 240]}
+                  to={[256, 224]}
+                  lines={locale === "en" ? ["Liquid over", "can top"] : ["Dịch dềnh", "quá mặt lon"]}
+                />
               </g>
             )}
           </>
@@ -334,7 +343,11 @@ export function Faq3() {
       {/* Sub-step 2: Diluted leachate (~1:100) watering can + potted sprout */}
       {s2Vis > 0.01 && (
         <g opacity={s2Vis}>
-          <LeaderLabel from={[296, 118]} to={[302, 92]} lines={["Pha loãng", "~1:100"]} />
+          <LeaderLabel
+            from={[296, 118]}
+            to={[302, 92]}
+            lines={locale === "en" ? ["Dilute", "~1:100"] : ["Pha loãng", "~1:100"]}
+          />
           <PotSprout x={potX} y={potY} w={56} growth={sproutGrowth} swayDeg={sproutSway} />
           <WateringCan x={canX} y={canY} tiltDeg={canTilt} scale={0.96} />
 
@@ -387,5 +400,6 @@ export function Faq3() {
         </g>
       )}
     </StageCanvas>
+    </>
   );
 }

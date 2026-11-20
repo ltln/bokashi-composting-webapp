@@ -1,5 +1,6 @@
 import { useCurrentFrame } from "remotion";
 import { BinRig, OrganicPatternDef, StageCanvas } from "../components/BinRig";
+import { VoAudioTrack } from "../components/VoAudioTrack";
 import {
   BagCollar,
   Lid,
@@ -11,6 +12,7 @@ import {
 import { EASE, clampInterp, createSeededParticles, segProgress } from "../physics";
 import { FAQ1_TL, S1, S2, S3, localFrame } from "../timeline";
 import { TOKENS } from "../tokens";
+import { mapBoardFrame, type BoardLocale } from "../voAlignment";
 
 const EM_GRAINS = createSeededParticles("faq1-em", 20);
 const SMELL_MOTES = createSeededParticles("faq1-motes", 10);
@@ -28,8 +30,9 @@ const BUBBLES_S3 = [
   { x0: 194, xExit: 237, cy: 87, dir: 1, stagger: 16 },
 ] as const;
 
-export function Faq1() {
-  const frame = useCurrentFrame();
+export function Faq1({ locale = "vi", voiced = false }: { locale?: BoardLocale; voiced?: boolean }) {
+  const rawFrame = useCurrentFrame();
+  const frame = mapBoardFrame(rawFrame, "Faq1", locale, voiced);
   const f0 = localFrame(frame, 0);
   const f1 = localFrame(frame, 1);
   const f2 = localFrame(frame, 2);
@@ -146,7 +149,9 @@ export function Faq1() {
         : 79;
 
   return (
-    <StageCanvas>
+    <>
+      <VoAudioTrack boardId="Faq1" locale={locale} voiced={voiced} />
+      <StageCanvas>
       <BinRig
         idPrefix="faq1"
         newspaperOpacity={1}
@@ -202,15 +207,29 @@ export function Faq1() {
         }
         overlay={
           <>
+            <Lid yOffset={lidY} />
             {badgeOp > 0.01 && (
               <g opacity={badgeOp}>
-                <rect x="220" y="10" width="76" height="21" rx="10.5" fill={TOKENS.accent} />
-                <text x="258" y="24" textAnchor="middle" fontSize="10.5" fontWeight="700" fill={TOKENS.surface}>
-                  2–3 muỗng
+                <rect
+                  x="252"
+                  y="66"
+                  width="78"
+                  height="21"
+                  rx="10.5"
+                  fill={TOKENS.accent}
+                />
+                <text
+                  x="291"
+                  y="80"
+                  textAnchor="middle"
+                  fontSize="10.5"
+                  fontWeight="700"
+                  fill={TOKENS.surface}
+                >
+                  {locale === "en" ? "2–3 spoons" : "2–3 muỗng"}
                 </text>
               </g>
             )}
-            <Lid yOffset={lidY} />
           </>
         }
       >
@@ -289,5 +308,6 @@ export function Faq1() {
         )}
       </BinRig>
     </StageCanvas>
+    </>
   );
 }

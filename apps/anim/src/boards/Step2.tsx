@@ -1,9 +1,11 @@
 import { useCurrentFrame } from "remotion";
 import { BinRig, OrganicPatternDef, StageCanvas } from "../components/BinRig";
+import { VoAudioTrack } from "../components/VoAudioTrack";
 import { Bottle, Bracket, PressPlate, SmoothHand, getBottleMouth } from "../components/props";
 import { EASE, clampInterp, createSeededParticles, parabolicArc, segProgress } from "../physics";
 import { S1, S2, S3, STEP2_TL, localFrame } from "../timeline";
 import { TOKENS } from "../tokens";
+import { mapBoardFrame, type BoardLocale } from "../voAlignment";
 
 /** Chopped organic pieces tossed into Layer 3 during sub-step 0. */
 const SCRAP_PIECES = [
@@ -23,8 +25,9 @@ const SQUEEZE_DROPS = createSeededParticles("step2-squeeze", 6);
 const EM_GRAINS = createSeededParticles("step2-em", 22);
 const SCRAP_SEEDS = createSeededParticles("step2-scraps", SCRAP_PIECES.length);
 
-export function Step2() {
-  const frame = useCurrentFrame();
+export function Step2({ locale = "vi", voiced = false }: { locale?: BoardLocale; voiced?: boolean }) {
+  const rawFrame = useCurrentFrame();
+  const frame = mapBoardFrame(rawFrame, "Step2", locale, voiced);
   const f0 = localFrame(frame, 0);
   const f1 = localFrame(frame, 1);
   const f2 = localFrame(frame, 2);
@@ -133,7 +136,9 @@ export function Step2() {
   const highlight3to5 = f1 >= 20 && frame < S2;
 
   return (
-    <StageCanvas>
+    <>
+      <VoAudioTrack boardId="Step2" locale={locale} voiced={voiced} />
+      <StageCanvas>
       <BinRig
         idPrefix="step2"
         newspaperOpacity={1}
@@ -317,5 +322,6 @@ export function Step2() {
         )}
       </BinRig>
     </StageCanvas>
+    </>
   );
 }

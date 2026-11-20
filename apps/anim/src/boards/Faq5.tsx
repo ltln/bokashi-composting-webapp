@@ -1,5 +1,6 @@
 import { useCurrentFrame } from "remotion";
 import { StageCanvas } from "../components/BinRig";
+import { VoAudioTrack } from "../components/VoAudioTrack";
 import { PotSprout, WateringCan, getWateringCanTip } from "../components/props";
 import {
   EASE,
@@ -10,12 +11,14 @@ import {
 } from "../physics";
 import { FAQ5_TL, S1, S2, localFrame } from "../timeline";
 import { FONT_FAMILY, TOKENS } from "../tokens";
+import { mapBoardFrame, type BoardLocale } from "../voAlignment";
 
 const SCRAP_DROPS = createSeededParticles("faq5-scraps", 10);
 const WATER_DROPS = createSeededParticles("faq5-water", 12);
 
-export function Faq5() {
-  const frame = useCurrentFrame();
+export function Faq5({ locale = "vi", voiced = false }: { locale?: BoardLocale; voiced?: boolean }) {
+  const rawFrame = useCurrentFrame();
+  const frame = mapBoardFrame(rawFrame, "Faq5", locale, voiced);
   const f0 = localFrame(frame, 0);
   const f1 = localFrame(frame, 1);
   const f2 = localFrame(frame, 2);
@@ -79,7 +82,9 @@ export function Faq5() {
   const sC = cardStyle(focusC);
 
   return (
-    <StageCanvas rawCoords>
+    <>
+      <VoAudioTrack boardId="Faq5" locale={locale} voiced={voiced} />
+      <StageCanvas rawCoords>
       {/* Card (a): Vùi chậu cây */}
       <g
         opacity={sA.opacity}
@@ -96,7 +101,7 @@ export function Faq5() {
           strokeWidth={sA.borderWidth}
         />
         <text x={xs[0] + 24} y={cardY + 56} fontSize="25" fontWeight="700" fontFamily={FONT_FAMILY} fill={TOKENS.ink}>
-          (a) Vùi chậu cây
+          {locale === "en" ? "(a) Bury in planter" : "(a) Vùi chậu cây"}
         </text>
         <g transform={`translate(${xs[0] + 20}, ${cardY + 125}) scale(${figScale})`}>
           <ellipse cx="80" cy="134" rx="64" ry="4" fill={TOKENS.divider} />
@@ -165,7 +170,7 @@ export function Faq5() {
             fontFamily={FONT_FAMILY}
             fill={TOKENS.faq.disposal.fg}
           >
-            Bón cho cây
+            {locale === "en" ? "Feed plants" : "Bón cho cây"}
           </text>
         </g>
       </g>
@@ -186,7 +191,7 @@ export function Faq5() {
           strokeWidth={sB.borderWidth}
         />
         <text x={xs[1] + 24} y={cardY + 56} fontSize="25" fontWeight="700" fontFamily={FONT_FAMILY} fill={TOKENS.ink}>
-          (b) Bỏ rác sinh hoạt
+          {locale === "en" ? "(b) Household trash" : "(b) Bỏ rác sinh hoạt"}
         </text>
         <g transform={`translate(${xs[1] + 20}, ${cardY + 125}) scale(${figScale})`}>
           <ellipse cx="75" cy="134" rx="64" ry="4" fill={TOKENS.divider} />
@@ -288,7 +293,7 @@ export function Faq5() {
             fontFamily={FONT_FAMILY}
             fill={TOKENS.illo.label}
           >
-            Điểm thu gom
+            {locale === "en" ? "Waste pickup" : "Điểm thu gom"}
           </text>
         </g>
       </g>
@@ -309,7 +314,7 @@ export function Faq5() {
           strokeWidth={sC.borderWidth}
         />
         <text x={xs[2] + 24} y={cardY + 56} fontSize="25" fontWeight="700" fontFamily={FONT_FAMILY} fill={TOKENS.ink}>
-          (c) Tưới dịch rỉ
+          {locale === "en" ? "(c) Use leachate" : "(c) Tưới dịch rỉ"}
         </text>
         <g transform={`translate(${xs[2] + 20}, ${cardY + 125}) scale(${figScale})`}>
           <ellipse cx="80" cy="134" rx="64" ry="4" fill={TOKENS.divider} />
@@ -353,10 +358,11 @@ export function Faq5() {
             fontFamily={FONT_FAMILY}
             fill={TOKENS.faq.disposal.fg}
           >
-            Pha loãng ~1:100
+            {locale === "en" ? "Dilute ~1:100" : "Pha loãng ~1:100"}
           </text>
         </g>
       </g>
     </StageCanvas>
+    </>
   );
 }

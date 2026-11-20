@@ -1,9 +1,11 @@
 import { interpolateColors, useCurrentFrame } from "remotion";
 import { AluminiumCan, BinRig, CAN_SLOTS, StageCanvas } from "../components/BinRig";
+import { VoAudioTrack } from "../components/VoAudioTrack";
 import { Bracket, PaperBall } from "../components/props";
 import { EASE, clampInterp, createSeededParticles, gravityDrop, segProgress } from "../physics";
 import { S1, S2, STEP1_TL, localFrame } from "../timeline";
 import { TOKENS } from "../tokens";
+import { mapBoardFrame, type BoardLocale } from "../voAlignment";
 
 /** 15 crumpled newspaper balls filling every gap between the 2 rows of cans (natural depth variation). */
 const PAPER_BALLS = [
@@ -34,8 +36,9 @@ const MARKERS = [
   { n: 3, cx: 276, cy: 152, line: [246, 152, 267, 152] as const },
 ] as const;
 
-export function Step1() {
-  const frame = useCurrentFrame();
+export function Step1({ locale = "vi", voiced = false }: { locale?: BoardLocale; voiced?: boolean }) {
+  const rawFrame = useCurrentFrame();
+  const frame = mapBoardFrame(rawFrame, "Step1", locale, voiced);
   const f1 = localFrame(frame, 1);
   const f2 = localFrame(frame, 2);
 
@@ -86,7 +89,9 @@ export function Step1() {
   const activeStep = frame >= S2 ? 2 : frame >= S1 ? 1 : 0;
 
   return (
-    <StageCanvas>
+    <>
+      <VoAudioTrack boardId="Step1" locale={locale} voiced={voiced} />
+      <StageCanvas>
       <BinRig
         idPrefix="step1"
         cans="none"
@@ -282,5 +287,6 @@ export function Step1() {
         )}
       </BinRig>
     </StageCanvas>
+    </>
   );
 }
